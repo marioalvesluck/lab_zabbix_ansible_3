@@ -1,0 +1,9 @@
+---
+# defaults file for install_zabbix_server
+# Lista de Pacotes de Instalação no zabbix-server
+packages_zabbix_server:
+  - mysql
+  - zabbix-server-mysql
+  - zabbix-agent2
+  - zabbix-sql-scripts
+  

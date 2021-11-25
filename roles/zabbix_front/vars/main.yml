@@ -1,0 +1,14 @@
+---
+# vars file for install_zabbix_front
+
+# timezone: America/Sao_Paulo
+
+# db_name: 'zabbix'
+# db_user: 'zabbix_web'
+# db_user_pass: 'zabbix'
+# zbx_front: 172.18.10.100
+# zbx_srv: 172.18.10.110
+# zbx_db: 172.18.10.120
+# zbx_port: 10051
+# zbx_name: Monitor_Ansible
+# zbx_web: 'zabbix'

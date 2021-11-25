@@ -1,0 +1,19 @@
+---
+# defaults file for db_zabbix 
+# Arquivos de variaveis  criação do banco de dados e usuario remoto
+
+#zbx_front: 172.18.10.100
+#zbx_srv: 172.18.10.110
+#zbx_db: 172.18.10.120
+
+packages_mysql:
+  - mysql-server
+  - mysql
+  - python3-PyMySQL
+
+# Senha do UsuarioRoot
+#root_pass: 'zabbix'
+
+# # Nome database do zabbix
+#db_name: 'zabbix'
+

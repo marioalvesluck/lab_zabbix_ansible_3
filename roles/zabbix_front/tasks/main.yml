@@ -1,0 +1,2 @@
+- name: Instalação do zabbix_front e as configurações do arquivo.
+  include_tasks: front.yml

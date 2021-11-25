@@ -1,0 +1,24 @@
+# Arquivos de hosts de configuração com variaveis 
+
+# Lista de hosts para Implementação do zabbix 3 camadas
+
+[all:vars]
+ansible_python_interpreter= /usr/bin/python3
+ansible_ssh_port=  22
+ansible_become =  True
+ansible_become_user=  root
+ansible_user= vagrant
+
+[zbx_front]
+172.18.10.100
+
+[zbx_srv]
+172.18.10.110
+
+[zbx_db]
+172.18.10.120
+
+[zabbix:children]
+zbx_front
+zbx_srv
+zbx_db

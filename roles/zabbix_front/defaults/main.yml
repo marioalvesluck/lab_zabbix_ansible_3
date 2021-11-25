@@ -1,0 +1,11 @@
+---
+# defaults file for install_zabbix_front
+
+# Lista de Pacotes de Instalação no zabbix-server
+#packages_zabbix_frontend:
+#  - mysql
+#  - zabbix-apache-conf
+#  - zabbix-web-mysql
+#  - zabbix-agent2
+#  - httpd
+  

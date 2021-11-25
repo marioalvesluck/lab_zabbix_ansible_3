@@ -1,0 +1,11 @@
+---
+# vars file for db_zabbix
+# Senha do UsuarioRoot
+root_pass: 'zabbix'
+  
+# Nome database do zabbix
+db_name: 'zabbix'
+
+zbx_front: 172.18.10.100
+zbx_srv: 172.18.10.110
+zbx_db: 172.18.10.120
