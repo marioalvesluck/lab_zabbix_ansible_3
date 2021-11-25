@@ -57,5 +57,5 @@
     - role: zabbix_front
       when: ansible_host == zbx_front
     - role: zabbix_agent_linux
-      when: ansible == zbx_front or zbx_db
+      when: ansible_host == zbx_front or zbx_db
     
