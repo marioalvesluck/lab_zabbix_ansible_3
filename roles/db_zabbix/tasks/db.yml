@@ -8,14 +8,15 @@
     name: "{{ packages_mysql }}"
     state: latest
   tags: mdb
-  when: ansible_os_family == "RedHat"
+  when: ansible_distribution_file_variety == "RedHat"
 #----------------------------------------------------#
 - name: MYSQL | Remover pacotes MariaDB
   dnf:
     name: mariadb-libs
     state: removed
   tags: mdb
-  when: ansible_os_family == "RedHat"
+  when: ansible_facts['distribution_major_version'] == "8" or ansible_distribution_file_variety == "RedHat"
+  
 
 # ----------------------------------------------------#
 - name: MYSQL - Habilitando na Inicialização Service MYSQL
@@ -24,7 +25,8 @@
     state: started
     enabled: yes
   tags: mdb
-  when: ansible_os_family == "RedHat"
+  when: ansible_facts['distribution_major_version'] == "8"
+  
 #---------------------------------------------------------------------#
 - name: MYSQL | Criar senha de Root no banco de Dados
   mysql_user:
@@ -32,7 +34,8 @@
     password: "{{ root_pass }}"
     host: localhost
   tags: mdb
-  when: ansible_os_family == "RedHat"
+  when: ansible_facts['distribution_major_version'] == "8"
+  
 
 #----------------------------------------------------------------------#
 - name: MYCNF | Copiando Arquivo .my.cnf default
@@ -42,8 +45,8 @@
     mode: 0644
   loop:
     - { src: '.my.cnf', dest: '/root/.my.cnf'}
-  when: ansible_os_family == "RedHat"
-
+  when: ansible_facts['distribution_major_version'] == "8"
+  
 #-------------------------------------------------------------------___# 
 - name: MYSQL | Removendo contas de usuários 'anônimos' para localhost
   mysql_user:
@@ -53,18 +56,19 @@
     login_user: root
     login_password: "{{ root_pass }}"
   tags: mdb
-  when: ansible_os_family == "RedHat"
+  when: ansible_facts['distribution_major_version'] == "8"
+  
 #---------------------------------------------------#
 - name: MYSQL | Removendo usuários 'zabbix' para o localhost se existir
   mysql_user:
     name: "{{ db_user_zabbix }}"
-    #name: 'zabbix'
     host: localhost
     login_user: root
     login_password: "{{ root_pass }}"
     state: absent
   tags: mdb
-  when: ansible_distribution == "CentOS"
+  when: ansible_facts['distribution_major_version'] == "8"
+  
 #--------------------------------------------------------#
 - name: MYSQL | Removendo o MySQL 'test database'
   mysql_db:
@@ -73,34 +77,36 @@
     login_user: root
     login_password: "{{ root_pass }}"
   tags: mdb
-  when: ansible_os_family == "RedHat"
+  when: ansible_facts['distribution_major_version'] == "8"
+  
 #------------------------------#
 - name: MYSQL | Altera o plugin de autenticação do usuário 'root' do MYSQL para mysql_native_password
   shell: mysql -u root -p"{{ root_pass }}" -e 'UPDATE mysql.user SET plugin="mysql_native_password" WHERE user="root" AND host="localhost"'
   tags: mdb
-  when: ansible_os_family == "RedHat"
+  when: ansible_facts['distribution_major_version'] == "8"
+  
 #------------------------------------------------------------#
 - name: MYSQL | Privilégios de liberação para usuário 'root'
   shell: mysql -u root -p"{{ root_pass }}" -e 'FLUSH PRIVILEGES'
   tags: mdb
-  when: ansible_os_family == "RedHat"
+  when: ansible_facts['distribution_major_version'] == "8"
+  
 #-----------------------------------------------------------------#  
 - name: MYSQL | Criando usuário 'zabbix' para o MYSQL
   mysql_user:
     name: "{{ db_user_zabbix }}"
-    #name: zabbix
     password: zabbix
     priv: '*.*:ALL,GRANT'
     login_user: root
     login_password: "{{ root_pass }}"
     state: present
   tags: mdb
-  when: ansible_os_family == "RedHat"
+  when: ansible_facts['distribution_major_version'] == "8"
+  
 #------------------------------------------#
 - name: MYSQL | Criando usuário 'zabbix_server' para o MYSQL
   mysql_user:
     name: "{{ db_user_server }}"
-    #name: zabbix_server
     password: "{{ db_user_pass_server }}"
     #password: zabbix
     priv: '*.*:ALL,GRANT'
@@ -109,26 +115,25 @@
     state: present
     host: '%'
   tags: mdb
-  when: ansible_os_family == "RedHat"
+  when: ansible_facts['distribution_major_version'] == "8"
+  
 #---------------------------------------------#
 - name: MYSQL | Criando usuário 'zabbix_web' para o MYSQL
   mysql_user:
     name: "{{ db_user_web }}"
-    #name: zabbix_web
     password: "{{ db_user_pass_web }}"
-    #password: zabbix
     priv: '*.*:ALL,GRANT'
     login_user: root
     login_password: "{{ root_pass }}"
     state: present
     host: '%'
   tags: mdb
-  when: ansible_os_family == "RedHat"
+  when: ansible_facts['distribution_major_version'] == "8"
+  
 #-----------------------------------------------------------#
 - name: MYSQL | Criando banco de dados com nome 'zabbix'
   mysql_db:
     name: "{{ db_user_zabbix }}"
-    #name: 'zabbix'
     login_host: localhost
     login_user: 'root'
     login_password: '{{ root_pass }}'
@@ -136,7 +141,8 @@
     collation: utf8_bin
     state: present
   tags: mdb
-  when: ansible_os_family == "RedHat"
+  when: ansible_facts['distribution_major_version'] == "8"
+  
 #----------------------------------------------------------------#
 - name: Adcionado Porta firewalld  Zabbix_Server/Zabbix_Agent
   firewalld:
@@ -148,7 +154,8 @@
     - 10050/tcp
     - 3306/tcp
   tags: mdb
-  when: ansible_os_family == "RedHat"
+  when: ansible_facts['distribution_major_version'] == "8"
+  
 #-------------------------------------------------------------------------#
 - name: FIREWALL | Realizando Reload no Firewall
   systemd:
@@ -156,4 +163,5 @@
     state: reloaded
     enabled: yes
   tags: mdb
-  when: ansible_os_family == "RedHat"
+  when: ansible_facts['distribution_major_version'] == "8"
+  

@@ -5,6 +5,7 @@ machines = {
   "node01"   => {"memory" => "1024", "cpu" => "2", "ip" => "100", "image" => "centos/8"},
   "node02" => {"memory" => "1024",  "cpu" => "2", "ip" => "110", "image" => "centos/8"},
   "node03" => {"memory" => "2048",  "cpu" => "2", "ip" => "120", "image" => "centos/8"}
+#  "node04" => {"memory" => "512",  "cpu" => "2", "ip" => "130", "image" => "centos/8"}
 }
 
 Vagrant.configure("2") do |config|
@@ -36,7 +37,9 @@ Vagrant.configure("2") do |config|
       echo '172.18.10.100 node01.example' >> /etc/hosts
       echo '172.18.10.110 node02.example' >> /etc/hosts
       echo '172.18.10.120 node03.example' >> /etc/hosts
-      echo '192.168.3.211 node04.example' >> /etc/hostss
+#      echo '172.18.10.120 node04.example' >> /etc/hosts
+      echo '192.168.3.211 node05.example' >> /etc/hostss
+      echo '192.168.3.254 node06.example' >> /etc/hostss
       EOF
     end
   end

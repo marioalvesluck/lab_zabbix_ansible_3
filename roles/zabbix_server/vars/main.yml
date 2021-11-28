@@ -1,12 +1,3 @@
 ---
 # vars file for install_zabbix_server
 
-# Variaveis ultilização no zabbix_server.conf
-# db_name: 'zabbix'
-# db_user: 'zabbix_server'
-# db_user_pass: 'zabbix'
-
-
-# zbx_front: 172.18.10.100
-# zbx_srv: 172.18.10.110
-# zbx_db: 172.18.10.120

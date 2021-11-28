@@ -4,17 +4,17 @@
 - name: Adcionando Repositorio Zabbix - CentOS8
   dnf:
     name: '{{ url_packages_zabbix }}'
-    #name: 'http://repo.zabbix.com/zabbix/5.5/rhel/8/x86_64/zabbix-release-5.5-1.el8.noarch.rpm'
     state: present
   tags: zabbix_server
+  when: ansible_facts['distribution_major_version'] == "8"
 # --------------------------------------------------------------------------------------------#
 #
 - name: Instalando pacotes zabbix-server zabbix-agent zabbix-sql-scripts
   dnf:
-    name: "{{ packages_zabbix_server}}"
+    name: '{{ packages_zabbix_server}}'
     state: latest
   tags: zabbix_server
-  when: ansible_distribution == "CentOS"
+  when: ansible_facts['distribution_major_version'] == "8"
 # --------------------------------------------------------------------------------------------#
 - name: Iniciar/ Habilitar zabbix-server / zabbix-agent2
   systemd:
@@ -22,15 +22,15 @@
     state: started
     enabled: yes
   tags: zabbix_server
-  when: ansible_distribution == "CentOS"
+  when: ansible_facts['distribution_major_version'] == "8"
 #----------------------------------------------------------------------------------------------#
-- name: Iniciar/ Habilitar zabbix-server / zabbix-agent2
-  systemd:
-    name: zabbix-agent2
-    state: started
-    enabled: yes
-  tags: zabbix_server
-  when: ansible_distribution == "CentOS"
+# - name: Iniciar/ Habilitar zabbix-server / zabbix-agent2
+#   systemd:
+#     name: zabbix-agent2
+#     state: started
+#     enabled: yes
+#   tags: zabbix_server
+#   when: ansible_facts['distribution_major_version'] == "8"
 
 #----------------------------------------------------------------------------------------------#
 #
@@ -43,8 +43,9 @@
     - 10051/tcp
     - 10050/tcp
     - 3306/tcp
+    
   tags: zabbix_server
-  when: ansible_distribution == "CentOS"
+  when: ansible_facts['distribution_major_version'] == "8"
 # ----------------------------------------------------------------------------------------------#
 - name: Reload no firewalld
   systemd:
@@ -52,6 +53,7 @@
     state: reloaded
     enabled: yes
   tags: zabbix_server
+  when: ansible_facts['distribution_major_version'] == "8"
 #-------------------------------------------------------------------------------#
 - name: SSH | Setando configurações de segurança no arquivo zabbix_server.conf
   lineinfile:
@@ -71,7 +73,7 @@
     - { regexp: '# CacheSize=8M', line: 'CacheSize=512M' }
     - { regexp: '# ValueCacheSize=8M', line: 'ValueCacheSize=1024M' }
     - { regexp: '# VMwareCacheSize=8M', line: 'VMwareCacheSize=1024M' }
-  when: ansible_distribution == "CentOS"
+  when: ansible_facts['distribution_major_version'] == "8"
   tags: zabbix_server
 #-----------------------------------------------------------------------------------#
 - name: MYCNF | Copiando Arquivo .my.cnf default
@@ -81,24 +83,63 @@
     mode: 0644
   loop:
     - { src: '.my.cnf', dest: '/root/.my.cnf'}
-  when: ansible_distribution == "CentOS"
+  when: ansible_facts['distribution_major_version'] == "8"
+#---------------------------------------------------------------------------------------------#
+- name: MYCNF | Copiando Para realizar Particionamento do Banco de Dados.
+  copy: 
+    src: "{{ item.src }}" 
+    dest: "{{ item.dest }}"
+  loop:
+    - { src: 'zbx_db_part.sql', dest: '/opt/zbx_db_part.sql'}
+  when: ansible_facts['distribution_major_version'] == "8"
 #-----------------------------------------------------------------------------------#
 - name: Importando schema da database do zabbix servidor "{{ zbx_db }}"
-  #shell: "zcat /usr/share/doc/zabbix-sql-scripts/mysq/create.sql.gz | mysql -h '{{ zbx_db }}' -u '{{ db_user_server }}' -p'{{ db_user_pass_server }}' {{ db_name }}"
-  shell: "zcat /usr/share/doc/zabbix-sql-scripts/mysql/create.sql.gz | mysql -h 172.18.10.120 -u zabbix_server -pzabbix zabbix"
+  shell: "zcat /usr/share/doc/zabbix-sql-scripts/mysql/create.sql.gz | mysql -h 192.168.3.120 -u zabbix_server -pzabbix zabbix"
   ignore_errors: yes
-  when: ansible_distribution == "CentOS"
+  when: ansible_facts['distribution_major_version'] == "8"
+
+- name: Habilitar a execução do 'zbx_db_part.sql' "{{ zbx_db }}"
+  shell: "chmod +x /opt/zbx_db_part.sql"
+  ignore_errors: yes
+  when: ansible_facts['distribution_major_version'] == "8"
+
+
+- name: Habilitar a execução do 'zbx_db_part.sql' "{{ zbx_db }}"
+  shell: "dos2unix /opt/zbx_db_part.sql"
+  ignore_errors: yes
+  when: ansible_facts['distribution_major_version'] == "8"
+
+- name: Realizar o particionamento no banco de dados "{{ zbx_db }}"
+  shell: "mysql -h 192.168.3.120 -u zabbix_server -pzabbix zabbix < /opt/zbx_db_part.sql"
+  ignore_errors: yes
+  when: ansible_facts['distribution_major_version'] == "8"
+
+- name: Realizar a configuração inicial de manutenção do banco "{{ zbx_db }}"
+  shell: mysql -h 192.168.3.120 -u zabbix_server -pzabbix zabbix -e "CALL partition_maintenance_all('zabbix');"
+  ignore_errors: yes
+  when: ansible_facts['distribution_major_version'] == "8"
+
+- name: Realizar a configuração inicial de manutenção do banco "{{ zbx_db }}"
+  shell: mysql -h 192.168.3.120 -u zabbix_server -pzabbix zabbix -e "show create table history\G"
+  ignore_errors: yes
+  when: ansible_facts['distribution_major_version'] == "8"
+  
+- name: Realizar a configuração inicial de manutenção do banco "{{ zbx_db }}"
+  shell: mysql -h 192.168.3.120 -u zabbix_server -pzabbix zabbix -e "show create table trends\G"
+  ignore_errors: yes
+  when: ansible_facts['distribution_major_version'] == "8"
+
 # --------------------------------------------------------------------------------------------#
-- name: Iniciar/ Restart Zabbix-Server/Zabbix-agent2
+- name: Iniciar/ Restart Zabbix-Server
   systemd:
     name: "{{ item }}"
     state: restarted
     enabled: yes
   loop:
     - zabbix-server
-    - zabbix-agent2
+    # - zabbix-agent2
   tags: zabbix_server
-  when: ansible_distribution == "CentOS"
+  when: ansible_facts['distribution_major_version'] == "8"
 #----------------------------------------------------------------------------------------------#
 
 ...

@@ -4,6 +4,7 @@
 packages_zabbix_server:
   - mysql
   - zabbix-server-mysql
-  - zabbix-agent2
+  # - zabbix-agent2
   - zabbix-sql-scripts
-  
+  - git
+  - dos2unix

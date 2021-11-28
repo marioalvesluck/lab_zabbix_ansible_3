@@ -1,5 +1,0 @@
----
-# vars file for update_linux
-#
-# variavel de Senha do Usuario Ansible
-ansible_pass: "74094276cfbf400d991af276008d94a4"

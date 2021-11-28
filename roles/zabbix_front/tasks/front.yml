@@ -5,9 +5,9 @@
 - name: Adcionando Repositorio Zabbix - CentOS8
   dnf:
     name: '{{ url_packages_zabbix }}'
-    #name: 'http://repo.zabbix.com/zabbix/5.5/rhel/8/x86_64/zabbix-release-5.5-1.el8.noarch.rpm'
     state: present
   tags: zabbix_front
+  when: ansible_facts['distribution_major_version'] == "8"
 # --------------------------------------------------------------------------------------------#
 #
 - name: Zabbix | Instalando pacotes zabbix-Frontend
@@ -15,20 +15,20 @@
     name: "{{ packages_zabbix_frontend }}"
     state: latest
   tags: zabbix_front
-  when: ansible_distribution == "CentOS"
+  when: ansible_facts['distribution_major_version'] == "8"
 #----------------------------------------------------------------------------------------------#
 - name: PHP | ADD time zone no /etc/php-fpm.d/zabbix.conf
   shell: "echo php_value[date.timezone] = {{ timezone }} >> /etc/php-fpm.d/zabbix.conf"
   ignore_errors: True
   tags: zabbix_front
-  when: ansible_distribution == "CentOS"
+  when: ansible_facts['distribution_major_version'] == "8"
 #-----------------------------------------------------------------------------------------------#
 - name: zabbix-Frontend | Copiando Arquivo zabbix.conf.php default
   template:
     src:  templates/zabbix.conf.php.j2
     dest: /etc/zabbix/web/zabbix.conf.php
   tags: config_inicial
-  when: ansible_distribution == "CentOS" or ansible_distribution == "RedHat" or ansible_distribution == "Debian" or ansible_distribution == "Ubuntu"
+  when: ansible_facts['distribution_major_version'] == "8"
 # ----------------------------------------------------------------------------------------------#
 - name: PHP | Iniciar/ Habilitar e Iniciar App do Apache2
   systemd:
@@ -39,21 +39,21 @@
      - httpd 
      - php-fpm
   tags: zabbix_front
-  when: ansible_distribution == "CentOS"
+  when: ansible_facts['distribution_major_version'] == "8"
 #----------------------------------------------------------------------------------------------#
-- name: Adcionado Porta firewalld  Apache2/Zabbix_Server/Zabbix_Agent
+- name: Adcionado Porta firewalld  Front/Apache2/Zabbix_Server/Zabbix_Agent2
   firewalld:
     port: "{{ item }}"
     permanent: yes
     state: enabled
   loop:
-    - 10051/tcp
-    - 10050/tcp
-    - 3306/tcp
-    - 80/tcp
-    - 443/tcp
+   - 10051/tcp
+   - 10050/tcp
+   - 3306/tcp
+   - 80/tcp
+   - 443/tcp
   tags: zabbix_front
-  when: ansible_distribution == "CentOS"
+  when: ansible_facts['distribution_major_version'] == "8"
 # ----------------------------------------------------------------------------------------------#
 - name: Reload no firewalld
   systemd:
@@ -62,7 +62,7 @@
     enabled: yes
   tags: zabbix_front
 #-----------------------------------------------------------------------------------------------#
-- name: Zabbix | Iniciar/ Habilitar zabbix-agent2
+- name: Zabbix | Reinciar FRONTEND
   systemd:
     name: "{{ item }}"
     state: restarted
@@ -71,5 +71,5 @@
     - php-fpm
     - httpd 
   tags: zabbix_front
-  when: ansible_distribution == "CentOS"
+  when: ansible_facts['distribution_major_version'] == "8"
 #----------------------------------------------------------------------------------------------#
