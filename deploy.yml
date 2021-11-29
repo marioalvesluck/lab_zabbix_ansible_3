@@ -1,21 +1,27 @@
 - name: Playbook de Instalação e Implementação Zabbix 3 Camadas Usando CentOS + Vagrant
   hosts:
     - zabbix
-    - DC01
+      # - DC01
   
   vars:
     
     # VARIAVEL DE HOSTS
     
-    - zbx_front: 192.168.3.100
-    - zbx_srv: 192.168.3.110
-    - zbx_db: 192.168.3.120
+    - zbx_front: 172.18.10.100
+    - zbx_srv: 172.18.10.110
+    - zbx_db: 172.18.10.120
     - DC01: 192.168.3.200
     
     # VARIAVEL DE TimeZone.
     - timezone: America/Sao_Paulo
+    
+    # Schema Criação banco de Dados MYSQL8.0
+    - url_schema: zcat /usr/share/doc/zabbix-sql-scripts/mysql/create.sql.gz | mysql -h 172.18.10.120 -u zabbix_server -pzabbix zabbix
+    - url_partition: "mysql -h 192.168.3.120 -u zabbix_server -pzabbix zabbix < /opt/zbx_db_part.sql"
 
-    - url_zabbix: http://192.168.3.100/zabbix/
+
+    # VARIAVEL DE API URL  
+    - url_zabbix: http://172.18.10.100/zabbix/
     
     # VARIAVEL DE URL_ZABBIX
     - url_packages_zabbix: http://repo.zabbix.com/zabbix/5.5/rhel/8/x86_64/zabbix-release-5.5-1.el8.noarch.rpm 
@@ -66,7 +72,7 @@
   
   roles:
    
-    #- role: Common_Linux
+    - role: Common_Linux
     - role: db_zabbix
       when: ansible_host == zbx_db
     - role: zabbix_server
@@ -79,5 +85,5 @@
       when: ansible_host == zbx_db
     - role: api_add_linux
     # INCIANDO ROLES DO WINDOWS 
-    - role: Common_Windows
-    - role: api_add_windows
+    #- role: Common_Windows
+    #- role: api_add_windows

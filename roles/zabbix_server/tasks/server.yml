@@ -24,13 +24,13 @@
   tags: zabbix_server
   when: ansible_facts['distribution_major_version'] == "8"
 #----------------------------------------------------------------------------------------------#
-# - name: Iniciar/ Habilitar zabbix-server / zabbix-agent2
-#   systemd:
-#     name: zabbix-agent2
-#     state: started
-#     enabled: yes
-#   tags: zabbix_server
-#   when: ansible_facts['distribution_major_version'] == "8"
+- name: Iniciar/ Habilitar zabbix-server / zabbix-agent2
+  systemd:
+    name: zabbix-agent2
+    state: started
+    enabled: yes
+  tags: zabbix_server
+  when: ansible_facts['distribution_major_version'] == "8"
 
 #----------------------------------------------------------------------------------------------#
 #
@@ -94,7 +94,8 @@
   when: ansible_facts['distribution_major_version'] == "8"
 #-----------------------------------------------------------------------------------#
 - name: Importando schema da database do zabbix servidor "{{ zbx_db }}"
-  shell: "zcat /usr/share/doc/zabbix-sql-scripts/mysql/create.sql.gz | mysql -h 192.168.3.120 -u zabbix_server -pzabbix zabbix"
+#  shell: "zcat /usr/share/doc/zabbix-sql-scripts/mysql/create.sql.gz | mysql -h 192.168.3.120 -u zabbix_server -pzabbix zabbix"
+  shell: '{{ url_schema }}'
   ignore_errors: yes
   when: ansible_facts['distribution_major_version'] == "8"
 
@@ -104,28 +105,32 @@
   when: ansible_facts['distribution_major_version'] == "8"
 
 
-- name: Habilitar a execução do 'zbx_db_part.sql' "{{ zbx_db }}"
+- name: Converter e Habilitar a execução do 'zbx_db_part.sql' "{{ zbx_db }}"
   shell: "dos2unix /opt/zbx_db_part.sql"
   ignore_errors: yes
   when: ansible_facts['distribution_major_version'] == "8"
 
 - name: Realizar o particionamento no banco de dados "{{ zbx_db }}"
-  shell: "mysql -h 192.168.3.120 -u zabbix_server -pzabbix zabbix < /opt/zbx_db_part.sql"
+  #shell: "mysql -h 192.168.3.120 -u zabbix_server -pzabbix zabbix < /opt/zbx_db_part.sql"
+  shell: "mysql -h 172.18.10.120 -u zabbix_server -pzabbix zabbix < /opt/zbx_db_part.sql"
   ignore_errors: yes
   when: ansible_facts['distribution_major_version'] == "8"
 
 - name: Realizar a configuração inicial de manutenção do banco "{{ zbx_db }}"
-  shell: mysql -h 192.168.3.120 -u zabbix_server -pzabbix zabbix -e "CALL partition_maintenance_all('zabbix');"
+  #shell: mysql -h 192.168.3.120 -u zabbix_server -pzabbix zabbix -e "CALL partition_maintenance_all('zabbix');"
+  shell: MYSQL_PWD="{{ db_user_pass_server }}" mysql -h "{{ zbx_db }}" -u zabbix_server  "{{ db_name }}" -e "CALL partition_maintenance_all('zabbix');"
   ignore_errors: yes
   when: ansible_facts['distribution_major_version'] == "8"
 
 - name: Realizar a configuração inicial de manutenção do banco "{{ zbx_db }}"
-  shell: mysql -h 192.168.3.120 -u zabbix_server -pzabbix zabbix -e "show create table history\G"
+  #shell: mysql -h 192.168.3.120 -u zabbix_server -pzabbix zabbix -e "show create table history\G"
+  shell: MYSQL_PWD="{{ db_user_pass_server }}" mysql -h "{{ zbx_db }}" -u zabbix_server  "{{ db_name }}" -e "show create table history\G"
   ignore_errors: yes
   when: ansible_facts['distribution_major_version'] == "8"
   
 - name: Realizar a configuração inicial de manutenção do banco "{{ zbx_db }}"
-  shell: mysql -h 192.168.3.120 -u zabbix_server -pzabbix zabbix -e "show create table trends\G"
+  #shell: mysql -h 192.168.3.120 -u zabbix_server -pzabbix zabbix -e "show create table trends\G"
+  shell: MYSQL_PWD="{{ db_user_pass_server }}" mysql -h "{{ zbx_db }}" -u zabbix_server  "{{ db_name }}" -e "show create table trends\G"
   ignore_errors: yes
   when: ansible_facts['distribution_major_version'] == "8"
 
@@ -137,7 +142,7 @@
     enabled: yes
   loop:
     - zabbix-server
-    # - zabbix-agent2
+    - zabbix-agent2
   tags: zabbix_server
   when: ansible_facts['distribution_major_version'] == "8"
 #----------------------------------------------------------------------------------------------#

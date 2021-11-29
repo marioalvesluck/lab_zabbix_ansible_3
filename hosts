@@ -3,13 +3,13 @@
 # Lista de hosts para Implementação do zabbix 3 camadas
 
 [zbx_front]
-192.168.3.100
+172.18.10.100
 
 [zbx_srv]
-192.168.3.110
+172.18.10.110
 
 [zbx_db]
-192.168.3.120
+172.18.10.120
 
 [zabbix:children]
 zbx_front
