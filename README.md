@@ -30,7 +30,7 @@ Dependencies:
 
 Neste Projeto foram ultilizados 4 Servidores:
 
-  - Frontend zabbix
+  - Frontend zabbix / Grafana Server
   - Zabbix-server
   - Zabbix-Proxy
   - Banco de Dados
@@ -59,7 +59,7 @@ Ajustar de Acordo seu Ambiente.
 
 Arquivo hosts :
 
-Ajudar os IPs Conforme sua infraestrutura .
+Ajustar os IPs Conforme sua infraestrutura .
 
 Variaveis em group_vars:
 
