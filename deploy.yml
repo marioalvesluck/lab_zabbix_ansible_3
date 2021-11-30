@@ -86,7 +86,7 @@
     #   when: ansible_host == zbx_front
     # - role: zabbix_agent_linux
     #   when: ansible_host == zbx_db
-    # - role: grafana-server
+    # - role: grafana_server
     #   when: ansible_host == zbx_front
-    - role: zabbix-proxy
+    - role: zabbix_proxy
       when: ansible_host == zbx_proxy

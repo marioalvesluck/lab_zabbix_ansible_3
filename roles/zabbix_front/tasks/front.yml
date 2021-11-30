@@ -2,7 +2,7 @@
 # tasks file for install_zabbix_front
 
 # -------------------------------------------------------------------------------------------#
-- name: Adcionando Repositorio Zabbix - CentOS8
+- name: FRONT | Adcionando Repositorio Zabbix - CentOS8
   dnf:
     name: '{{ url_packages_zabbix }}'
     state: present
@@ -10,7 +10,7 @@
   when: ansible_facts['distribution_major_version'] == "8"
 # --------------------------------------------------------------------------------------------#
 #
-- name: Zabbix | Instalando pacotes zabbix-Frontend
+- name: FRONT | Instalando pacotes zabbix-Frontend
   dnf:
     name: "{{ packages_zabbix_frontend }}"
     state: latest
@@ -23,7 +23,7 @@
   tags: zabbix_front
   when: ansible_facts['distribution_major_version'] == "8"
 #-----------------------------------------------------------------------------------------------#
-- name: zabbix-Frontend | Copiando Arquivo zabbix.conf.php default
+- name: FRONT | Copiando Arquivo zabbix.conf.php default
   template:
     src:  templates/zabbix.conf.php.j2
     dest: /etc/zabbix/web/zabbix.conf.php
@@ -41,7 +41,7 @@
   tags: zabbix_front
   when: ansible_facts['distribution_major_version'] == "8"
 #----------------------------------------------------------------------------------------------#
-- name: Adcionado Porta firewalld  Front/Apache2/Zabbix_Server/Zabbix_Agent2
+- name: FRONT | Adcionado Porta firewalld  Front/Apache2/Zabbix_Server/Zabbix_Agent2
   firewalld:
     port: "{{ item }}"
     permanent: yes
@@ -62,7 +62,7 @@
     enabled: yes
   tags: zabbix_front
 #-----------------------------------------------------------------------------------------------#
-- name: Zabbix | Reinciar FRONTEND
+- name: FRONT | Reinciar FRONTEND
   systemd:
     name: "{{ item }}"
     state: restarted
