@@ -21,6 +21,11 @@ https://docs.ansible.com/
 
 https://www.vagrantup.com/
 
+Procedures Particionamento do Banco de Dados Zabbix.
+
+https://blog.zabbix.com/partitioning-a-zabbix-mysql-database-with-perl-or-stored-procedures/13531/
+
+
 Dependencies:
 ------------
 
