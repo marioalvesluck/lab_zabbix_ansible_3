@@ -73,3 +73,12 @@
   tags: zabbix_front
   when: ansible_facts['distribution_major_version'] == "8"
 #--------------------------------------------------------------------------------------#
+- name: FRONT | Baixando Pacotes googlechrome 
+  shell: wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+  tags: zabbix_front
+  when: ansible_facts['distribution_major_version'] == "8"
+#-------------------------------------------------------------------------------------------------#
+- name: FRONT | Instalando googlechrome
+  shell: "sudo dnf localinstall google-chrome-stable_current_x86_64.rpm -y"
+  tags: zabbix_front
+  when: ansible_facts['distribution_major_version'] == "8"

@@ -1,7 +1,7 @@
 ---
 # tasks file for install_zabbix_server
 # -------------------------------------------------------------------------------------------#
-- name: Adcionando Repositorio Zabbix - CentOS8
+- name: Adcionando Repositorio Zabbix Server.
   dnf:
     name: '{{ url_packages_zabbix }}'
     state: present
@@ -68,11 +68,12 @@
     - { regexp: 'DBUser=zabbix', line: 'DBUser={{ db_user_server }}' }
     - { regexp: '# DBPassword=', line: 'DBPassword={{ db_user_pass_server }}' }
     - { regexp: '# StartPollers=5', line: 'StartPollers=10' }
-    - { regexp: '# StartPollers=5', line: 'StartPollers=10' }
     - { regexp: '# StartPingers=1', line: 'StartPingers=5' }
     - { regexp: '# CacheSize=8M', line: 'CacheSize=512M' }
     - { regexp: '# ValueCacheSize=8M', line: 'ValueCacheSize=1024M' }
     - { regexp: '# VMwareCacheSize=8M', line: 'VMwareCacheSize=1024M' }
+    - { regexp: '# StartReportWriters=0', line: 'StartReportWriters=1' }
+    - { regexp: '# WebServiceURL=', line: 'WebServiceURL=http://{{zbx_front}}:10053/report' }
   when: ansible_facts['distribution_major_version'] == "8"
   tags: zabbix_server
 #-----------------------------------------------------------------------------------#
@@ -112,7 +113,7 @@
 
 - name: Realizar o particionamento no banco de dados "{{ zbx_db }}"
   #shell: "mysql -h 192.168.3.120 -u zabbix_server -pzabbix zabbix < /opt/zbx_db_part.sql"
-  shell: "mysql -h 172.18.10.120 -u zabbix_server -pzabbix zabbix < /opt/zbx_db_part.sql"
+  shell: MYSQL_PWD="{{ db_user_pass_server }}" mysql -h "{{ zbx_db }}" -u zabbix_server zabbix < /opt/zbx_db_part.sql
   ignore_errors: yes
   when: ansible_facts['distribution_major_version'] == "8"
 

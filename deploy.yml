@@ -1,27 +1,29 @@
-- name: Playbook de Instalação e Implementação Zabbix 3 Camadas Usando CentOS + Vagrant
+- name: Playbook de Instalação e Implementação Zabbix 3 Camadas Usando Rocky Linux8.
   hosts:
     - zabbix
-      # - DC01
-  
+    - zbx_proxy
+    - DC01
+        
   vars:
     
     # VARIAVEL DE HOSTS
     
-    - zbx_front: 172.18.10.100
-    - zbx_srv: 172.18.10.110
-    - zbx_db: 172.18.10.120
+    - zbx_front: 192.168.3.100
+    - zbx_srv: 192.168.3.110
+    - zbx_db: 192.168.3.120
+    - zbx_proxy: 192.168.3.130
     - DC01: 192.168.3.200
     
     # VARIAVEL DE TimeZone.
     - timezone: America/Sao_Paulo
     
     # Schema Criação banco de Dados MYSQL8.0
-    - url_schema: zcat /usr/share/doc/zabbix-sql-scripts/mysql/create.sql.gz | mysql -h 172.18.10.120 -u zabbix_server -pzabbix zabbix
+    - url_schema: zcat /usr/share/doc/zabbix-sql-scripts/mysql/create.sql.gz | mysql -h 192.168.3.120 -u zabbix_server -pzabbix zabbix
     - url_partition: "mysql -h 192.168.3.120 -u zabbix_server -pzabbix zabbix < /opt/zbx_db_part.sql"
 
 
     # VARIAVEL DE API URL  
-    - url_zabbix: http://172.18.10.100/zabbix/
+    - url_zabbix_api: http://192.168.3.100/zabbix/
     
     # VARIAVEL DE URL_ZABBIX
     - url_packages_zabbix: http://repo.zabbix.com/zabbix/5.5/rhel/8/x86_64/zabbix-release-5.5-1.el8.noarch.rpm 
@@ -69,21 +71,22 @@
         - zabbix-apache-conf
         - zabbix-web-mysql
         - httpd
+        - zabbix-web-service
   
   roles:
    
-    - role: Common_Linux
-    - role: db_zabbix
-      when: ansible_host == zbx_db
-    - role: zabbix_server
-      when: ansible_host == zbx_srv
-    - role: zabbix_front
-      when: ansible_host == zbx_front
-    - role: zabbix_agent_linux
-      when: ansible_host == zbx_front
-    - role: zabbix_agent_linux
-      when: ansible_host == zbx_db
-    - role: api_add_linux
-    # INCIANDO ROLES DO WINDOWS 
-    #- role: Common_Windows
-    #- role: api_add_windows
+    #- role: Common_Linux
+    # - role: db_zabbix
+    #   when: ansible_host == zbx_db
+    # - role: zabbix_server
+    #   when: ansible_host == zbx_srv
+    # - role: zabbix_front
+    #   when: ansible_host == zbx_front
+    # - role: zabbix_agent_linux
+    #   when: ansible_host == zbx_front
+    # - role: zabbix_agent_linux
+    #   when: ansible_host == zbx_db
+    # - role: grafana-server
+    #   when: ansible_host == zbx_front
+    - role: zabbix-proxy
+      when: ansible_host == zbx_proxy
