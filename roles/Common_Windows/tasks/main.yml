@@ -1,0 +1,2 @@
+- name: Instalação de pacotes e atualização Windows
+  include_tasks: windows.yml

@@ -1,0 +1,15 @@
+---
+# defaults file for upgrade_windows
+
+common_pacotes_windows:
+  # - forticlientvpn
+  - cpu-z.install
+  - winrar
+  - googlechrome
+  # - teamviewer
+  # - anydesk
+
+common_desinstall_windows:
+  - vim
+  - git
+

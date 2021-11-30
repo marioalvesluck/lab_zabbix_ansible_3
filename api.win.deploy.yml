@@ -1,0 +1,11 @@
+- name: Playbook de Criação de hosts no Zabbix
+  hosts:
+    - DC01
+  vars:
+    # VARIAVEL DE HOSTS
+    - DC01: 192.168.3.200
+    
+  
+  roles:
+    - role: api_add_windows
+      when: ansible_os_family == "Windows"

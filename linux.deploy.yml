@@ -1,0 +1,8 @@
+- name: Playbook de Criação de hosts no Zabbix
+  hosts:
+    - zbx_front
+    - zbx_db
+    - zbx_srv  
+  roles:
+    
+    - role: zabbix_agent_linux

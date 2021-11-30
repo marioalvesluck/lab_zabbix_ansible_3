@@ -1,0 +1,4 @@
+---
+# vars file for zabbix-proxy
+
+packages_zabbix_proxy: zabbix-proxy-sqlite3

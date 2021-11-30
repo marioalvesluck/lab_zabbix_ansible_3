@@ -1,0 +1,2 @@
+- name: Atualização dos servidores Linux
+  include_tasks: config_inicial.yml

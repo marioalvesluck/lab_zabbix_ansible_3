@@ -1,0 +1,74 @@
+---
+# tasks file for grafana-server
+# -------------------------------------------------------------------------------------------#
+- name: Adcionando Repositorio Grafana
+  shell: "wget https://dl.grafana.com/oss/release/grafana-8.2.5-1.x86_64.rpm"
+  tags: grafana-server
+  when: ansible_facts['distribution_major_version'] == "8"
+# --------------------------------------------------------------------------------------------#
+#
+- name: DNF | Atualizando Sistema / cache
+  dnf: 
+    name: '*'
+    state: latest
+    update_cache: yes
+  tags: config_inicial
+  when: ansible_facts['distribution_major_version'] == "8"
+#----------------------------------------------------------------------------------------------#
+- name: Instalando pacotes grafana-server
+  shell: "yum install grafana-8.2.5-1.x86_64.rpm -y"
+  tags: grafana-server
+  when: ansible_facts['distribution_major_version'] == "8"
+#----------------------------------------------------------------------------------------------#
+- name: Habilitando Plugins zabbix-server
+  shell: "grafana-cli plugins install alexanderzobnin-zabbix-app"
+  tags: grafana-server
+  when: ansible_facts['distribution_major_version'] == "8"
+#----------------------------------------------------------------------------------------------#
+- name: Iniciar/ Habilitar Grafana-server
+  systemd:
+    name: grafana-server
+    state: started
+    enabled: yes
+  tags: zabbix_server
+  when: ansible_facts['distribution_major_version'] == "8"
+#----------------------------------------------------------------------------------------------#
+- name: Iniciar/ Habilitar Grafana-server
+  systemd:
+    name: grafana-server
+    state: started
+    enabled: yes
+  tags: grafana-server
+  when: ansible_facts['distribution_major_version'] == "8"
+
+#----------------------------------------------------------------------------------------------#
+#
+- name: Zabbix | |Reiniciar HTTPD
+  systemd:
+    name: "{{ item }}"
+    state: restarted
+    enabled: yes
+  loop:
+    - php-fpm
+    - httpd 
+  tags: zabbix_front
+  when: ansible_facts['distribution_major_version'] == "8"
+#------------------------------------------------------------------------------------------------#
+- name: Adcionado Porta firewalld Grafana-server
+  firewalld:
+    port: "{{ item }}"
+    permanent: yes
+    state: enabled
+  loop:
+    - 3000/tcp
+  tags: grafana-server
+  when: ansible_facts['distribution_major_version'] == "8"
+# ----------------------------------------------------------------------------------------------#
+
+- name: Reload no firewalld
+  systemd:
+    name: firewalld
+    state: reloaded
+    enabled: yes
+  tags: grafana-server
+  when: ansible_facts['distribution_major_version'] == "8"

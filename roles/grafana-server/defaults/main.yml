@@ -1,0 +1,4 @@
+---
+# defaults file for grafana-server
+packages_zabbix_server:
+  - grafana

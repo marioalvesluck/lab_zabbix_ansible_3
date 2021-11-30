@@ -1,0 +1,74 @@
+---
+# tasks file for upgrade_windows
+
+# ---------------------------------------------------------------------------#
+- name: WINDOWS | Instale todas as atualizações de segurança, críticas e cumulativas .
+  win_updates:
+    category_names:
+      - SecurityUpdates
+      - CriticalUpdates
+      - UpdateRollups 
+  tags: config_inicial
+  when: ansible_os_family == "Windows"
+#----------------------------------------------------------------------------#
+- name: WINDOWS | Instale todas as atualizações de segurança com reinicializações automáticas.
+  win_updates:
+    category_names:
+          - SecurityUpdates
+    reboot: yes
+  tags: config_inicial
+  when: ansible_os_family == "Windows"
+#----------------------------------------------------------------------------#
+- name: WINDOWS | CHOCOLATEY | Instalando Chocolatey
+  win_shell: Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+  tags: config_inicial
+  when: ansible_os_family == "Windows"
+#----------------------------------------------------------------------------#
+- name: WINDOWS | CHOCOLATEY | Desabilitando  enhanced exit codes
+  win_chocolatey_feature:
+        name: useEnhancedExitCodes
+        state: disabled
+  tags: config_inicial
+  when: ansible_os_family == "Windows"
+#----------------------------------------------------------------------------#
+- name : WINDOWS | CHOCOLATEY | Instalando Multiplos Pacotes
+  win_chocolatey:
+    name: '{{ common_pacotes_windows }}'
+    # present = instalar  absent = desinstalar
+    state: present
+  tags: config_inicial
+  when: ansible_os_family == "Windows"
+#----------------------------------------------------------------------------#
+- name: WINDOWS | Instale todas as atualizações de segurança, críticas e cumulativas .
+  win_updates:
+        category_names:
+          - SecurityUpdates
+          - CriticalUpdates
+          - UpdateRollups
+  tags: config_inicial
+  when: ansible_os_family == "Windows"
+#-----------------------------_#   
+- name: WINDOWS | Parar Serviço no Servidor.
+  win_service:
+    name: "{{ item }}"
+    # Opções : restarted , stopped, started.
+    state: started
+  loop:
+    - Spooler
+  tags: config_inicial
+  when: ansible_os_family == "Windows"  
+#----------------------------------------------------------------------------#
+- name: Windows Chocolotey | Desinstalando Programas.
+  win_chocolatey:
+    name: '{{ common_desinstall_windows }}'
+    state: absent
+  tags: config_inicial
+  when: ansible_os_family == "Windows"
+#----------------------------------------------------------------------------#
+- name: WINDOWS | Realizar Reboot do Sistema Apos procedimentos de atualização.
+  win_updates:
+      reboot: yes
+      reboot_timeout: 5
+  tags: config_inicial
+  when: ansible_os_family == "Windows"
+#----------------------------------------------------------------------------#

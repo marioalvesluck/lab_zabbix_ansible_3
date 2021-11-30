@@ -1,0 +1,77 @@
+---
+# tasks file for zabbix-proxy
+- name: Adcionando Repositorio Zabbix Proxy.
+  dnf:
+    name: '{{ url_packages_zabbix }}'
+    state: present
+  tags: zabbix_proxy
+  when: ansible_facts['distribution_major_version'] == "8"
+# --------------------------------------------------------------------------------------------#
+#
+- name: Instalando pacotes zabbix-proxy
+  dnf:
+    name: '{{ packages_zabbix_proxy }}'
+    state: latest
+  tags: zabbix_proxy
+  when: ansible_facts['distribution_major_version'] == "8"
+
+#--------------------------------------------------------------------------------------------#
+- name: Criar diretorio banco sqlite3
+  file:
+    path: /var/lib/sqlite
+    owner: zabbix
+    group: zabbix
+    mode: '0755'
+    state: directory
+    recurse: yes
+  tags: zabbix_proxy
+  when: ansible_facts['distribution_major_version'] == "8"
+# --------------------------------------------------------------------------------------------#
+- name: SSH | Setando configurações de segurança no arquivo zabbix_proxy.conf
+  lineinfile:
+    dest: /etc/zabbix/zabbix_proxy.conf
+    state: present
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    backrefs: yes
+  loop:
+    - { regexp: '# ProxyMode=0', line: 'ProxyMode=0' }
+    - { regexp: '^Server=127.0.0.1', line: 'Server={{ zbx_srv }}' }
+    - { regexp: '^Hostname=Zabbix proxy', line: 'Hostname={{ zbx_proxy}}' }
+    - { regexp: '# EnableRemoteCommands=0', line: '# EnableRemoteCommands=1' }
+    - { regexp: '^DBName=zabbix_proxy', line: 'DBName=/var/lib/sqlite/zabbix_proxy.db' }
+    - { regexp: '# StartPollers=5', line: 'StartPollers=10' }
+    - { regexp: '# StartPinger=1', line: 'StartPinger=10' }
+    - { regexp: '# ConfigFrequency=3600', line: 'ConfigFrequency=60' }
+    - { regexp: '# CacheSize=8M', line: 'CacheSize=1024M' }
+    - { regexp: '^Timeout=4', line: 'Timeout=30' }
+  tags: zabbix_proxy
+  when: ansible_facts['distribution_major_version'] == "8"
+#-----------------------------------------------------------------------------------#
+- name: Realizar Restart do  Zabbix Proxy.
+  systemd:
+    name: zabbix-proxy
+    state: restarted
+    enabled: yes
+  tags: zabbix_proxy 
+  when: ansible_facts['distribution_major_version'] == "8"
+#----------------------------------------------------------------------------------------------#
+#
+- name: Adcionado Porta firewalld de Comunicação zabbix Proxy.
+  firewalld:
+    port: "{{ item }}"
+    permanent: yes
+    state: enabled
+  loop:
+    - 10051/tcp
+    - 10050/tcp
+  tags: zabbix_proxy
+  when: ansible_facts['distribution_major_version'] == "8"
+# ----------------------------------------------------------------------------------------------#
+- name: Reload no firewalld
+  systemd:
+    name: firewalld
+    state: reloaded
+    enabled: yes
+  tags: zabbix_proxy
+  when: ansible_facts['distribution_major_version'] == "8"

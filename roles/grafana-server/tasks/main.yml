@@ -1,0 +1,3 @@
+- name: Instalação do Grafana Server / Adição dos Plugins
+  include_tasks: grafana.yml
+

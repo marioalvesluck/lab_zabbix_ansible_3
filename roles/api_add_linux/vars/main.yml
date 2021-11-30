@@ -1,0 +1,5 @@
+---
+# vars file for api_zabbix
+
+ip_address: 
+  - 172.18.10.100

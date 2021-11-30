@@ -1,0 +1,24 @@
+# SENHA DO ROOT
+root_pass: 'zabbix'
+
+# VARIAVEL CRIAÇÃO DO BANCO DE DADOS 
+db_name: 'zabbix'
+    
+# VARIAVEL CRIAÇÃDO DO USUARIO ZABBIX LOCALHOST
+db_user_zabbix: 'zabbix'
+db_user_zabbix_pass: 'zabbix'
+    
+# VARIAVEL CRIAÇÃO DO USUARIO ZABBIX SERVER
+db_user_server: 'zabbix_server'
+db_user_pass_server: 'zabbix'
+    
+# VARIAVEIS DE CRIAÇÃO DE USUARIO zabbix_web 
+db_user_web: 'zabbix_web'
+db_user_pass_web: 'zabbix'
+      
+      
+# CONFIGURAÇÃO DO FRONTEND DO ZABBIX
+zbx_port: 10051
+zbx_name: Monitor_Ansible
+zabx_web: 'zabbix'
+

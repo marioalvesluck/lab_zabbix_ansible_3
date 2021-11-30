@@ -1,0 +1,8 @@
+- name: Playbook de Criação de hosts no Zabbix
+  hosts:
+    - zbx_front
+    - zbx_db
+  
+  roles:
+    
+    - role: api_add_linux

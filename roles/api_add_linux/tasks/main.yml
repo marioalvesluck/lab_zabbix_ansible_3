@@ -1,0 +1,28 @@
+---
+# tasks file for api_zabbix
+- name: Criando hosts no zabbix forma Automatica.
+  local_action:
+    module: community.zabbix.zabbix_host
+    server_url: http://192.168.3.100/zabbix/
+    login_user: Admin
+    login_password: zabbix
+    host_name: "{{ansible_fqdn}}"
+    visible_name: "{{ansible_fqdn}}"
+    host_groups:
+      - Zabbix servers
+    link_templates:
+      - Linux by Zabbix agent active
+    status: enabled
+    state: present
+    inventory_mode: automatic
+    interfaces:
+      - type: '1'
+        main: 1
+        useip: 1
+        #ip: "{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0])}}"
+        ip: "{{ ansible_all_ipv4_addresses[0]}}"
+        #ip: "{{ ansible_eth1.ipv4.address}}"
+        dns: ""
+        port: "10050"
+  tags: api_zabbix
+  when: ansible_facts['distribution_major_version'] == "8"

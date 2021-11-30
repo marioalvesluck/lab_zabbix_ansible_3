@@ -1,0 +1,27 @@
+---
+# tasks file for api_zabbix
+- name: Criar um novo host {{ DC01 }}
+  local_action:
+    module: community.zabbix.zabbix_host
+    server_url: http://192.168.3.100/zabbix/
+    login_user: Admin
+    login_password: zabbix
+    host_name: "{{ansible_hostname}}"
+    visible_name: "{{ansible_hostname}}"
+    description: Servidor de Teste Windows
+    host_groups:
+      - Zabbix servers
+    link_templates:
+      - ICMP Ping
+    status: enabled
+    state: present
+    inventory_mode: manual
+    interfaces:
+      - type: '1'
+        main: 1
+        useip: 1
+        ip: "{{ansible_ip_addresses[0]}}"
+        dns: ""
+        port: "10050"
+  tags: api_zabbix
+  when: ansible_os_family == "Windows"
