@@ -49,7 +49,7 @@
   tags: config_inicial
   when: ansible_facts['distribution_major_version'] == "8"
 # -------------------------------------------------------------------------------------------------#
-# User | Criando Usuario Ansible
+# Directory | Criando Um Diretorio Para usuario "{{ username }}"
 
 - name: DIRETORIO | Criando Diretorio 
   file:

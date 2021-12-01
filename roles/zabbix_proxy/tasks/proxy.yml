@@ -28,6 +28,39 @@
   tags: zabbix_proxy
   when: ansible_facts['distribution_major_version'] == "8"
 # --------------------------------------------------------------------------------------------#
+- name: Gerando Chave psk - ZBX - ZBX PROXY
+  shell: sudo sh -c "openssl rand -hex 32 > /etc/zabbix/zabbix_agentd.psk"
+  ignore_errors: true
+  tags: zabbix_proxy
+  when: ansible_facts['distribution_major_version'] == "8"
+
+#------------------------------------------------------------------------------------------------#
+- name : Armazenando psk VARIAVEL
+  shell: "cat /etc/zabbix/zabbix_agentd.psk"
+  register: pks
+  ignore_errors: yes
+  when: ansible_facts['distribution_major_version'] == "8"
+#------------------------------------------------------------------------------------------------#
+- name: Armazenando saida pks.stdout
+  set_fact: 
+       psk: "{{ pks.stdout }}"
+#------------------------------------------------------------------------------------------------#
+- name: ZBX PROXY - Criar o Proxy Modo Active.
+  local_action:
+    module: community.zabbix.zabbix_proxy
+    server_url: '{{ url_zabbix_api }}'
+    login_user: '{{ username }}'
+    login_password: '{{ password }}'
+    proxy_name: '{{ proxy_name }}'
+    status: active
+    state: present
+    proxy_address: '{{ zbx_proxy }}'
+    tls_accept: PSK
+    tls_psk_identity: 'PSK 001'
+    tls_psk: "{{ psk }}"  
+  when: ansible_facts['distribution_major_version'] == "8"
+
+#-----------------------------------------------------------------------------------------------#
 - name: SSH | Setando configurações de segurança no arquivo zabbix_proxy.conf
   lineinfile:
     dest: /etc/zabbix/zabbix_proxy.conf
@@ -46,22 +79,14 @@
     - { regexp: '# ConfigFrequency=3600', line: 'ConfigFrequency=60' }
     - { regexp: '# CacheSize=8M', line: 'CacheSize=1024M' }
     - { regexp: '^Timeout=4', line: 'Timeout=30' }
+    - { regexp: '# TLSConnect=unencrypted', line: 'TLSConnect=psk' }
+    - { regexp: '# TLSAccept=unencrypted', line: 'TLSAccept=psk' }
+    - { regexp: '# TLSPSKIdentity=', line: 'TLSPSKIdentity=PSK001' }
+    - { regexp: '# TLSPSKFile=', line: 'TLSPSKFile=/etc/zabbix/zabbix_agentd.psk' }
   tags: zabbix_proxy
   when: ansible_facts['distribution_major_version'] == "8"
 #-----------------------------------------------------------------------------------#
-- name: ZBX PROXY - Criar o Proxy Modo Active.
-  local_action:
-    module: community.zabbix.zabbix_proxy
-    server_url: '{{ url_zabbix_api }}'
-    login_user: '{{ username }}'
-    login_password: '{{ password }}'
-    proxy_name: '{{ proxy_name }}'
-    status: active
-    state: present
-    proxy_address: '{{ zbx_proxy }}'
-  when: ansible_facts['distribution_major_version'] == "8"
-#------------------------------------------------------------------------------------#
-- name: Realizar Restart do  Zabbix Proxy.
+- name: ZBX PROXY | Realizar Restart do  Zabbix Proxy.
   systemd:
     name: zabbix-proxy
     state: restarted
@@ -88,3 +113,7 @@
     enabled: yes
   tags: zabbix_proxy
   when: ansible_facts['distribution_major_version'] == "8"
+#-----------------------------------------------------------------------------------------------#
+
+
+  

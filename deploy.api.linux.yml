@@ -3,6 +3,16 @@
     - zbx_front
     - zbx_db
     - zbx_proxy
+
+  vars: 
+   - url_zabbix_api: http://192.168.3.100/zabbix/
+   - username: 'Admin'
+   - password: 'zabbix'
+   - zbx_srv: 192.168.3.110
+   - proxy_name: 'zbx_proxy'
+   - zbx_proxy: 192.168.3.130
+   - host_template: 'Linux by Zabbix agent active'
+   - host_grupo: 'Zabbix servers' 
+ 
   roles:
-    
     - role: api_add_linux
