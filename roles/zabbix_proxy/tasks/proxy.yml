@@ -4,6 +4,7 @@
   dnf:
     name: '{{ url_packages_zabbix }}'
     state: present
+  ignore_errors: yes
   tags: zabbix_proxy
   when: ansible_facts['distribution_major_version'] == "8"
 # --------------------------------------------------------------------------------------------#
@@ -37,8 +38,8 @@
   loop:
     - { regexp: '# ProxyMode=0', line: 'ProxyMode=0' }
     - { regexp: '^Server=127.0.0.1', line: 'Server={{ zbx_srv }}' }
-    - { regexp: '^Hostname=Zabbix proxy', line: 'Hostname={{ zbx_proxy}}' }
-    - { regexp: '# EnableRemoteCommands=0', line: '# EnableRemoteCommands=1' }
+    - { regexp: '^Hostname=Zabbix proxy', line: 'Hostname={{ proxy_name }}' }
+    - { regexp: '# EnableRemoteCommands=0', line: 'EnableRemoteCommands=1' }
     - { regexp: '^DBName=zabbix_proxy', line: 'DBName=/var/lib/sqlite/zabbix_proxy.db' }
     - { regexp: '# StartPollers=5', line: 'StartPollers=10' }
     - { regexp: '# StartPinger=1', line: 'StartPinger=10' }
@@ -48,6 +49,18 @@
   tags: zabbix_proxy
   when: ansible_facts['distribution_major_version'] == "8"
 #-----------------------------------------------------------------------------------#
+- name: ZBX PROXY - Criar o Proxy Modo Active.
+  local_action:
+    module: community.zabbix.zabbix_proxy
+    server_url: '{{ url_zabbix_api }}'
+    login_user: '{{ username }}'
+    login_password: '{{ password }}'
+    proxy_name: '{{ proxy_name }}'
+    status: active
+    state: present
+    proxy_address: '{{ zbx_proxy }}'
+  when: ansible_facts['distribution_major_version'] == "8"
+#------------------------------------------------------------------------------------#
 - name: Realizar Restart do  Zabbix Proxy.
   systemd:
     name: zabbix-proxy

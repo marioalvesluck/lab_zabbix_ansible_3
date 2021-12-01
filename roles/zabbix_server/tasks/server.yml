@@ -91,7 +91,7 @@
     src: "{{ item.src }}" 
     dest: "{{ item.dest }}"
   loop:
-    - { src: 'zbx_db_part.sql', dest: '/opt/zbx_db_part.sql'}
+    - { src: 'part.sql', dest: '/opt/part.sql'}
   when: ansible_facts['distribution_major_version'] == "8"
 #-----------------------------------------------------------------------------------#
 - name: Importando schema da database do zabbix servidor "{{ zbx_db }}"
@@ -105,7 +105,7 @@
   when: ansible_facts['distribution_major_version'] == "8"
 
 
-- name: Converter e Habilitar a execução do 'zbx_db_part.sql' "{{ zbx_db }}"
+- name: Converter e Habilitar a execução do 'part.sql' "{{ zbx_db }}"
   shell: "dos2unix /opt/part.sql"
   ignore_errors: yes
   when: ansible_facts['distribution_major_version'] == "8"
@@ -129,6 +129,16 @@
   shell: MYSQL_PWD="{{ db_user_pass_server }}" mysql -h "{{ zbx_db }}" -u zabbix_server  "{{ db_name }}" -e "show create table trends\G"
   ignore_errors: yes
   when: ansible_facts['distribution_major_version'] == "8"
+
+- name: ZBX SRV | Criar Arquivo /etc/cron.d
+  ansible.builtin.cron:
+    name: ansible_partition_db
+    weekday: "0"
+    minute: "30"
+    hour: "3"
+    user: root
+    job: MYSQL_PWD="{{ db_user_pass_server }}" mysql -h "{{ zbx_db }}" -u zabbix_server  "{{ db_name }}" -e "CALL partition_maintenance_all('zabbix');" > /tmp/CronDBpartitiong.log 2>&1"
+    cron_file: ansible_partition_db
 
 # --------------------------------------------------------------------------------------------#
 - name: ZBX SRV | Iniciar/ Restart Zabbix-Server

@@ -1,0 +1,14 @@
+- name: Playbook de Instalação Zabbix Proxy
+  hosts:
+    - zbx_proxy
+  vars: 
+   - url_zabbix_api: http://192.168.3.100/zabbix/
+   - username: 'Admin'
+   - password: 'zabbix'
+   - zbx_srv: 192.168.3.110
+   - proxy_name: 'zbx_proxy'
+   - zbx_proxy: 192.168.3.130
+
+  roles:
+    
+    - role: zabbix_proxy

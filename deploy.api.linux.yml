@@ -2,7 +2,7 @@
   hosts:
     - zbx_front
     - zbx_db
-  
+    - zbx_proxy
   roles:
     
     - role: api_add_linux

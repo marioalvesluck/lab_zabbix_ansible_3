@@ -1,0 +1,15 @@
+- name: Playbook Realizar Teste de api.
+  hosts: Zabbix Server
+  tasks:
+ 
+   - name: Criando hosts no zabbix forma Automatica.
+     local_action:
+         module: community.zabbix.zabbix_host
+         server_url: http://192.168.3.100/zabbix/
+         login_user: Admin
+         login_password: zabbix
+         host_name: ''
+         ignore_erros: True
+
+      
+         

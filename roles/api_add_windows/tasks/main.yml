@@ -1,5 +1,5 @@
 ---
-# tasks file for api_zabbix
+# tasks file for api_zabbix create hosts windows
 - name: Criar um novo host {{ DC01 }}
   local_action:
     module: community.zabbix.zabbix_host

@@ -1,5 +1,6 @@
 ---
-# tasks file for api_zabbix
+# tasks for api_zabbix create hosts .
+
 - name: Criando hosts no zabbix forma Automatica.
   local_action:
     module: community.zabbix.zabbix_host
@@ -19,10 +20,9 @@
       - type: '1'
         main: 1
         useip: 1
-        #ip: "{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0])}}"
         ip: "{{ ansible_all_ipv4_addresses[0]}}"
-        #ip: "{{ ansible_eth1.ipv4.address}}"
         dns: ""
         port: "10050"
+  ignore_errors: yes
   tags: api_zabbix
   when: ansible_facts['distribution_major_version'] == "8"
