@@ -23,6 +23,7 @@
         ip: "{{ ansible_all_ipv4_addresses[0]}}"
         dns: ""
         port: "10050"
+    proxy: '{{ proxy_name }}'
   ignore_errors: yes
   tags: api_zabbix
   when: ansible_facts['distribution_major_version'] == "8"

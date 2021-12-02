@@ -1,5 +1,10 @@
 ---
 # vars file for db_zabbix
+# Schema Criação banco de Dados MYSQL8.0
+url_schema: zcat /usr/share/doc/zabbix-sql-scripts/mysql/create.sql.gz | mysql -h 192.168.3.120 -u zabbix_server -pzabbix zabbix
+url_partition: "mysql -h 192.168.3.120 -u zabbix_server -pzabbix zabbix < /opt/zbx_db_part.sql"
+
+
 # Senha do UsuarioRoot
 # root_pass: 'zabbix'
   

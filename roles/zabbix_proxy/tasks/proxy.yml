@@ -1,5 +1,13 @@
 ---
 # tasks file for zabbix-proxy
+# - name: Get zabbix proxy info alongside the list of hosts monitored by the proxy
+#   community.zabbix.zabbix_proxy_info:
+#     server_url: '{{ url_zabbix_api }}'
+#     login_user: '{{ username }}'
+#     login_password: '{{ password }}'
+#     proxy_name: '{{ proxy_name }}'
+#     proxy_hosts: True
+#----------------------------------------------------------------------------------------------#    
 - name: Adcionando Repositorio Zabbix Proxy.
   dnf:
     name: '{{ url_packages_zabbix }}'
@@ -56,7 +64,7 @@
     state: present
     proxy_address: '{{ zbx_proxy }}'
     tls_accept: PSK
-    tls_psk_identity: 'PSK 001'
+    tls_psk_identity: 'zabbixproxy'
     tls_psk: "{{ psk }}"  
   when: ansible_facts['distribution_major_version'] == "8"
 
@@ -81,7 +89,7 @@
     - { regexp: '^Timeout=4', line: 'Timeout=30' }
     - { regexp: '# TLSConnect=unencrypted', line: 'TLSConnect=psk' }
     - { regexp: '# TLSAccept=unencrypted', line: 'TLSAccept=psk' }
-    - { regexp: '# TLSPSKIdentity=', line: 'TLSPSKIdentity=PSK001' }
+    - { regexp: '# TLSPSKIdentity=', line: 'TLSPSKIdentity=zabbixproxy' }
     - { regexp: '# TLSPSKFile=', line: 'TLSPSKFile=/etc/zabbix/zabbix_agentd.psk' }
   tags: zabbix_proxy
   when: ansible_facts['distribution_major_version'] == "8"
@@ -114,6 +122,3 @@
   tags: zabbix_proxy
   when: ansible_facts['distribution_major_version'] == "8"
 #-----------------------------------------------------------------------------------------------#
-
-
-  

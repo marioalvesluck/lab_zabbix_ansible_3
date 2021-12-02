@@ -1,0 +1,78 @@
+---
+# tasks file for Common_RockyLinux
+# -------------------------- Padronizar Ambiente Linux --------------------------------------#
+#----------------------------------- --------------------------------------------------------#
+# Adcionar timezone da Cidade
+- name: TIMEZONE | Setando timezone 
+  timezone:
+    name: "{{ timezone }}"
+  tags: config_inicial
+  when: ansible_facts['distribution_major_version'] == "8" 
+#----------------------------------------------------------------------------------------------#
+# Alterando o layout do TECLADO
+- name: Alterando o layout do teclado do sistema
+  command: /bin/localectl set-keymap br-abnt2
+  tags: config_inicial
+  when: ansible_facts['distribution_major_version'] == "8"
+#------------------------------------------------------------------------------------------------#
+- name: DNF | Atualizando Sistema / cache
+  dnf: 
+    name: '*'
+    state: latest
+    update_cache: yes
+  tags: config_inicial
+  when: ansible_facts['distribution_major_version'] == "8"
+#---------------------------------------------------------------------------------------------------------#
+- name: CENTOS - DNF | Remove pacotes
+  dnf:
+    name: ['postfix']
+    state: absent
+  tags: config_inicial
+  when: ansible_facts['distribution_major_version'] == "8"
+#---------------------------------------------------------------------------------------------------------#
+- name: CENTOS - DNF | Intalando lista de Pacotes
+  dnf: 
+     name: "{{ common_pacotes_redhat }}"
+     state: latest
+  tags: config_inicial
+  when: ansible_facts['distribution_major_version'] == "8"
+#----------------------------------------------------------------------------------------------------------#
+# CENTOS| REDHAT | Habilitando serviços na inicialização 
+- name: CENTOS - SERVICE | Habilitar e iniciar serviços na inicialização
+  systemd:
+     name: chronyd
+     state: started
+     enabled: yes
+  tags: config_inicial
+  when: ansible_facts['distribution_major_version'] == "8"
+#-----------------------------------------------------------------------------------------------------------#
+# Realizar Restart da APP
+- name: CENTOS - SERVICE | Reiniciar serviço chronyd 
+  systemd:
+     name: chronyd
+     state: restarted
+     daemon_reload: yes
+  tags: config_inicial
+  when: ansible_facts['distribution_major_version'] == "8"
+#-----------------------------------------------------------------------------------------------------------#
+- name: FIREWALL | Ativar o firewalld
+  systemd:
+    name: firewalld
+    state: started
+    enabled: yes
+  tags: config_inicial
+  when: ansible_facts['distribution_major_version'] == "8"
+#------------------------------------------------------------------------------------------------------------#
+- name: Reload no firewalld
+  systemd:
+    name: firewalld
+    state: reloaded
+    enabled: yes
+  tags: config_inicial
+  when: ansible_facts['distribution_major_version'] == "8"
+#------------------------------------------------------------------------------------------------------------#    
+- name: REBOOT | Realizar Reboot Apos 1 minutos
+  reboot:
+    reboot_timeout: 300
+  tags: config_inicial
+  when: ansible_facts['distribution_major_version'] == "8"

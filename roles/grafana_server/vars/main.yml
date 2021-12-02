@@ -1,2 +1,6 @@
 ---
 # vars file for grafana-server
+
+# VARIAVEIS DE URL VERSÃO DO GRAFANA
+url_packages_grafana: https://dl.grafana.com/oss/release/grafana-8.2.5-1.x86_64.rpm
+    #- url_packages_grafana: https://dl.grafana.com/oss/release/grafana-8.3.0-1.x86_64.rpm    

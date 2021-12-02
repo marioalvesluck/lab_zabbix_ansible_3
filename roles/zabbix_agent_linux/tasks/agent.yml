@@ -31,7 +31,6 @@
     state: enabled
   loop:
     - 10050/tcp
-
   tags: zabbix_agent2
   when: ansible_facts['distribution_major_version'] == "8"
 #-------------------------------------------------------------------------------#
@@ -43,7 +42,7 @@
     line: "{{ item.line }}"
     backrefs: yes
   loop:
-    - { regexp: "^Server=127.0.0.1", line: "Server={{zbx_proxy}}" }
+    - { regexp: "^Server=127.0.0.1", line: "Server={{ zbx_proxy}}" }
     - { regexp: "^ServerActive=127.0.0.1", line: "ServerActive={{ zbx_proxy }} " }
     - { regexp: "^Hostname=Zabbix server", line: "Hostname={{ ansible_fqdn }}" }
     - { regexp: "# Timeout=3", line: "Timeout=30" }
