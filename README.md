@@ -1,5 +1,6 @@
 Role Name
 =========
+FINALIZANDO PROJETO EM DESENVOLVIMENTO.
 
 Padronização do Ambiente e Instalação do Zabbix 3 Camadas com particionamento banco de dados + Proxy + Agents + Adção de hosts Automaticamente e ++++++.
 
