@@ -18,12 +18,3 @@
 zbx_front
 zbx_srv
 zbx_db
-zbx_proxy
-
-[agentes:children]
-zbx_front
-zbx_db
-zbx_proxy
-
-[DC01]
-192.168.3.200

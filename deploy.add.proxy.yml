@@ -7,8 +7,12 @@
    - password: 'zabbix'
    - zbx_srv: 192.168.3.110
    - proxy_name: 'zabbixproxy'
+   - psk_identity: zabbix
    - zbx_proxy: 192.168.3.130
+   - host_grupo:  
+        - Linux by Zabbix agent active
+        - Zabbix proxy health
 
   roles:
-    
+    - role: Common_RockyLinux    
     - role: zabbix_proxy

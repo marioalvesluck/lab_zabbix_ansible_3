@@ -14,3 +14,4 @@ host_grupo: 'Zabbix servers'
 
 # PACOTES DE INSTALL PROXY
 packages_zabbix_proxy: zabbix-proxy-sqlite3
+packages_zabbix_agent: zabbix-agent2

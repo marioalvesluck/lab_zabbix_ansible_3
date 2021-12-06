@@ -1,2 +1,5 @@
 ---
 # handlers file for install_zabbix_front
+
+- name: Restart apache
+  systemd: name='{{ common_packages_front }}' state=restarted enabled=yes

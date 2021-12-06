@@ -1,0 +1,30 @@
+---
+# tasks for api_zabbix create hosts .
+#-------------------------------------------------------------------------------------------------#
+- name: Criando hosts no zabbix forma Automatica.
+  local_action:
+    module: community.zabbix.zabbix_host
+    server_url: '{{ url_zabbix_api }}'
+    login_user: '{{ username }}'
+    login_password: '{{ password }}'
+    host_name: "{{ansible_fqdn}}"
+    visible_name: "{{ansible_fqdn}}"
+    host_groups:
+      - '{{ host_grupo }}'
+    link_templates:
+      - '{{ host_template }}'
+    status: enabled
+    state: present
+    inventory_mode: automatic
+    interfaces:
+      - type: '1'
+        main: 1
+        useip: 1
+        ip: "{{ ansible_all_ipv4_addresses[0]}}"
+        dns: ""
+        port: "10050"
+    proxy: '{{ proxy_name }}'
+  tags: api_zabbix
+  when: ansible_facts['distribution_major_version'] == "8"
+#---------------------------------------------------------------------------------------------#
+...

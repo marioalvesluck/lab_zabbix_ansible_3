@@ -1,6 +1,7 @@
 ---
 # vars file for install_zabbix_front
-
+# VARIAVEL DE TimeZone.
+timezone: America/Sao_Paulo
 
 # CONFIGURAÇÃO DO FRONTEND DO ZABBIX
 zbx_port: 10051
@@ -9,21 +10,18 @@ zbx_web: 'zabbix'
 
 # LISTA DE PACOTES INSTALAR FRONTEND
 packages_zabbix_frontend:
-        - mysql
-        - zabbix-agent2 
+        - mysql 
         - zabbix-apache-conf
         - zabbix-web-mysql
         - httpd
         - zabbix-web-service
 
-# timezone: America/Sao_Paulo
+# VARIAVEIS DO APACHE
+execution_time: 600
+max_input: 600
+memory_limit: 256M
+max_size: 32M
+max_filesize: 16M
 
-# db_name: 'zabbix'
-# db_user: 'zabbix_web'
-# db_user_pass: 'zabbix'
-# zbx_front: 172.18.10.100
-# zbx_srv: 172.18.10.110
-# zbx_db: 172.18.10.120
-# zbx_port: 10051
-# zbx_name: Monitor_Ansible
-# zbx_web: 'zabbix'
+# VARIAVEL REQUIRE APACHE 
+set_ip: 192.168.3.0/24

@@ -14,6 +14,19 @@
   command: /bin/localectl set-keymap br-abnt2
   tags: config_inicial
   when: ansible_facts['distribution_major_version'] == "8"
+#-------------------------------------------------------------------------------------------------#
+- name: Add Mapeamento  to /etc/hosts
+  blockinfile:
+    path: /etc/hosts
+    block: |
+    #   {{ item.ip }} {{ item.name }}
+    # marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item.name }}"
+  loop:
+    - { name: node01.ansible, ip: "{{ zbx_front }}" }
+    - { name: node02.ansible, ip: "{{ zbx_srv }}" }
+    - { name: node03.ansible, ip: "{{ zbx_db }}" }
+    - { name: node04.ansible, ip: "{{ zbx_proxy }}" }
+
 #------------------------------------------------------------------------------------------------#
 - name: DNF | Atualizando Sistema / cache
   dnf: 
@@ -23,7 +36,7 @@
   tags: config_inicial
   when: ansible_facts['distribution_major_version'] == "8"
 #---------------------------------------------------------------------------------------------------------#
-- name: CENTOS - DNF | Remove pacotes
+- name: Remove pacotes Desnecessarios
   dnf:
     name: ['postfix']
     state: absent
@@ -71,8 +84,8 @@
   tags: config_inicial
   when: ansible_facts['distribution_major_version'] == "8"
 #------------------------------------------------------------------------------------------------------------#    
-- name: REBOOT | Realizar Reboot Apos 1 minutos
-  reboot:
-    reboot_timeout: 300
-  tags: config_inicial
-  when: ansible_facts['distribution_major_version'] == "8"
+# - name: REBOOT | Realizar Reboot Apos 1 minutos
+#   reboot:
+#     reboot_timeout: 300
+#   tags: config_inicial
+#   when: ansible_facts['distribution_major_version'] == "8"

@@ -16,7 +16,6 @@
   when: ansible_facts['distribution_major_version'] == "8"
 #----------------------------------------------------------------------------------------------#
 - name: Instalando pacotes grafana-server
-  #shell: "yum install grafana-8.3.0-1.x86_64.rpm -y"
   shell: "yum install grafana-8.2.5-1.x86_64.rpm -y"
   tags: grafana-server
   when: ansible_facts['distribution_major_version'] == "8"
@@ -34,16 +33,6 @@
   tags: zabbix_server
   when: ansible_facts['distribution_major_version'] == "8"
 #----------------------------------------------------------------------------------------------#
-- name: Iniciar/ Habilitar Grafana-server
-  systemd:
-    name: grafana-server
-    state: started
-    enabled: yes
-  tags: grafana-server
-  when: ansible_facts['distribution_major_version'] == "8"
-
-#----------------------------------------------------------------------------------------------#
-#
 - name: Zabbix | |Reiniciar HTTPD
   systemd:
     name: "{{ item }}"

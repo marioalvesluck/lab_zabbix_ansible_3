@@ -1,2 +1,4 @@
----
-# handlers file for install_zabbix_server
+# default
+
+- name: Restart zabbix
+  systemd: name='{{ services_zabbix }}' state=restarted enabled=yes

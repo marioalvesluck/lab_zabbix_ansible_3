@@ -2,7 +2,7 @@
 # tasks file for install_zabbix_front
 
 # -------------------------------------------------------------------------------------------#
-- name: FRONT | Adcionando Repositorio Zabbix - CentOS8
+- name: Adcionando Repositorio Zabbix - CentOS8
   dnf:
     name: '{{ url_packages_zabbix }}'
     state: present
@@ -10,25 +10,68 @@
   when: ansible_facts['distribution_major_version'] == "8"
 # --------------------------------------------------------------------------------------------#
 #
-- name: FRONT | Instalando pacotes zabbix-Frontend
+- name: Instalando pacotes zabbix-Frontend
   dnf:
     name: "{{ packages_zabbix_frontend }}"
     state: latest
   tags: zabbix_front
   when: ansible_facts['distribution_major_version'] == "8"
 #----------------------------------------------------------------------------------------------#
-- name: PHP | ADD time zone no /etc/php-fpm.d/zabbix.conf
+- name: ADD time zone no /etc/php-fpm.d/zabbix.conf
   shell: "echo php_value[date.timezone] = {{ timezone }} >> /etc/php-fpm.d/zabbix.conf"
   ignore_errors: True
   tags: zabbix_front
   when: ansible_facts['distribution_major_version'] == "8"
 #-----------------------------------------------------------------------------------------------#
-- name: FRONT | Copiando Arquivo zabbix.conf.php default
+- name: Setando configurações do Arquivo PhP do Apache
+  lineinfile:
+    dest:  /etc/php.ini
+    state: present
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    backrefs: yes
+  loop:
+    - { regexp: ';date.timezone =', line: 'date.timezone = {{ timezone }}' }
+    - { regexp: 'max_execution_time = 30', line: 'max_execution_time = {{ execution_time }}' }
+    - { regexp: 'max_input_time = 60', line: 'max_input_time = {{ max_input }}' }
+    - { regexp: 'memory_limit = 128M', line: 'memory_limit = {{ memory_limit  }}' }
+    - { regexp: 'post_max_size = 8M', line: 'post_max_size = {{ max_size }}' }
+    - { regexp: 'upload_max_filesize = 2M', line: 'upload_max_filesize = {{ max_filesize }}' }
+  tags: zabbix_front
+  when: ansible_facts['distribution_major_version'] == "8"
+
+#-----------------------------------------------------------------------------------------------#
+- name: Setando configurações do Arquivo Apache / Coletas HTT
+  blockinfile:
+    path: /etc/httpd/conf/httpd.conf
+    block: |
+      <Location "/server-status">
+        SetHandler server-status
+        Require local
+        Require ip {{ set_ip }}
+      </Location>
+  tags: zabbix_front
+  when: ansible_facts['distribution_major_version'] == "8"
+
+#--------------------------------------------------------------------------------------------------#
+
+- name: Copiando Arquivo zabbix.conf.php default
   template:
     src:  templates/zabbix.conf.php.j2
     dest: /etc/zabbix/web/zabbix.conf.php
-  tags: config_inicial
+  tags: zabbix_front
   when: ansible_facts['distribution_major_version'] == "8"
+#--------------------------------------------------------------------------------------------------#
+- name: Baixando Pacotes googlechrome 
+  shell: wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+  tags: zabbix_front
+  when: ansible_facts['distribution_major_version'] == "8"
+#-------------------------------------------------------------------------------------------------#
+- name: Instalando googlechrome
+  shell: "sudo dnf localinstall google-chrome-stable_current_x86_64.rpm -y"
+  tags: zabbix_front
+  when: ansible_facts['distribution_major_version'] == "8"
+
 # ----------------------------------------------------------------------------------------------#
 - name: PHP | Iniciar/ Habilitar e Iniciar App do Apache2
   systemd:
@@ -41,7 +84,7 @@
   tags: zabbix_front
   when: ansible_facts['distribution_major_version'] == "8"
 #----------------------------------------------------------------------------------------------#
-- name: FRONT | Adcionado Porta firewalld  Front/Apache2/Zabbix_Server/Zabbix_Agent2
+- name: Adcionado Portas firewalld  Front/Apache2/Zabbix_Server/Zabbix_Agent2
   firewalld:
     port: "{{ item }}"
     permanent: yes
@@ -62,7 +105,7 @@
     enabled: yes
   tags: zabbix_front
 #-----------------------------------------------------------------------------------------------#
-- name: FRONT | Reinciar FRONTEND
+- name: Reinciar FRONTEND
   systemd:
     name: "{{ item }}"
     state: restarted
@@ -74,12 +117,3 @@
   when: ansible_facts['distribution_major_version'] == "8"
 
 #-------------------------------------------------------------------------------------------------#
-- name: FRONT | Baixando Pacotes googlechrome 
-  shell: wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
-  tags: zabbix_front
-  when: ansible_facts['distribution_major_version'] == "8"
-#-------------------------------------------------------------------------------------------------#
-- name: FRONT | Instalando googlechrome
-  shell: "sudo dnf localinstall google-chrome-stable_current_x86_64.rpm -y"
-  tags: zabbix_front
-  when: ansible_facts['distribution_major_version'] == "8"

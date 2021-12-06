@@ -4,13 +4,13 @@
 url_schema: zcat /usr/share/doc/zabbix-sql-scripts/mysql/create.sql.gz | mysql -h 192.168.3.120 -u zabbix_server -pzabbix zabbix
 url_partition: "mysql -h 192.168.3.120 -u zabbix_server -pzabbix zabbix < /opt/zbx_db_part.sql"
 
+# VARIAVEL CRIAÇÃDO DO USUARIO ZABBIX LOCALHOST
+db_user_zabbix: 'zabbix'
+db_user_zabbix_pass: 'zabbix'
+    
 
-# Senha do UsuarioRoot
-# root_pass: 'zabbix'
-  
-# # Nome database do zabbix
-# db_name: 'zabbix'
+# SENHA DO USER LOCAL ROOT
+root_pass: 'zabbix'
 
-# zbx_front: 172.18.10.100
-# zbx_srv: 172.18.10.110
-# zbx_db: 172.18.10.120
+# VARIAVEL DE TimeZone.
+timezone: America/Sao_Paulo

@@ -1,0 +1,42 @@
+- name: Playbook de Instalação Zabbix 3 Camadas Usando Rocky Linux8.
+  hosts:
+    - zabbix
+        
+  vars:
+    
+    # VARIAVEL DE HOSTS
+    
+    - zbx_front: 192.168.3.100
+    - zbx_srv: 192.168.3.110
+    - zbx_db: 192.168.3.120
+    - zbx_proxy: 192.168.3.130
+    
+    # VARIAVEL DE URL_ZABBIX
+    - url_packages_zabbix: http://repo.zabbix.com/zabbix/5.5/rhel/8/x86_64/zabbix-release-5.5-1.el8.noarch.rpm 
+
+    # VARIAVEL CRIAÇÃO DO BANCO DE DADOS 
+    - db_name: 'zabbix'
+    
+    # VARIAVEL CRIAÇÃO DO USUARIO ZABBIX SERVER
+    - db_user_server: 'zabbix_server'
+    - db_user_pass_server: 'zabbix'
+    
+    # VARIAVEIS DE CRIAÇÃO DE USUARIO zabbix_web 
+    - db_user_web: 'zabbix_web'
+    - db_user_pass_web: 'zabbix'
+
+    # VARIAVEIS DE CRIAÇÃO DE USUARIO ZABBIXMONITDB 
+    - db_user_monit_db: 'zabbixmonitdb'
+    - db_user_pass_db: 'zabbixmonitdb'
+
+  roles:
+   
+    - role: Common_RockyLinux
+    #- role: db_zabbix
+    #  when: ansible_host == zbx_db
+    #- role: zabbix_server
+    #  when: ansible_host == zbx_srv
+    #- role: zabbix_front
+    #  when: ansible_host == zbx_front
+      #- role: grafana_server
+      # when: ansible_host == zbx_front
