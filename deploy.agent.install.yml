@@ -1,8 +1,9 @@
 - name: Playbook de instalação do Agentes de hosts no Zabbix /  Proxy
   hosts:
 
-    - zbx_front
-
+    #- zbx_front
+    #- zbx_db
+    #- zbx_proxy
 
   vars:
     # VARIAVEL DE URL_ZABBIX
@@ -10,17 +11,25 @@
     - url_zabbix_api: http://192.168.3.100/zabbix/
     - username: 'Admin'
     - password: 'zabbix'
-    - zbx_srv: 192.168.3.110
     - proxy_name: 'zabbixproxy'
+    - zbx_srv: 192.168.3.110
     - zbx_proxy: 192.168.3.130
-    - host_template: 
-         - Linux by Zabbix agent active
-         - Apache by Zabbix agent
-         - ICMP Ping
-    - host_grupo: 'Zabbix servers' 
-    - zbx_srv: 192.168.3.110   
-    - zbx_proxy: 192.168.3.130
-    
+
+    # Para Monitoramento banco de Dados Ativar Opções Abaixo e Adcionar host destino em hosts.
+    #- host_template: 
+    #      - Linux by Zabbix agent active
+    #      - MySQL by Zabbix agent 2
+    #      - ICMP Ping
+
+    #- host_grupo: 'Zabbix servers'
+
+    # Template e Grupo para Ativação para instalar agente e adcionar templates e grupo .
+    # - host_template: 
+    #      - Linux by Zabbix agent active
+    #      - Apache by Zabbix agent
+    #      - ICMP Ping
+    # - host_grupo: 'Zabbix servers' 
+ 
 
   roles:
     

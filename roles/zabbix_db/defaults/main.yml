@@ -1,0 +1,10 @@
+---
+# defaults file for db_zabbix 
+# Pacotes de Instalação da App MYSQL + Particionamento. 
+
+packages_mysql:
+  - mysql-server
+  - mysql
+  - python3-PyMySQL
+  - git
+  - dos2unix

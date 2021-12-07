@@ -128,8 +128,8 @@
        Description = MySQL Monitoring Database
        Driver      = MySQL ODBC 8.0 Unicode Driver
        Server      = {{ zbx_db }}
-       User        = {{ user_mysql }}
-       Password    = {{ user_mysql_pass }}
+       User        = {{ user_mysql_remote }}
+       Password    = {{ user_mysql_pass_remote }}
        Port        = 3306
        Database    = zabbix
   tags: zabbix_front

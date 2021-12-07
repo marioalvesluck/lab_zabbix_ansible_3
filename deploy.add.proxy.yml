@@ -1,25 +1,42 @@
-- name: Playbook de Instalação Zabbix Proxy
+- name: Playbook de Instalação Zabbix Proxy / Cadastrar em Proxy como Active/Criptografado /Adcionar host proxy do Monitoramento + Templates.
   hosts:
     - zbx_proxy
   vars: 
    - url_zabbix_api: http://192.168.3.100/zabbix/
    - username: 'Admin'
    - password: 'zabbix'
+   - zbx_front: 192.168.3.100
    - zbx_srv: 192.168.3.110
    - zbx_db: 192.168.3.120
    - proxy_name: 'zabbixproxy'
    - psk_identity: zabbix
    - zbx_proxy: 192.168.3.130
-   - host_grupo:  
+   - host_grupo: 'Zabbix servers'
+   - host_template:  
         - Linux by Zabbix agent active
         - Zabbix proxy health
-
+        - ICMP Ping
+        - MySQL by Zabbix agent 2
+        
   # Variaveis de monitoring db zabbix
+   # Ajustar conforme sua versão de banco de dados Acessando e verificando versão com comando select version ();
    - url_odbc_connector: https://downloads.mysql.com/archives/get/p/10/file/mysql-connector-odbc-8.0.26-1.el8.x86_64.rpm
    - font_dns: zabbix
-   - user_mysql: zabbixmonitdb
-   - user_mysql_pass: zabbixmonitdb
+   - user_mysql_remote: zabbixmonitdb
+   - user_mysql_pass_remote: zabbixmonitdb
+  
+  # Observação Neste caso do Monitoramento no host banco dados a partir do proxy, podera seguir conforme
+  # Sua Necessidade e alterando assim, podendo clonar host e adcionar template MYSQL by Zabbix agent2
+  # Variveis do host User password criado em deploy.zabbix.yml , verificar usuario abaixo adcionado.
+  # nosso Caso de Exemplo- ZABBIXMONITDB - Informações o usuario remote acima.
+  
+  # Acionar variaveis aos hosts. 
+
+  # {$MYSQL.DSN} - tcp://192.168.3.120:3306
+  # {$MYSQL.PASSWORD} -  zabbixmonitdb
+  # {$MYSQL.USER} - zabbixmonitdb
+
 
   roles:
-    #- role: Common_RockyLinux 
+     - role: Common_RockyLinux 
      - role: zabbix_proxy
