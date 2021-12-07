@@ -58,6 +58,7 @@ Roles do Projeto:
   - Adcionar hosts Linux  / Templates
   - Adcionar hosts Windows / Templates
   - Instalação de Agentes Windows em Desenvolvimento.
+  - Adcionado Configurações Monitoramento Apache 
 
 Variables
 --------------
@@ -79,7 +80,7 @@ ansible_pass: batatinha@2021
 Exemplo de Ultilização 
 ----------------
 
-ansible-playbook deploy.yml
+ansible-playbook deploy.zabbix.yml
 
   roles:
    
