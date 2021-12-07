@@ -1,3 +1,0 @@
-- name: Instalação do Banco de Dados Zabbix Server
-  include_tasks: db.yml
-

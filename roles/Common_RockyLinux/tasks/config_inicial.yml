@@ -26,7 +26,6 @@
     - { name: node02.ansible, ip: "{{ zbx_srv }}" }
     - { name: node03.ansible, ip: "{{ zbx_db }}" }
     - { name: node04.ansible, ip: "{{ zbx_proxy }}" }
-
 #------------------------------------------------------------------------------------------------#
 - name: DNF | Atualizando Sistema / cache
   dnf: 

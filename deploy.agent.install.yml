@@ -2,7 +2,7 @@
   hosts:
 
     - zbx_front
-    - zbx_db
+
 
   vars:
     # VARIAVEL DE URL_ZABBIX
@@ -13,10 +13,14 @@
     - zbx_srv: 192.168.3.110
     - proxy_name: 'zabbixproxy'
     - zbx_proxy: 192.168.3.130
-    - host_template: 'Linux by Zabbix agent active'
+    - host_template: 
+         - Linux by Zabbix agent active
+         - Apache by Zabbix agent
+         - ICMP Ping
     - host_grupo: 'Zabbix servers' 
     - zbx_srv: 192.168.3.110   
     - zbx_proxy: 192.168.3.130
+    
 
   roles:
     

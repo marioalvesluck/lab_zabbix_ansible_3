@@ -32,11 +32,11 @@
   roles:
    
     - role: Common_RockyLinux
-    #- role: db_zabbix
-    #  when: ansible_host == zbx_db
-    #- role: zabbix_server
-    #  when: ansible_host == zbx_srv
-    #- role: zabbix_front
-    #  when: ansible_host == zbx_front
-      #- role: grafana_server
-      # when: ansible_host == zbx_front
+    - role: zabbix_db
+      when: ansible_host == zbx_db
+    - role: zabbix_server
+      when: ansible_host == zbx_srv
+    - role: zabbix_front
+      when: ansible_host == zbx_front
+    - role: grafana_server
+      when: ansible_host == zbx_front

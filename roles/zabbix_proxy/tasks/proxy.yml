@@ -113,6 +113,28 @@
   systemd: name=firewalld state=reloaded daemon_reload=yes enabled=yes
   tags: zabbix_proxy
   when: ansible_facts['distribution_major_version'] == "8"
+
+- name: Realizando Download dos Drivers odbc versão correspondende do banco
+  shell: rpm -ivh {{ url_odbc_connector }}
+  ignore_errors: yes
+  tags: zabbix_proxy
+  when: ansible_facts['distribution_major_version'] == "8"
+#------------------------------------------------------------------------------------------------#
+- name: Setando configurações no Arquivo odbc.ini
+  blockinfile:
+    path: /etc/odbc.ini
+    block: |
+       [{{ font_dns }}]
+       Description = MySQL Monitoring Database
+       Driver      = MySQL ODBC 8.0 Unicode Driver
+       Server      = {{ zbx_db }}
+       User        = {{ user_mysql }}
+       Password    = {{ user_mysql_pass }}
+       Port        = 3306
+       Database    = zabbix
+  tags: zabbix_front
+  when: ansible_facts['distribution_major_version'] == "8"
+
 #-----------------------------------------------------------------------------------------------#
 - name: ZBX PROXY - Criar o Proxy Modo Active.
   local_action:

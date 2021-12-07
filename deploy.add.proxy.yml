@@ -6,6 +6,7 @@
    - username: 'Admin'
    - password: 'zabbix'
    - zbx_srv: 192.168.3.110
+   - zbx_db: 192.168.3.120
    - proxy_name: 'zabbixproxy'
    - psk_identity: zabbix
    - zbx_proxy: 192.168.3.130
@@ -13,6 +14,12 @@
         - Linux by Zabbix agent active
         - Zabbix proxy health
 
+  # Variaveis de monitoring db zabbix
+   - url_odbc_connector: https://downloads.mysql.com/archives/get/p/10/file/mysql-connector-odbc-8.0.26-1.el8.x86_64.rpm
+   - font_dns: zabbix
+   - user_mysql: zabbixmonitdb
+   - user_mysql_pass: zabbixmonitdb
+
   roles:
-    - role: Common_RockyLinux    
-    - role: zabbix_proxy
+    #- role: Common_RockyLinux 
+     - role: zabbix_proxy

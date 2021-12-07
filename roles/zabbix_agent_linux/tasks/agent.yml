@@ -32,7 +32,6 @@
     - { regexp: "# DenyKey=system.run[*]", line: "AllowKey=system.run[*]" }
   tags: zabbix_agent2
   when: ansible_facts['distribution_major_version'] == "8"
-
 #----------------------------------------------------------------------------------------------#
 - name: Adcionado Porta firewalld  Zabbix_Agent2
   firewalld:
@@ -41,6 +40,7 @@
     state: enabled
   loop:
     - 10050/tcp
+    - 10051/tcp
   tags: zabbix_agent2
   when: ansible_facts['distribution_major_version'] == "8"
 # ----------------------------------------------------------------------------------------------#
@@ -59,7 +59,7 @@
     enabled: yes
   tags: zabbix_agent2
   when: ansible_facts['distribution_major_version'] == "8"
-# -------------------------------------------------------------------------------------------#
+#-------------------------------------------------------------------------------------------------#
 - name: Criando hosts no zabbix forma Automatica.
   local_action:
     module: community.zabbix.zabbix_host
@@ -70,8 +70,7 @@
     visible_name: "{{ansible_fqdn}}"
     host_groups:
       - '{{ host_grupo }}'
-    link_templates:
-      - '{{ host_template }}'
+    link_templates: '{{ host_template }}'
     status: enabled
     state: present
     inventory_mode: automatic
@@ -87,85 +86,3 @@
   when: ansible_facts['distribution_major_version'] == "8"
 
 ...
-
-
-
-
-
-
-
-# # tasks file for install_zabbix_agent_linux
-
-# - name: Adcionando Repositorio Zabbix - Rocky Linux 8 
-#   dnf:
-#     name: "{{ url_packages_zabbix }}"
-#     state: present
-#   tags: zabbix_agent2
-#   when: ansible_facts['distribution_major_version'] == "8"
-# # --------------------------------------------------------------------------------------------#
-# #
-# - name: Instalando pacote zabbix-agent2
-#   dnf:
-#     name: zabbix-agent2
-#     state: present
-#   tags: zabbix_agent2
-#   when: ansible_facts['distribution_major_version'] == "8"
-# # # --------------------------------------------------------------------------------------------#
-# - name: Iniciar/ Habilitar zabbix-agent2
-#   systemd:
-#     name: zabbix-agent2
-#     state: started
-#     enabled: yes
-#   tags: zabbix_agent2
-#   when: ansible_facts['distribution_major_version'] == "8"
-# #-------------------------------------------------------------------------------#
-# - name: SSH | Setando configurações de segurança no arquivo zabbix_agent2.conf
-#   lineinfile:
-#     dest: /etc/zabbix/zabbix_agent2.conf
-#     state: present
-#     regexp: "{{ item.regexp }}"
-#     line: "{{ item.line }}"
-#     backrefs: yes
-#   loop:
-#     - { regexp: "^Server=127.0.0.1", line: "Server={{ zbx_proxy }}" }
-#     - { regexp: "^ServerActive=127.0.0.1", line: "ServerActive={{ zbx_proxy }} " }
-#     - { regexp: "^Hostname=Zabbix server", line: "Hostname={{ ansible_fqdn }}" }
-#     - { regexp: "# Timeout=3", line: "Timeout=30" }
-#     - { regexp: "# DenyKey=system.run[*]", line: "AllowKey=system.run[*]" }
-#         # Modo Ativo habilitar opção abaixo.
-#     # - { regexp: '# TLSConnect=unencrypted', line: 'TLSConnect=psk' }
-#       # Modo Passivo habilitando opção abaixo.
-#     # - { regexp: '# TLSAccept=unencrypted', line: 'TLSAccept=psk' }
-#     # - { regexp: '# TLSPSKIdentity=', line: 'TLSPSKIdentity=zabbix_agent' }
-#     # - { regexp: '# TLSPSKFile=', line: 'TLSPSKFile=/etc/zabbix/keys/agent.psk' }
-#   tags: zabbix_agent2
-#   when: ansible_facts['distribution_major_version'] == "8"
-
-# #----------------------------------------------------------------------------------------------#
-# - name: Adcionado Porta firewalld  Zabbix_Agent2
-#   firewalld:
-#     port: "{{ item }}"
-#     permanent: yes
-#     state: enabled
-#   loop:
-#     - 10050/tcp
-#   tags: zabbix_agent2
-#   when: ansible_facts['distribution_major_version'] == "8"
-# # ----------------------------------------------------------------------------------------------#
-# - name: Realizar Restart zabbix-agent2
-#   systemd:
-#     name: zabbix-agent2
-#     state: restarted
-#     enabled: yes
-#   tags: zabbix_agent2
-#   when: ansible_facts['distribution_major_version'] == "8"
-# #------------------------------------------------------------------------------------------------#
-# - name: Reload no firewalld
-#   systemd:
-#     name: firewalld
-#     state: reloaded
-#     enabled: yes
-#   tags: zabbix_agent2
-#   when: ansible_facts['distribution_major_version'] == "8"
-# # -------------------------------------------------------------------------------------------#
-

@@ -1,6 +1,5 @@
 ---
 # tasks file for install_zabbix_front
-
 # -------------------------------------------------------------------------------------------#
 - name: Adcionando Repositorio Zabbix - CentOS8
   dnf:
@@ -9,7 +8,6 @@
   tags: zabbix_front
   when: ansible_facts['distribution_major_version'] == "8"
 # --------------------------------------------------------------------------------------------#
-#
 - name: Instalando pacotes zabbix-Frontend
   dnf:
     name: "{{ packages_zabbix_frontend }}"
@@ -39,7 +37,6 @@
     - { regexp: 'upload_max_filesize = 2M', line: 'upload_max_filesize = {{ max_filesize }}' }
   tags: zabbix_front
   when: ansible_facts['distribution_major_version'] == "8"
-
 #-----------------------------------------------------------------------------------------------#
 - name: Setando configurações do Arquivo Apache / Coletas HTT
   blockinfile:
@@ -52,9 +49,7 @@
       </Location>
   tags: zabbix_front
   when: ansible_facts['distribution_major_version'] == "8"
-
 #--------------------------------------------------------------------------------------------------#
-
 - name: Copiando Arquivo zabbix.conf.php default
   template:
     src:  templates/zabbix.conf.php.j2
@@ -71,7 +66,6 @@
   shell: "sudo dnf localinstall google-chrome-stable_current_x86_64.rpm -y"
   tags: zabbix_front
   when: ansible_facts['distribution_major_version'] == "8"
-
 # ----------------------------------------------------------------------------------------------#
 - name: PHP | Iniciar/ Habilitar e Iniciar App do Apache2
   systemd:
@@ -115,5 +109,4 @@
     - httpd 
   tags: zabbix_front
   when: ansible_facts['distribution_major_version'] == "8"
-
 #-------------------------------------------------------------------------------------------------#

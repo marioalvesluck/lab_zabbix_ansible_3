@@ -1,9 +1,0 @@
----
-# handlers file for update_linux
-- name: Restart ssh
-  systemd:
-     name: sshd
-     state: restarted
-     enabled: yes
-     daemon_reload: yes
-     

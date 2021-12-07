@@ -39,6 +39,7 @@
     - { regexp: '# StartPollers=5', line: 'StartPollers=10' }
     - { regexp: '# StartPingers=1', line: 'StartPingers=5' }
     - { regexp: '# CacheSize=8M', line: 'CacheSize=512M' }
+    - { regexp: '# Timeout=3', line: 'Timeout=30' }
     - { regexp: '# ValueCacheSize=8M', line: 'ValueCacheSize=1024M' }
     - { regexp: '# VMwareCacheSize=8M', line: 'VMwareCacheSize=1024M' }
     - { regexp: '# StartReportWriters=0', line: 'StartReportWriters=1' }
