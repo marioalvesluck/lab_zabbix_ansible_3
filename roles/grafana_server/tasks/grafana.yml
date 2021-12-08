@@ -7,7 +7,7 @@
   when: ansible_facts['distribution_major_version'] == "8"
 # --------------------------------------------------------------------------------------------#
 #
-- name: DNF | Atualizando Sistema / cache
+- name: Atualizando Sistema / cache
   dnf: 
     name: '*'
     state: latest
@@ -33,7 +33,7 @@
   tags: zabbix_server
   when: ansible_facts['distribution_major_version'] == "8"
 #----------------------------------------------------------------------------------------------#
-- name: Zabbix | |Reiniciar HTTPD
+- name: Reiniciar HTTPD
   systemd:
     name: "{{ item }}"
     state: restarted
@@ -54,7 +54,6 @@
   tags: grafana-server
   when: ansible_facts['distribution_major_version'] == "8"
 # ----------------------------------------------------------------------------------------------#
-
 - name: Reload no firewalld
   systemd:
     name: firewalld

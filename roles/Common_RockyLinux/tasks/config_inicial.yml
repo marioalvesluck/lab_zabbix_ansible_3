@@ -27,7 +27,7 @@
     - { name: node03.ansible, ip: "{{ zbx_db }}" }
     - { name: node04.ansible, ip: "{{ zbx_proxy }}" }
 #------------------------------------------------------------------------------------------------#
-- name: DNF | Atualizando Sistema / cache
+- name: Atualizando Sistema / cache
   dnf: 
     name: '*'
     state: latest
@@ -42,15 +42,14 @@
   tags: config_inicial
   when: ansible_facts['distribution_major_version'] == "8"
 #---------------------------------------------------------------------------------------------------------#
-- name: CENTOS - DNF | Intalando lista de Pacotes
+- name: Intalando lista de Pacotes
   dnf: 
      name: "{{ common_pacotes_redhat }}"
      state: latest
   tags: config_inicial
   when: ansible_facts['distribution_major_version'] == "8"
 #----------------------------------------------------------------------------------------------------------#
-# CENTOS| REDHAT | Habilitando serviços na inicialização 
-- name: CENTOS - SERVICE | Habilitar e iniciar serviços na inicialização
+- name: Habilitar e iniciar serviços na inicialização
   systemd:
      name: chronyd
      state: started
@@ -59,7 +58,7 @@
   when: ansible_facts['distribution_major_version'] == "8"
 #-----------------------------------------------------------------------------------------------------------#
 # Realizar Restart da APP
-- name: CENTOS - SERVICE | Reiniciar serviço chronyd 
+- name: Reiniciar serviço chronyd 
   systemd:
      name: chronyd
      state: restarted
@@ -67,7 +66,7 @@
   tags: config_inicial
   when: ansible_facts['distribution_major_version'] == "8"
 #-----------------------------------------------------------------------------------------------------------#
-- name: FIREWALL | Ativar o firewalld
+- name: Ativar o firewalld
   systemd:
     name: firewalld
     state: started

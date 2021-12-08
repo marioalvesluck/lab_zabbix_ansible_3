@@ -1,7 +1,9 @@
 ---
 # tasks file for zabbix-proxy
 - name: Adcionando Repositorio Zabbix Proxy.
-  dnf: name='{{ url_packages_zabbix }}' state=present
+  dnf:
+    name: https://repo.zabbix.com/zabbix/{{ zbx_version }}/rhel/8/x86_64/zabbix-release-{{ zbx_version }}-1.el8.noarch.rpm
+    state: present
   ignore_errors: yes
   tags: zabbix_proxy
   when: ansible_facts['distribution_major_version'] == "8"
@@ -108,14 +110,19 @@
     - 3306/tcp
   tags: zabbix_proxy
   when: ansible_facts['distribution_major_version'] == "8"
+#----------------------------------------------------------------------------------------------#
+- name: Realizar Restart do  Zabbix Proxy.
+  systemd: name=zabbix-proxy state=restarted enabled=yes
+  tags: zabbix_proxy 
+  when: ansible_facts['distribution_major_version'] == "8"
 # ----------------------------------------------------------------------------------------------#
 - name: Reload no firewalld
   systemd: name=firewalld state=reloaded daemon_reload=yes enabled=yes
   tags: zabbix_proxy
   when: ansible_facts['distribution_major_version'] == "8"
-
+#------------------------------------------------------------------------------------------------#
 - name: Realizando Download dos Drivers odbc versão correspondende do banco
-  shell: rpm -ivh {{ url_odbc_connector }}
+  shell: rpm -ivh https://downloads.mysql.com/archives/get/p/10/file/mysql-connector-odbc-{{ version_connector_odbc }}-1.el8.x86_64.rpm
   ignore_errors: yes
   tags: zabbix_proxy
   when: ansible_facts['distribution_major_version'] == "8"
@@ -136,10 +143,10 @@
   when: ansible_facts['distribution_major_version'] == "8"
 
 #-----------------------------------------------------------------------------------------------#
-- name: ZBX PROXY - Criar o Proxy Modo Active.
+- name: Criar o Proxy Modo Active.
   local_action:
     module: community.zabbix.zabbix_proxy
-    server_url: '{{ url_zabbix_api }}'
+    server_url: http://{{ zbx_front }}/zabbix/
     login_user: '{{ username }}'
     login_password: '{{ password }}'
     proxy_name: '{{ proxy_name }}'

@@ -61,7 +61,7 @@ Roles do Projeto:
   - Adcionado Configurações Monitoramento Apache 
   - Adcionado ao Projeto odbc Connector configurações do proxy e adcionado configurações basicas do odbc.ini
     Ajustar conforme sua necessidade e verificar versão do MYSQL , acessando banco e executando select version ();
-
+  
 Variables
 --------------
 Ajustar de Acordo seu Ambiente.

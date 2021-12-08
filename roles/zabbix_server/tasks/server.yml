@@ -1,22 +1,23 @@
 ---
 # tasks file for install_zabbix_server
 # -------------------------------------------------------------------------------------------#
-- name: ZBX SRV | Adcionando Repositorio Zabbix Server.
+- name: Adcionando Repositorio Zabbix Server.
   dnf:
-    name: '{{ url_packages_zabbix }}'
+    #name: '{{ url_packages_zabbix }}'
+    name: https://repo.zabbix.com/zabbix/{{ zbx_version }}/rhel/8/x86_64/zabbix-release-{{ zbx_version }}-1.el8.noarch.rpm
     state: present
   tags: zabbix_server
   when: ansible_facts['distribution_major_version'] == "8"
 # --------------------------------------------------------------------------------------------#
 #
-- name: ZBX SRV | Instalando pacotes zabbix-server zabbix-agent zabbix-sql-scripts
+- name: Instalando pacotes zabbix-server zabbix-agent zabbix-sql-scripts
   dnf:
     name: '{{ packages_zabbix_server}}'
     state: latest
   tags: zabbix_server
   when: ansible_facts['distribution_major_version'] == "8"
 # --------------------------------------------------------------------------------------------#
-- name: ZBX SRV | Iniciar/ Habilitar zabbix-server / zabbix-agent2
+- name: Iniciar/ Habilitar zabbix-server / zabbix-agent2
   systemd:
     name: zabbix-server
     state: started
@@ -24,7 +25,7 @@
   tags: zabbix_server
   when: ansible_facts['distribution_major_version'] == "8"
 #-------------------------------------------------------------------------------#
-- name: ZBX SRV | Setando configurações de segurança no arquivo zabbix_server.conf
+- name: Setando configurações de segurança no arquivo zabbix_server.conf
   lineinfile:
     dest: /etc/zabbix/zabbix_server.conf
     state: present
@@ -47,7 +48,7 @@
   when: ansible_facts['distribution_major_version'] == "8"
   tags: zabbix_server
 #-----------------------------------------------------------------------------------#
-- name: MYCNF | Copiando Arquivo .my.cnf default
+- name: Copiando Arquivo .my.cnf default
   copy: 
     src: "{{ item.src }}" 
     dest: "{{ item.dest }}"
@@ -56,7 +57,7 @@
     - { src: '.my.cnf', dest: '/root/.my.cnf'}
   when: ansible_facts['distribution_major_version'] == "8"
 #---------------------------------------------------------------------------------------------#
-- name: MYCNF | Copiando Para realizar Particionamento do Banco de Dados.
+- name: Copiando Para realizar Particionamento do Banco de Dados.
   copy: 
     src: "{{ item.src }}" 
     dest: "{{ item.dest }}"
@@ -100,7 +101,7 @@
   ignore_errors: yes
   when: ansible_facts['distribution_major_version'] == "8"
 
-- name: ZBX SRV | Criar Arquivo /etc/cron.d
+- name: Criar Arquivo /etc/cron.d
   ansible.builtin.cron:
     name: ansible_partition_db
     weekday: "0"
@@ -113,7 +114,7 @@
   when: ansible_facts['distribution_major_version'] == "8"
 
 # --------------------------------------------------------------------------------------------#
-- name: ZBX SRV | Adcionado Porta firewalld  Zabbix_Server/Zabbix_Agent
+- name: Adcionado Porta firewalld  Zabbix_Server/Zabbix_Agent
   firewalld:
     port: "{{ item }}"
     permanent: yes
@@ -125,7 +126,7 @@
   tags: zabbix_server
   when: ansible_facts['distribution_major_version'] == "8"
 # ----------------------------------------------------------------------------------------------#
-- name: FIREWALL | Reload no firewalld
+- name: Reload no firewalld
   systemd:
     name: firewalld
     state: reloaded
@@ -133,7 +134,7 @@
   tags: zabbix_server
   when: ansible_facts['distribution_major_version'] == "8"
 #-------------------------------------------------------------------------------------------------#
-- name: ZBX SRV | Iniciar/ Restart Zabbix-Server / Agent2
+- name: Iniciar/ Restart Zabbix-Server / Agent2
   systemd:
     name: "{{ item }}"
     state: restarted
@@ -144,5 +145,4 @@
   tags: zabbix_server
   when: ansible_facts['distribution_major_version'] == "8"
 #----------------------------------------------------------------------------------------------#
- 
 ...

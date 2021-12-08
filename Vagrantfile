@@ -4,8 +4,8 @@
 machines = {
   "node01"   => {"memory" => "1024", "cpu" => "2", "ip" => "100", "image" => "centos/8"},
   "node02" => {"memory" => "1024",  "cpu" => "2", "ip" => "110", "image" => "centos/8"},
-  "node03" => {"memory" => "2048",  "cpu" => "2", "ip" => "120", "image" => "centos/8"}
-  "node04" => {"memory" => "512",  "cpu" => "2", "ip" => "130", "image" => "centos/8"}
+  "node03" => {"memory" => "2048",  "cpu" => "2", "ip" => "120", "image" => "centos/8"},
+  "node04" => {"memory" => "1024",  "cpu" => "2", "ip" => "130", "image" => "centos/8"}
 }
 
 Vagrant.configure("2") do |config|

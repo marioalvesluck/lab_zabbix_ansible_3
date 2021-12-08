@@ -2,25 +2,32 @@
   hosts:
     - zbx_proxy
   vars: 
-   - url_zabbix_api: http://192.168.3.100/zabbix/
+  
+   # Consulta a versão que busca Instalar em : https://repo.zabbix.com/zabbix/
+   - zbx_version: 5.5
+
    - username: 'Admin'
    - password: 'zabbix'
+   
+   # macros de hosts ultilizadas durante deploy.
    - zbx_front: 192.168.3.100
    - zbx_srv: 192.168.3.110
    - zbx_db: 192.168.3.120
+   - zbx_proxy: 192.168.3.130
+   # Macros de configuração do Proxy
    - proxy_name: 'zabbixproxy'
    - psk_identity: zabbix
-   - zbx_proxy: 192.168.3.130
    - host_grupo: 'Zabbix servers'
    - host_template:  
-        - Linux by Zabbix agent active
-        - Zabbix proxy health
-        - ICMP Ping
-        - MySQL by Zabbix agent 2
-        
+      - Linux by Zabbix agent active
+      - Zabbix proxy health
+      - ICMP Ping
+      
   # Variaveis de monitoring db zabbix
    # Ajustar conforme sua versão de banco de dados Acessando e verificando versão com comando select version ();
-   - url_odbc_connector: https://downloads.mysql.com/archives/get/p/10/file/mysql-connector-odbc-8.0.26-1.el8.x86_64.rpm
+   # https://downloads.mysql.com/archives/c-odbc/
+
+   - version_connector_odbc: 8.0.26
    - font_dns: zabbix
    - user_mysql_remote: zabbixmonitdb
    - user_mysql_pass_remote: zabbixmonitdb

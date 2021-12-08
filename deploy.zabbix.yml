@@ -4,7 +4,7 @@
         
   vars:
     
-    # VARIAVEL DE HOSTS
+    # DECLARAR AS VARIAVEL DO ARQUIVO HOSTS/ ALTERAR IP CONFORME NECESSIDADE EM HOSTS .
     
     - zbx_front: 192.168.3.100
     - zbx_srv: 192.168.3.110
@@ -12,7 +12,10 @@
     - zbx_proxy: 192.168.3.130
     
     # VARIAVEL DE URL_ZABBIX
-    - url_packages_zabbix: http://repo.zabbix.com/zabbix/5.5/rhel/8/x86_64/zabbix-release-5.5-1.el8.noarch.rpm 
+    #- url_packages_zabbix: http://repo.zabbix.com/zabbix/5.5/rhel/8/x86_64/zabbix-release-5.5-1.el8.noarch.rpm 
+
+    # Consulta a versão que busca Instalar em : https://repo.zabbix.com/zabbix/
+    - zbx_version: 5.5
 
     # VARIAVEL CRIAÇÃO DO BANCO DE DADOS 
     - db_name: 'zabbix'

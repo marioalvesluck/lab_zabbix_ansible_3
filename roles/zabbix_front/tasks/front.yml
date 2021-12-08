@@ -3,7 +3,8 @@
 # -------------------------------------------------------------------------------------------#
 - name: Adcionando Repositorio Zabbix - CentOS8
   dnf:
-    name: '{{ url_packages_zabbix }}'
+    #name: '{{ url_packages_zabbix }}'
+    name: https://repo.zabbix.com/zabbix/{{ zbx_version }}/rhel/8/x86_64/zabbix-release-{{ zbx_version }}-1.el8.noarch.rpm
     state: present
   tags: zabbix_front
   when: ansible_facts['distribution_major_version'] == "8"
@@ -67,7 +68,7 @@
   tags: zabbix_front
   when: ansible_facts['distribution_major_version'] == "8"
 # ----------------------------------------------------------------------------------------------#
-- name: PHP | Iniciar/ Habilitar e Iniciar App do Apache2
+- name: Iniciar/ Habilitar e Iniciar App do Apache2
   systemd:
     name: "{{ item }}"
     state: started

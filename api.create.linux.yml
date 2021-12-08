@@ -1,19 +1,21 @@
-- name: Playbook de Criação de hosts no Zabbix
+- name: Playbook de Criação de hosts no Frontend do Zabbix
   hosts:
-    - zbx_proxy_monit_db
+    - zbx_db
 
   vars: 
-   - url_zabbix_api: http://192.168.3.100/zabbix/
+  
    - username: 'Admin'
    - password: 'zabbix'
    - proxy_name: 'zabbixproxy'
    - zbx_srv: 192.168.3.110
+   - zbx_front: 192.168.3.100
    - zbx_proxy: 192.168.3.130
-   
-   - host_template: 
-          - MySQL by Zabbix agent 2
-          
    - host_grupo: 'Zabbix servers' 
- 
+
+   # Ultilizando Templates Padrão Adcinar nome do template conforme cadastrado no frontend do zabbix , observar erro de digitação.
+   - host_template: 
+        - ICMP Ping 
+        - Linux by Zabbix agent active
+          
   roles:
     - role: api_add_linux

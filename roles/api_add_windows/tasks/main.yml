@@ -1,9 +1,9 @@
 ---
 # tasks file for api_zabbix create hosts windows
-- name: Criar um novo host {{ DC01 }}
+- name: Criar um novo host Windows
   local_action:
     module: community.zabbix.zabbix_host
-    server_url: http://192.168.3.100/zabbix/
+    server_url: http://{{ zbx_front }}/zabbix/
     login_user: Admin
     login_password: zabbix
     host_name: "{{ansible_hostname}}"

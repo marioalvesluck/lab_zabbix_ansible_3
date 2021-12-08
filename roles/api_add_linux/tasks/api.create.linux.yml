@@ -4,7 +4,7 @@
 - name: Criando hosts no zabbix forma Automatica.
   local_action:
     module: community.zabbix.zabbix_host
-    server_url: '{{ url_zabbix_api }}'
+    server_url: http://{{ zbx_front }}/zabbix/
     login_user: '{{ username }}'
     login_password: '{{ password }}'
     host_name: "{{ansible_fqdn}}"

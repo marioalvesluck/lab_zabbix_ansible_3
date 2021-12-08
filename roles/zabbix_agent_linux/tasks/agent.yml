@@ -4,7 +4,7 @@
 
 - name: Adcionando Repositorio Zabbix - Rocky Linux 8 
   dnf:
-    name: "{{ url_packages_zabbix }}"
+    name: https://repo.zabbix.com/zabbix/{{ zbx_version }}/rhel/8/x86_64/zabbix-release-{{ zbx_version }}-1.el8.noarch.rpm
     state: present
   tags: zabbix_agent2
   when: ansible_facts['distribution_major_version'] == "8"
@@ -17,7 +17,7 @@
   tags: zabbix_agent2
   when: ansible_facts['distribution_major_version'] == "8"
 # # --------------------------------------------------------------------------------------------#
-- name: SSH | Setando configurações de segurança no arquivo zabbix_agent2.conf
+- name: Setando configurações de segurança no arquivo zabbix_agent2.conf
   lineinfile:
     dest: /etc/zabbix/zabbix_agent2.conf
     state: present
@@ -63,14 +63,19 @@
 - name: Criando hosts no zabbix forma Automatica.
   local_action:
     module: community.zabbix.zabbix_host
-    server_url: '{{ url_zabbix_api }}'
+    server_url: http://{{ zbx_front }}/zabbix/
     login_user: '{{ username }}'
     login_password: '{{ password }}'
     host_name: "{{ansible_fqdn}}"
     visible_name: "{{ansible_fqdn}}"
     host_groups:
       - '{{ host_grupo }}'
-    link_templates: '{{ host_template }}'
+    link_templates:
+#      - '{{ host_template }}'
+          - Linux by Zabbix agent active
+          - ICMP Ping
+          - Apache by Zabbix agent
+#      - '{{ host_template }}'
     status: enabled
     state: present
     inventory_mode: automatic

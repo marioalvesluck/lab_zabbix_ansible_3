@@ -3,14 +3,14 @@
 # https://docs.ansible.com/ansible/latest/collections/community/mysql/index.html
 
 # -----------------------------------------------------#
-- name: MYSQL | Instalando Banco de Dados .
+- name: Instalando Banco de Dados .
   dnf:
     name: "{{ packages_mysql }}"
     state: latest
   tags: zabbix_mydb
   when: ansible_distribution_file_variety == "RedHat"
 #----------------------------------------------------#
-- name: MYSQL | Remover pacotes MariaDB.
+- name: Remover pacotes Desnecessarios.
   dnf:
     name: mariadb-libs
     state: removed
@@ -18,7 +18,7 @@
   when: ansible_facts['distribution_major_version'] == "8" or ansible_distribution_file_variety == "RedHat"
   
 # ----------------------------------------------------#
-- name: MYSQL - Habilitando na Inicialização Service MYSQL
+- name: Habilitando na Inicialização Service MYSQL
   systemd:
     name: mysqld
     state: started
@@ -27,7 +27,7 @@
   when: ansible_facts['distribution_major_version'] == "8"
   
 #---------------------------------------------------------------------#
-- name: MYSQL | Criar senha de Root no banco de Dados
+- name: Criar senha de Root no banco de Dados
   mysql_user:
     name: root
     password: "{{ root_pass }}"
@@ -37,7 +37,7 @@
   when: ansible_facts['distribution_major_version'] == "8"
   
 #----------------------------------------------------------------------#
-- name: MYCNF | Copiando Arquivo .my.cnf default
+- name: Copiando Arquivo .my.cnf default
   copy: 
     src: "{{ item.src }}" 
     dest: "{{ item.dest }}"
@@ -48,7 +48,7 @@
   when: ansible_facts['distribution_major_version'] == "8"
   
 #-------------------------------------------------------------------___# 
-- name: MYSQL | Removendo contas de usuários 'anônimos' para localhost
+- name: Removendo contas de usuários 'anônimos' para localhost
   mysql_user:
     name: ''
     host_all: yes
@@ -60,7 +60,7 @@
   when: ansible_facts['distribution_major_version'] == "8"
   
 #---------------------------------------------------#
-- name: MYSQL | Removendo usuários 'zabbix' para o localhost se existir
+- name: Removendo usuários 'zabbix' para o localhost se existir
   mysql_user:
     name: "{{ db_user_zabbix }}"
     host: localhost
@@ -72,9 +72,9 @@
   when: ansible_facts['distribution_major_version'] == "8"
   
 #--------------------------------------------------------#
-- name: MYSQL | Removendo o MySQL 'test database'
+- name: Removendo o MySQL 'test database'
   mysql_db:
-    name: 'test'
+    name: '{{ database_remove }}'
     state: absent
     login_user: root
     login_password: "{{ root_pass }}"
@@ -82,19 +82,19 @@
   when: ansible_facts['distribution_major_version'] == "8"
   
 #------------------------------#
-- name: MYSQL | Altera o plugin de autenticação do usuário 'root' do MYSQL para mysql_native_password
+- name: Altera o plugin de autenticação do usuário 'root' do MYSQL para mysql_native_password
   shell: mysql -u root -p"{{ root_pass }}" -e 'UPDATE mysql.user SET plugin="mysql_native_password" WHERE user="root" AND host="localhost"'
   tags: zabbix_mydb
   when: ansible_facts['distribution_major_version'] == "8"
   
 #------------------------------------------------------------#
-- name: MYSQL | Privilégios de liberação para usuário 'root'
+- name: Privilégios de liberação para usuário 'root'
   shell: mysql -u root -p"{{ root_pass }}" -e 'FLUSH PRIVILEGES'
   tags: zabbix_mydb
   when: ansible_facts['distribution_major_version'] == "8"
   
 #-----------------------------------------------------------------#  
-- name: MYSQL | Criando usuário 'zabbix' para o MYSQL
+- name: Criando usuário 'zabbix' para o MYSQL
   mysql_user:
     name: "{{ db_user_zabbix }}"
     password: zabbix
@@ -107,7 +107,7 @@
   when: ansible_facts['distribution_major_version'] == "8"
   
 #------------------------------------------#
-- name: MYSQL | Criando usuário 'zabbix_server' para o MYSQL
+- name: Criando usuário 'zabbix_server' para o MYSQL
   mysql_user:
     name: "{{ db_user_server }}"
     password: "{{ db_user_pass_server }}"
@@ -122,7 +122,7 @@
   when: ansible_facts['distribution_major_version'] == "8"
   
 #---------------------------------------------#
-- name: MYSQL | Criando usuário 'zabbix_web' para o MYSQL
+- name: Criando usuário 'zabbix_web' para o MYSQL
   mysql_user:
     name: "{{ db_user_web }}"
     password: "{{ db_user_pass_web }}"
@@ -136,7 +136,7 @@
   when: ansible_facts['distribution_major_version'] == "8"
 
 #-----------------------------------------------------------#
-- name: MYSQL | Criando usuário 'zabbixmonitdb' para Monitorar o Banco.
+- name: Criando usuário 'zabbixmonitdb' para Monitorar o Banco.
   mysql_user:
     name: "{{ db_user_monit_db }}"
     password: "{{ db_user_pass_db }}"
@@ -150,7 +150,7 @@
   when: ansible_facts['distribution_major_version'] == "8"
 
 #-----------------------------------------------------------#
-- name: MYSQL | Criando banco de dados com nome 'zabbix'
+- name: Criando banco de dados com nome 'zabbix'
   mysql_db:
     name: "{{ db_user_zabbix }}"
     login_host: localhost
@@ -176,11 +176,10 @@
   when: ansible_facts['distribution_major_version'] == "8"
   
 #-------------------------------------------------------------------------#
-- name: FIREWALL | Realizando Reload no Firewall
+- name: Realizando Reload no Firewall
   systemd:
     name: firewalld
     state: reloaded
     enabled: yes
   tags: zabbix_mydb
   when: ansible_facts['distribution_major_version'] == "8"
-  

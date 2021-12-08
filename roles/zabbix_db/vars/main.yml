@@ -14,3 +14,8 @@ root_pass: 'zabbix'
 
 # VARIAVEL DE TimeZone.
 timezone: America/Sao_Paulo
+
+database_remove:
+  - test
+  - sys
+  - perfomance_schema 
