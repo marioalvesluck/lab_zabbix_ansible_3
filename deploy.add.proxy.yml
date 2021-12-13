@@ -18,19 +18,20 @@
    - proxy_name: 'zabbixproxy'
    - psk_identity: zabbix
    - host_grupo: 'Zabbix servers'
-   - host_template:  
-      - Linux by Zabbix agent active
-      - Zabbix proxy health
-      - ICMP Ping
       
   # Variaveis de monitoring db zabbix
    # Ajustar conforme sua versão de banco de dados Acessando e verificando versão com comando select version ();
    # https://downloads.mysql.com/archives/c-odbc/
 
    - version_connector_odbc: 8.0.26
-   - font_dns: zabbix
+   - FRONT_DSN: zabbix
+
    - user_mysql_remote: zabbixmonitdb
    - user_mysql_pass_remote: zabbixmonitdb
+
+   # VARIAVEIS DE CRIAÇÃO DE USUARIO ZABBIXMONITDB 
+   - db_user_monit_db: 'zabbixmonitdb'
+   - db_user_pass_db: 'zabbixmonitdb'
   
   # Observação Neste caso do Monitoramento no host banco dados a partir do proxy, podera seguir conforme
   # Sua Necessidade e alterando assim, podendo clonar host e adcionar template MYSQL by Zabbix agent2
@@ -45,5 +46,6 @@
 
 
   roles:
-     - role: Common_RockyLinux 
+     #- role: Common_RockyLinux 
      - role: zabbix_proxy
+     

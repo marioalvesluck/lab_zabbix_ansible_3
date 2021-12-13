@@ -2,7 +2,7 @@
   hosts:
 
     - zbx_front
-    #- zbx_db
+    - zbx_db
 
   vars:
     # Consulta a versão que busca Instalar em : https://repo.zabbix.com/zabbix/
@@ -15,10 +15,7 @@
     - zbx_front: 192.168.3.100
     - zbx_proxy: 192.168.3.130
     - host_grupo: 'Zabbix servers'
-    - host_template:  
-          - Linux by Zabbix agent active
-          - ICMP Ping
-          - Apache by Zabbix agent
+    - host_template:  ['Linux by Zabbix agent active','ICMP Ping']
 
     # Add Lista de Template , Selecionar somente que irão ser ultilzado junto Monitoramento do host.
 

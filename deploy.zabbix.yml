@@ -1,45 +1,78 @@
-- name: Playbook de Instalação Zabbix 3 Camadas Usando Rocky Linux8.
-  hosts:
-    - zabbix
-        
+#------------------- Instalação zabbix Server ------------------------#
+# - name: Playbook de Instalação Zabbix 3 Camadas Usando S.O - Rocky Linux.
+#   hosts:
+#     - zabbix 
+
+#   roles:
+#     - role: Common_Linux
+#     - role: zabbix_db
+#       when: ansible_host == zbx_db
+#     - role: zabbix_server
+#       when: ansible_host == zbx_srv
+#     - role: zabbix_front
+#       when: ansible_host == zbx_front
+#     - role: grafana_server
+#       when: ansible_host == zbx_front
+
+#----------------------- PROXY SP --------------------------------------#
+# - name: Instalação do Zabbix Proxy
+#   hosts: 
+#     - zbx_proxy_sp
+  
+#   vars:
+
+#    - proxy_name: 'PROXY-SP'
+#    - zbx_proxy: 192.168.3.130
+#    - host_grupo: Matriz-A
+#    - psk_identity: proxysp
+#    - proxy_db: sp.db
+#    - local: sp
+
+#   roles:
+#     - role: Common_Linux
+#     - role: zabbix_proxy
+
+# #---------------------------------------------------------------------#
+
+# - name: Playbook de instalação do Agentes de hosts no Zabbix .
+#   hosts:
+#     - zbx_front
+#     - zbx_db
+
+#   vars:
+#     - proxy_name: 'PROXY-SP'
+#     - zbx_proxy: 192.168.3.130
+#     - host_grupo: Matriz-A
+    
+
+#   roles:
+#     - role: zabbix_agent_linux
+#----------------------------------------------------------------------#
+- name: Instalação do Zabbix Proxy
+  hosts: 
+    - zbx_proxy_rj
+    
   vars:
-    
-    # DECLARAR AS VARIAVEL DO ARQUIVO HOSTS/ ALTERAR IP CONFORME NECESSIDADE EM HOSTS .
-    
-    - zbx_front: 192.168.3.100
-    - zbx_srv: 192.168.3.110
-    - zbx_db: 192.168.3.120
-    - zbx_proxy: 192.168.3.130
-    
-    # VARIAVEL DE URL_ZABBIX
-    #- url_packages_zabbix: http://repo.zabbix.com/zabbix/5.5/rhel/8/x86_64/zabbix-release-5.5-1.el8.noarch.rpm 
-
-    # Consulta a versão que busca Instalar em : https://repo.zabbix.com/zabbix/
-    - zbx_version: 5.5
-
-    # VARIAVEL CRIAÇÃO DO BANCO DE DADOS 
-    - db_name: 'zabbix'
-    
-    # VARIAVEL CRIAÇÃO DO USUARIO ZABBIX SERVER
-    - db_user_server: 'zabbix_server'
-    - db_user_pass_server: 'zabbix'
-    
-    # VARIAVEIS DE CRIAÇÃO DE USUARIO zabbix_web 
-    - db_user_web: 'zabbix_web'
-    - db_user_pass_web: 'zabbix'
-
-    # VARIAVEIS DE CRIAÇÃO DE USUARIO ZABBIXMONITDB 
-    - db_user_monit_db: 'zabbixmonitdb'
-    - db_user_pass_db: 'zabbixmonitdb'
-
+   - proxy_name: 'PROXY-RJ'
+   - zbx_proxy: 192.168.3.160
+   - host_grupo: Matriz-B
+   - psk_identity: proxyrj
+   - proxy_db: rj.db
+   - local: rj
+  
   roles:
-   
-    - role: Common_RockyLinux
-    - role: zabbix_db
-      when: ansible_host == zbx_db
-    - role: zabbix_server
-      when: ansible_host == zbx_srv
-    - role: zabbix_front
-      when: ansible_host == zbx_front
-    - role: grafana_server
-      when: ansible_host == zbx_front
+    #- Common_Linux
+    - role: zabbix_proxy
+
+# #-----------------------------------------------------------------------#
+# - name: Playbook de instalação do Agentes de hosts no Zabbix .
+#   hosts:
+#     - debian
+#     - ubuntu
+#   vars:
+#     - proxy_name: 'PROXY-RJ'
+#     - zbx_proxy: 192.168.3.160
+#     - host_grupo: Matriz-B
+
+#   roles:
+#     - role: zabbix_agent_linux

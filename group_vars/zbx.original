@@ -1,7 +1,0 @@
-# Variaveis de Ambiente ansible
-ansible_python_interpreter: auto
-#/usr/bin/python3
-ansible_ssh_port: 22
-ansible_become : True
-ansible_become_user: root
-ansible_user: vagrant

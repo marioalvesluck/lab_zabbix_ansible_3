@@ -5,13 +5,6 @@ url_packages_zabbix: http://repo.zabbix.com/zabbix/5.5/rhel/8/x86_64/zabbix-rele
 
 # VARIAVEL HOSTNAME DO ZABBIX PROXY
  
-# username: 'Admin'
-# password: 'zabbix'
-# zbx_srv: 192.168.3.110
-# proxy_name: 'zabbixproxy'
-# host_template: 'Linux by Zabbix agent active'  
-# host_grupo: 'Zabbix servers'
-
 # PACOTES DE INSTALL PROXY
 packages_zabbix_proxy: zabbix-proxy-sqlite3
 packages_zabbix_agent: zabbix-agent2

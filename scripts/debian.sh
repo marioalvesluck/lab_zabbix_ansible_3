@@ -6,5 +6,5 @@ KEY="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDXvrIN4eT0/8JxGWOvnmvbnez3CJ0WwwJbQnm
 clear
 echo $KEY >> .ssh/authorized_keys
 clear
-sudo apt install python3 -y
+sudo apt-get install python3 -y
 clear

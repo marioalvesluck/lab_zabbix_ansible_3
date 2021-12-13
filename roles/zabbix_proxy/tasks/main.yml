@@ -1,2 +1,5 @@
 - name: Playbook de instalação do Zabbix Proxy SqLite3
   include_tasks: proxy.yml
+
+- name: Playbook de Criação do proxy no frontend do zabbix
+  include_tasks: api.proxy.create.yml

@@ -1,23 +1,22 @@
 ---
 # tasks file for install_zabbix_server
 # -------------------------------------------------------------------------------------------#
-- name: Adcionando Repositorio Zabbix Server.
+- name: Adcionando Repositorio Zabbix Server - {{ ansible_distribution }}/{{ ansible_all_ipv4_addresses[0]}}.
   dnf:
-    #name: '{{ url_packages_zabbix }}'
     name: https://repo.zabbix.com/zabbix/{{ zbx_version }}/rhel/8/x86_64/zabbix-release-{{ zbx_version }}-1.el8.noarch.rpm
     state: present
   tags: zabbix_server
   when: ansible_facts['distribution_major_version'] == "8"
 # --------------------------------------------------------------------------------------------#
 #
-- name: Instalando pacotes zabbix-server zabbix-agent zabbix-sql-scripts
+- name: Instalando pacotes zabbix-server zabbix-agent zabbix-sql-scripts - {{ zbx_srv }}.
   dnf:
     name: '{{ packages_zabbix_server}}'
     state: latest
   tags: zabbix_server
   when: ansible_facts['distribution_major_version'] == "8"
 # --------------------------------------------------------------------------------------------#
-- name: Iniciar/ Habilitar zabbix-server / zabbix-agent2
+- name: Iniciar/ Habilitar zabbix-server / zabbix-agent2 - {{ zbx_srv }}.
   systemd:
     name: zabbix-server
     state: started
@@ -25,7 +24,7 @@
   tags: zabbix_server
   when: ansible_facts['distribution_major_version'] == "8"
 #-------------------------------------------------------------------------------#
-- name: Setando configurações de segurança no arquivo zabbix_server.conf
+- name: Setando configurações de segurança no arquivo zabbix_server.conf - {{ zbx_srv }}.
   lineinfile:
     dest: /etc/zabbix/zabbix_server.conf
     state: present
@@ -48,7 +47,7 @@
   when: ansible_facts['distribution_major_version'] == "8"
   tags: zabbix_server
 #-----------------------------------------------------------------------------------#
-- name: Copiando Arquivo .my.cnf default
+- name: Copiando Arquivo .my.cnf default - {{ zbx_srv }}.
   copy: 
     src: "{{ item.src }}" 
     dest: "{{ item.dest }}"
@@ -57,7 +56,7 @@
     - { src: '.my.cnf', dest: '/root/.my.cnf'}
   when: ansible_facts['distribution_major_version'] == "8"
 #---------------------------------------------------------------------------------------------#
-- name: Copiando Para realizar Particionamento do Banco de Dados.
+- name: Copiando Para realizar Particionamento do Banco de Dados - {{ zbx_srv }}.
   copy: 
     src: "{{ item.src }}" 
     dest: "{{ item.dest }}"
@@ -65,7 +64,7 @@
     - { src: 'part.sql', dest: '/opt/part.sql'}
   when: ansible_facts['distribution_major_version'] == "8"
 #-----------------------------------------------------------------------------------#
-- name: Importando schema da database do zabbix servidor "{{ zbx_db }}"
+- name: Importando schema da database do zabbix servidor - {{ zbx_db }}.
   shell: '{{ url_schema }}'
   ignore_errors: yes
   when: ansible_facts['distribution_major_version'] == "8"
@@ -76,32 +75,32 @@
   when: ansible_facts['distribution_major_version'] == "8"
 
 
-- name: Converter e Habilitar a execução do 'part.sql' "{{ zbx_db }}"
+- name: Converter e Habilitar a execução do 'part.sql' - {{ zbx_srv }}.
   shell: "dos2unix /opt/part.sql"
   ignore_errors: yes
   when: ansible_facts['distribution_major_version'] == "8"
 
-- name: Realizar o particionamento no banco de dados "{{ zbx_db }}"
+- name: Realizar o particionamento no banco de dados - {{ zbx_srv }}.
   shell: MYSQL_PWD="{{ db_user_pass_server }}" mysql -h "{{ zbx_db }}" -u zabbix_server zabbix < /opt/part.sql
   ignore_errors: yes
   when: ansible_facts['distribution_major_version'] == "8"
 
-- name: Realizar a configuração inicial de manutenção do banco "{{ zbx_db }}"
+- name: Realizar a configuração inicial de manutenção do banco - {{ zbx_srv }}.
   shell: MYSQL_PWD="{{ db_user_pass_server }}" mysql -h "{{ zbx_db }}" -u zabbix_server  "{{ db_name }}" -e "CALL partition_maintenance_all('zabbix');"
   ignore_errors: yes
   when: ansible_facts['distribution_major_version'] == "8"
 
-- name: Realizar a configuração inicial de manutenção do banco "{{ zbx_db }}"
+- name: Realizar a configuração inicial de manutenção do banco - {{ zbx_srv }}.
   shell: MYSQL_PWD="{{ db_user_pass_server }}" mysql -h "{{ zbx_db }}" -u zabbix_server  "{{ db_name }}" -e "show create table history\G"
   ignore_errors: yes
   when: ansible_facts['distribution_major_version'] == "8"
   
-- name: Realizar a configuração inicial de manutenção do banco "{{ zbx_db }}"
+- name: Realizar a configuração inicial de manutenção do banco - {{ zbx_srv }}.
   shell: MYSQL_PWD="{{ db_user_pass_server }}" mysql -h "{{ zbx_db }}" -u zabbix_server  "{{ db_name }}" -e "show create table trends\G"
   ignore_errors: yes
   when: ansible_facts['distribution_major_version'] == "8"
 
-- name: Criar Arquivo /etc/cron.d
+- name: Criar Arquivo /etc/cron.d - {{ zbx_srv }}.
   ansible.builtin.cron:
     name: ansible_partition_db
     weekday: "0"
@@ -114,7 +113,7 @@
   when: ansible_facts['distribution_major_version'] == "8"
 
 # --------------------------------------------------------------------------------------------#
-- name: Adcionado Porta firewalld  Zabbix_Server/Zabbix_Agent
+- name: Adcionado Porta firewalld  Zabbix_Server/Zabbix_Agent2 - {{ zbx_srv }}.
   firewalld:
     port: "{{ item }}"
     permanent: yes
@@ -126,7 +125,7 @@
   tags: zabbix_server
   when: ansible_facts['distribution_major_version'] == "8"
 # ----------------------------------------------------------------------------------------------#
-- name: Reload no firewalld
+- name: Reload no firewalld - {{ zbx_srv }}.
   systemd:
     name: firewalld
     state: reloaded
@@ -134,7 +133,7 @@
   tags: zabbix_server
   when: ansible_facts['distribution_major_version'] == "8"
 #-------------------------------------------------------------------------------------------------#
-- name: Iniciar/ Restart Zabbix-Server / Agent2
+- name: Iniciar/ Restart Zabbix-Server / Agent2 - {{ zbx_srv }}.
   systemd:
     name: "{{ item }}"
     state: restarted

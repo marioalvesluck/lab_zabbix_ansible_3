@@ -5,7 +5,7 @@ timezone: America/Sao_Paulo
 
 # CONFIGURAÇÃO DO FRONTEND DO ZABBIX
 zbx_port: 10051
-zbx_name: Monitor_Ansible
+zbx_name: Deploy_Ansible
 zbx_web: 'zabbix'
 
 # LISTA DE PACOTES INSTALAR FRONTEND

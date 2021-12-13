@@ -2,10 +2,8 @@
 # vi: set ft=ruby  :
 
 machines = {
-  "node01"   => {"memory" => "1024", "cpu" => "2", "ip" => "100", "image" => "centos/8"},
-  "node02" => {"memory" => "1024",  "cpu" => "2", "ip" => "110", "image" => "centos/8"},
-  "node03" => {"memory" => "2048",  "cpu" => "2", "ip" => "120", "image" => "centos/8"},
-  "node04" => {"memory" => "1024",  "cpu" => "2", "ip" => "130", "image" => "centos/8"}
+  "debian"   => {"memory" => "512", "cpu" => "2", "ip" => "140","image" => "debian/bullseye64"},
+  "ubuntu" => {"memory" => "512",  "cpu" => "2", "ip" => "150", "image" => "ubuntu/focal64"},
 }
 
 Vagrant.configure("2") do |config|
@@ -13,38 +11,20 @@ Vagrant.configure("2") do |config|
   machines.each do |name, conf|
     config.vm.define "#{name}" do |machine|
       machine.vm.box = "#{conf["image"]}"
-      machine.vm.hostname = "#{name}.example"
-      machine.vm.network "private_network", ip: "172.18.10.#{conf["ip"]}"
+      machine.vm.hostname = "#{name}.vagrant"
+      machine.vm.network "public_network",ip: "192.168.3.#{conf["ip"]}"
       machine.vm.provider "virtualbox" do |vb|
         vb.name = "#{name}"
         vb.memory = conf["memory"]
         vb.cpus = conf["cpu"]
-        vb.customize ["modifyvm", :id, "--groups", "/ansible"]
+        vb.customize ["modifyvm", :id, "--groups", "/zabbix"]
       end
-     
-     if "#{conf["image"]}" == "centos/8"
-        machine.vm.provision "shell", path: "./scripts/centos.sh" 
+      if "#{conf["image"]}" == "debian/bullseye64"
+        machine.vm.provision "shell", path: "./scripts/debian.sh" 
       end
-      if "#{conf["image"]}" == "centos/8"
-        machine.vm.provision "shell", path: "./scripts/centos.sh"
+      if "#{conf["image"]}" == "ubuntu/focal64"
+        machine.vm.provision "shell", path: "./scripts/debian.sh"
       end
-
-      if "#{conf["image"]}" == "centos/8"
-        machine.vm.provision "shell", path: "./scripts/centos.sh"
-      end
- 
-      if "#{conf["image"]}" == "centos/8"
-        machine.vm.provision "shell", path: "./scripts/centos.sh"
-      end
-
-      config.vm.provision "shell", inline: <<-EOF
-      HOSTS=$(head -n7 /etc/hosts)
-      echo -e "$HOSTS" > /etc/hosts
-      echo '172.18.10.100 node01.example' >> /etc/hosts
-      echo '172.18.10.110 node02.example' >> /etc/hosts
-      echo '172.18.10.120 node03.example' >> /etc/hosts
-      echo '172.18.10.130 node04.example' >> /etc/hosts
-      EOF
     end
   end
 end

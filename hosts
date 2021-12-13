@@ -11,13 +11,25 @@
 [zbx_db]
 192.168.3.120
 
-[zbx_proxy]
+[zbx_proxy_sp]
 192.168.3.130
 
-[zbx_proxy_monit_db]
-192.168.3.130
+[zbx_proxy_rj]
+192.168.3.160
 
 [zabbix:children]
 zbx_front
 zbx_srv
 zbx_db
+zbx_proxy_sp
+zbx_proxy_rj
+
+[debian]
+192.168.3.140
+
+[ubuntu]
+192.168.3.150
+
+[vagrant]
+192.168.3.140
+192.168.3.150
