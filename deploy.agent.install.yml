@@ -1,27 +1,18 @@
-- name: Playbook de instalação do Agentes de hosts no Zabbix /  e Adcionar ao Monitoramento junto ao Proxy informado .
+- name: Playbook de instalação do Agentes de hosts no Zabbix .
   hosts:
+    - debian
 
-    - zbx_front
-    - zbx_db
-
+      # VARIAVEIS DE AMBIENTE A SER PASSADAS SE CASO NAO HOUVE PROXY INFORMA ENDEREÇO SERVER ZABBIX.
   vars:
-    # Consulta a versão que busca Instalar em : https://repo.zabbix.com/zabbix/
-    - zbx_version: 5.5
-  
-    - username: 'Admin'
-    - password: 'zabbix'
-    - proxy_name: 'zabbixproxy'
-    - zbx_srv: 192.168.3.110
-    - zbx_front: 192.168.3.100
-    - zbx_proxy: 192.168.3.130
-    - host_grupo: 'Zabbix servers'
-    - host_template:  ['Linux by Zabbix agent active','ICMP Ping']
 
-    # Add Lista de Template , Selecionar somente que irão ser ultilzado junto Monitoramento do host.
+   # Se o  Agente for apontado diretamente para Zabbix Server informa em zbx_prox: IP Endereço do Ip do Zabbix server
+
+
+    - proxy_name: 'PROXY-RJ'
+    - zbx_proxy: 192.168.3.160
+    - host_grupo: Matriz-B
+
+    
 
   roles:
-    
     - role: zabbix_agent_linux
-
-
-          

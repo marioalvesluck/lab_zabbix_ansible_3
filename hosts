@@ -15,14 +15,14 @@
 192.168.3.130
 
 [zbx_proxy_rj]
-192.168.3.160
+192.168.3.200
 
 [zabbix:children]
 zbx_front
 zbx_srv
 zbx_db
 zbx_proxy_sp
-zbx_proxy_rj
+
 
 [debian]
 192.168.3.140
@@ -33,3 +33,6 @@ zbx_proxy_rj
 [vagrant]
 192.168.3.140
 192.168.3.150
+
+[DC01]
+192.168.3.200

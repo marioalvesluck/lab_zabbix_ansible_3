@@ -1,13 +1,12 @@
 ---
 # tasks file for grafana-server
 # -------------------------------------------------------------------------------------------#
-- name: Adcionando Repositorio Grafana
-  shell: "wget https://dl.grafana.com/oss/release/grafana-8.2.5-1.x86_64.rpm"
+- name: Adcionando Repositorio Grafana Server
+  shell: "wget https://dl.grafana.com/oss/release/grafana-{{ version_grafana }}-1.x86_64.rpm"
   tags: grafana-server
   when: ansible_facts['distribution_major_version'] == "8"
 # --------------------------------------------------------------------------------------------#
-#
-- name: Atualizando Sistema / cache
+- name: Atualizando Sistema / cache Sistema Operacional
   dnf: 
     name: '*'
     state: latest
@@ -16,12 +15,18 @@
   when: ansible_facts['distribution_major_version'] == "8"
 #----------------------------------------------------------------------------------------------#
 - name: Instalando pacotes grafana-server
-  shell: "yum install grafana-8.2.5-1.x86_64.rpm -y"
+  shell: "yum install grafana-{{ version_grafana }}-1.x86_64.rpm -y"
   tags: grafana-server
   when: ansible_facts['distribution_major_version'] == "8"
 #----------------------------------------------------------------------------------------------#
-- name: Habilitando Plugins zabbix-server
-  shell: "grafana-cli plugins install alexanderzobnin-zabbix-app"
+- name: Instalando Plugins no Grafana
+  grafana_plugin:
+    name: "{{ item }}"
+    version: latest
+    state: present
+  loop:
+    - alexanderzobnin-zabbix-app
+    - grafana-piechart-panel
   tags: grafana-server
   when: ansible_facts['distribution_major_version'] == "8"
 #----------------------------------------------------------------------------------------------#
@@ -44,6 +49,21 @@
   tags: zabbix_front
   when: ansible_facts['distribution_major_version'] == "8"
 #------------------------------------------------------------------------------------------------#
+- name: Criando Datasource do zabbix no Grafana
+  grafana_datasource:
+    name: "zabbix"
+    grafana_url: "http://{{ zbx_front }}:3000"
+    grafana_user: "admin"
+    grafana_password: "admin"
+    org_id: "1"
+    ds_type: "alexanderzobnin-zabbix-datasource"
+    ds_url: "http://{{ zbx_front }}/zabbix/api_jsonrpc.php"
+    database: "zabbix"
+    user: "Admin"
+    password: "zabbix"
+  tags: grafana-server
+  when: ansible_facts['distribution_major_version'] == "8"
+#------------------------------------------------------------------------------------------------#
 - name: Adcionado Porta firewalld Grafana-server
   firewalld:
     port: "{{ item }}"
@@ -61,3 +81,4 @@
     enabled: yes
   tags: grafana-server
   when: ansible_facts['distribution_major_version'] == "8"
+...

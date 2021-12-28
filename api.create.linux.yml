@@ -12,10 +12,5 @@
    - zbx_proxy: 192.168.3.130
    - host_grupo: 'Zabbix servers' 
 
-   # Ultilizando Templates Padrão Adcinar nome do template conforme cadastrado no frontend do zabbix , observar erro de digitação.
-   - host_template: 
-        - ICMP Ping 
-        - Linux by Zabbix agent active
-          
   roles:
     - role: api_add_linux

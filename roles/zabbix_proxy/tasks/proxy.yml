@@ -1,6 +1,6 @@
 ---
 # tasks file for zabbix-proxy
-- name: Adcionando Repositorio Zabbix Proxy - {{ ansible_distribution }}/{{ ansible_all_ipv4_addresses[0]}}.
+- name: Adcionando Repositorio Zabbix Proxy - {{ ansible_all_ipv4_addresses[0]}}.
   dnf:
     name: https://repo.zabbix.com/zabbix/{{ zbx_version }}/rhel/8/x86_64/zabbix-release-{{ zbx_version }}-1.el8.noarch.rpm
     state: present
@@ -9,12 +9,12 @@
   when: ansible_facts['distribution_major_version'] == "8"
 # --------------------------------------------------------------------------------------------#
 #
-- name: Instalando pacotes zabbix-proxy {{ ansible_distribution }}.
+- name: Instalando pacotes zabbix-proxy
   dnf: name='{{ packages_zabbix_proxy }}' state=latest
   tags: zabbix_proxy
   when: ansible_facts['distribution_major_version'] == "8"
 #--------------------------------------------------------------------------------------------#
-- name: Criar diretorio banco sqlite3 {{ ansible_distribution }}.
+- name: Criar diretorio banco sqlite3
   file:
     path: /var/lib/sqlite
     owner: zabbix
@@ -25,21 +25,21 @@
   tags: zabbix_proxy
   when: ansible_facts['distribution_major_version'] == "8"
 # --------------------------------------------------------------------------------------------#
-- name: Gerando Chave psk - {{ ansible_distribution }}.
+- name: Gerando Chave psk
   shell: sudo sh -c "openssl rand -hex 32 > /etc/zabbix/{{ local }}.psk"
   ignore_errors: true
   tags: zabbix_proxy
   when: ansible_facts['distribution_major_version'] == "8"
 
 #------------------------------------------------------------------------------------------------#
-- name : Armazenando psk VARIAVEL {{ ansible_distribution }}.
+- name : Armazenando psk VARIAVEL
   shell: "cat /etc/zabbix/{{ local }}.psk"
   register: pks
   ignore_errors: yes
   tags: zabbix_proxy
   when: ansible_facts['distribution_major_version'] == "8"
 #------------------------------------------------------------------------------------------------#
-- name: Armazenando saida pks.stdout {{ ansible_distribution }}.
+- name: Armazenando saida pks.stdout
   set_fact: 
        psk: "{{ pks.stdout }}"
 #------------------------------------------------------------------------------------------------#
@@ -60,7 +60,9 @@
     - { regexp: '# StartPinger=1', line: 'StartPinger=10' }
     - { regexp: '# ConfigFrequency=3600', line: 'ConfigFrequency=60' }
     - { regexp: '# CacheSize=8M', line: 'CacheSize=256M' }
+    - { regexp: '# HistoryCacheSize=16M', line: 'HistoryCacheSize=256M' }
     - { regexp: '^Timeout=4', line: 'Timeout=30' }
+    - { regexp: '# StartPingers=1', line: 'StartPingers=10' }
     - { regexp: '# TLSConnect=unencrypted', line: 'TLSConnect=psk' }
     - { regexp: '# TLSAccept=unencrypted', line: 'TLSAccept=psk' }
     - { regexp: '# TLSPSKIdentity=', line: 'TLSPSKIdentity={{ psk_identity }}' }
@@ -68,17 +70,17 @@
   tags: zabbix_proxy
   when: ansible_facts['distribution_major_version'] == "8"
 #-----------------------------------------------------------------------------------------------#
-- name: Restart do  Zabbix Proxy {{ ansible_distribution }}.
+- name: Restart do  Zabbix Proxy
   systemd: name=zabbix-proxy state=started enabled=yes
   tags: zabbix_proxy 
   when: ansible_facts['distribution_major_version'] == "8"
 #----------------------------------------------------------------------------------------------#
-- name: Instalando Pacotes Agente2 {{ ansible_distribution }}.
+- name: Instalando Pacotes Agente2
   dnf: name='{{ packages_zabbix_agent }}' state=latest
   tags: zabbix_proxy
   when: ansible_facts['distribution_major_version'] == "8"
 #------------------------------------------------------------------------------------#
-- name: Configurando o Arquivo zabbix_agent2.conf {{ ansible_distribution }}.
+- name: Configurando o Arquivo zabbix_agent2.conf
   lineinfile:
     dest: /etc/zabbix/zabbix_agent2.conf
     state: present
@@ -94,13 +96,13 @@
   tags: zabbix_proxy
   when: ansible_facts['distribution_major_version'] == "8"
 #------------------------------------------------------------------------------------------------#
-- name: Restart zabbix-agent2 {{ ansible_distribution }}.
+- name: Restart zabbix-agent2
   systemd: name=zabbix-agent2 state=restarted enabled=yes
   tags: zabbix_proxy
   when: ansible_facts['distribution_major_version'] == "8"
 #-------------------------------------------------------------------------------------#
 
-- name: Adcionado Porta firewalld {{ ansible_distribution }}.
+- name: Adcionado Porta firewalld
   firewalld:
     port: "{{ item }}"
     permanent: yes
@@ -112,23 +114,23 @@
   tags: zabbix_proxy
   when: ansible_facts['distribution_major_version'] == "8"
 #----------------------------------------------------------------------------------------------#
-- name: Restart do  Zabbix Proxy {{ ansible_distribution }}.
+- name: Restart do  Zabbix Proxy
   systemd: name=zabbix-proxy state=restarted enabled=yes
   tags: zabbix_proxy 
   when: ansible_facts['distribution_major_version'] == "8"
 # ----------------------------------------------------------------------------------------------#
-- name: Reload no firewalld {{ ansible_distribution }}.
+- name: Reload no firewalld
   systemd: name=firewalld state=reloaded daemon_reload=yes enabled=yes
   tags: zabbix_proxy
   when: ansible_facts['distribution_major_version'] == "8"
 #------------------------------------------------------------------------------------------------#
-- name: Realizando Download dos Drivers odbc versão correspondende do banco {{ ansible_distribution }}.
+- name: Realizando Download dos Drivers odbc versão correspondende do banco
   shell: rpm -ivh https://downloads.mysql.com/archives/get/p/10/file/mysql-connector-odbc-{{ version_connector_odbc }}-1.el8.x86_64.rpm
   ignore_errors: yes
   tags: zabbix_proxy
   when: ansible_facts['distribution_major_version'] == "8"
 #------------------------------------------------------------------------------------------------#
-- name: Configurando o Arquivo odbc.ini {{ ansible_distribution }}.
+- name: Configurando o Arquivo odbc.ini
   blockinfile:
     path: /etc/odbc.ini
     block: |

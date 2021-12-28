@@ -1,78 +1,82 @@
 #------------------- Instalação zabbix Server ------------------------#
-# - name: Playbook de Instalação Zabbix 3 Camadas Usando S.O - Rocky Linux.
-#   hosts:
-#     - zabbix 
-
-#   roles:
-#     - role: Common_Linux
-#     - role: zabbix_db
-#       when: ansible_host == zbx_db
-#     - role: zabbix_server
-#       when: ansible_host == zbx_srv
-#     - role: zabbix_front
-#       when: ansible_host == zbx_front
-#     - role: grafana_server
-#       when: ansible_host == zbx_front
+- name: Deploy de Instalação Zabbix + Proxys.
+  hosts:
+    - zabbix 
+    
+  roles:
+    # - role: Common_Linux
+    # - role: zabbix_db
+    #   when: ansible_host == zbx_db
+    # - role: zabbix_server
+    #   when: ansible_host == zbx_srv
+    # - role: zabbix_front
+    #   when: ansible_host == zbx_front
+    # - role: grafana_server
+    #   when: ansible_host == zbx_front
 
 #----------------------- PROXY SP --------------------------------------#
 # - name: Instalação do Zabbix Proxy
 #   hosts: 
 #     - zbx_proxy_sp
-  
 #   vars:
-
 #    - proxy_name: 'PROXY-SP'
 #    - zbx_proxy: 192.168.3.130
 #    - host_grupo: Matriz-A
 #    - psk_identity: proxysp
 #    - proxy_db: sp.db
 #    - local: sp
-
 #   roles:
-#     - role: Common_Linux
 #     - role: zabbix_proxy
-
-# #---------------------------------------------------------------------#
-
+#---------------------------------------------------------------------#
 # - name: Playbook de instalação do Agentes de hosts no Zabbix .
 #   hosts:
 #     - zbx_front
 #     - zbx_db
-
 #   vars:
 #     - proxy_name: 'PROXY-SP'
 #     - zbx_proxy: 192.168.3.130
 #     - host_grupo: Matriz-A
-    
-
 #   roles:
 #     - role: zabbix_agent_linux
 #----------------------------------------------------------------------#
-- name: Instalação do Zabbix Proxy
-  hosts: 
-    - zbx_proxy_rj
+- name: Playbook de instalação do Agentes de hosts no Zabbix .
+  hosts:
+    - DC01
     
   vars:
-   - proxy_name: 'PROXY-RJ'
-   - zbx_proxy: 192.168.3.160
-   - host_grupo: Matriz-B
-   - psk_identity: proxyrj
-   - proxy_db: rj.db
-   - local: rj
-  
+    - zbx_front: 192.168.3.100
+    - proxy_name: 'PROXY-SP'
+    - zbx_proxy: 192.168.3.130
+    - host_grupo: Matriz-A
+    
   roles:
-    #- Common_Linux
-    - role: zabbix_proxy
+    - role: zabbix_agent_windows
 
+#-----------------------------------------------------------------------#
+
+# - name: Instalação do Zabbix Proxy
+#   hosts: 
+#     - zbx_proxy_rj
+    
+#   vars:
+#    - proxy_name: 'PROXY-RJ'
+#    - zbx_proxy: 192.168.3.200
+#    - host_grupo: Matriz-B
+#    - psk_identity: proxyrj
+#    - proxy_db: rj.db
+#    - local: rj
+  
+#   roles:
+#     - role: zabbix_proxy
 # #-----------------------------------------------------------------------#
 # - name: Playbook de instalação do Agentes de hosts no Zabbix .
 #   hosts:
-#     - debian
-#     - ubuntu
+#     #- debian
+#       - zbx_db
 #   vars:
-#     - proxy_name: 'PROXY-RJ'
-#     - zbx_proxy: 192.168.3.160
-#     - host_grupo: Matriz-B
+#      - proxy_name: 'PROXY-RJ'
+#      - zbx_proxy: 192.168.3.200
+#      - host_grupo: Matriz-B
 
 #   roles:
-#     - role: zabbix_agent_linux
+#      - role: zabbix_agent_linux

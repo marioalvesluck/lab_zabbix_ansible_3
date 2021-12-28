@@ -1,7 +1,7 @@
 ---
 # tasks file for install_zabbix_front
 # -------------------------------------------------------------------------------------------#
-- name: Adcionando Repositorio Zabbix - {{ ansible_distribution }}/{{ ansible_distribution_release }}/{{ ansible_distribution_major_version }}/{{ ansible_all_ipv4_addresses[0]}}.
+- name: Adcionando Repositorio Zabbix {{ ansible_all_ipv4_addresses[0]}}.
   dnf:
     #name: '{{ url_packages_zabbix }}'
     name: https://repo.zabbix.com/zabbix/{{ zbx_version }}/rhel/8/x86_64/zabbix-release-{{ zbx_version }}-1.el8.noarch.rpm
@@ -9,20 +9,20 @@
   tags: zabbix_front
   when: ansible_facts['distribution_major_version'] == "8"
 # --------------------------------------------------------------------------------------------#
-- name: Instalando pacotes zabbix-Frontend - {{ zbx_front }}.
+- name: Instalando pacotes zabbix-Frontend
   dnf:
     name: "{{ packages_zabbix_frontend }}"
     state: latest
   tags: zabbix_front
   when: ansible_facts['distribution_major_version'] == "8"
 #----------------------------------------------------------------------------------------------#
-- name: ADD time zone no /etc/php-fpm.d/zabbix.conf - {{ zbx_front }}.
+- name: ADD time zone no /etc/php-fpm.d/zabbix.conf
   shell: "echo php_value[date.timezone] = {{ timezone }} >> /etc/php-fpm.d/zabbix.conf"
   ignore_errors: True
   tags: zabbix_front
   when: ansible_facts['distribution_major_version'] == "8"
 #-----------------------------------------------------------------------------------------------#
-- name: Setando configurações do Arquivo PhP do Apache - {{ zbx_front }}.
+- name: Setando configurações do Arquivo PhP do Apache
   lineinfile:
     dest:  /etc/php.ini
     state: present
@@ -39,7 +39,7 @@
   tags: zabbix_front
   when: ansible_facts['distribution_major_version'] == "8"
 #-----------------------------------------------------------------------------------------------#
-- name: Setando configurações do Arquivo Apache / Coletas HTT - {{ zbx_front }}.
+- name: Setando configurações do Arquivo Apache / Coletas HTTP
   blockinfile:
     path: /etc/httpd/conf/httpd.conf
     block: |
@@ -51,24 +51,24 @@
   tags: zabbix_front
   when: ansible_facts['distribution_major_version'] == "8"
 #--------------------------------------------------------------------------------------------------#
-- name: Copiando Arquivo zabbix.conf.php default - {{ zbx_front }}.
+- name: Copiando Arquivo zabbix.conf.php default
   template:
     src:  templates/zabbix.conf.php.j2
     dest: /etc/zabbix/web/zabbix.conf.php
   tags: zabbix_front
   when: ansible_facts['distribution_major_version'] == "8"
 #--------------------------------------------------------------------------------------------------#
-- name: Baixando Pacotes googlechrome - {{ zbx_front }}.
+- name: Baixando Pacotes googlechrome
   shell: wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
   tags: zabbix_front
   when: ansible_facts['distribution_major_version'] == "8"
 #-------------------------------------------------------------------------------------------------#
-- name: Instalando googlechrome - {{ zbx_front }}.
+- name: Instalando googlechrome
   shell: "sudo dnf localinstall google-chrome-stable_current_x86_64.rpm -y"
   tags: zabbix_front
   when: ansible_facts['distribution_major_version'] == "8"
 # ----------------------------------------------------------------------------------------------#
-- name: Iniciar/ Habilitar e Iniciar App do Apache2 - {{ zbx_front }}.
+- name: Iniciar/ Habilitar e Iniciar App do Apache2
   systemd:
     name: "{{ item }}"
     state: started
@@ -79,7 +79,7 @@
   tags: zabbix_front
   when: ansible_facts['distribution_major_version'] == "8"
 #----------------------------------------------------------------------------------------------#
-- name: Adcionado Portas firewalld  Front/Apache2/Zabbix_Server/Zabbix_Agent2 - {{ zbx_front }}.
+- name: Adcionado Portas firewalld  Front/Apache2/Zabbix_Server/Zabbix_Agent2
   firewalld:
     port: "{{ item }}"
     permanent: yes
@@ -93,14 +93,14 @@
   tags: zabbix_front
   when: ansible_facts['distribution_major_version'] == "8"
 # ----------------------------------------------------------------------------------------------#
-- name: Reload no firewalld - {{ zbx_front }}.
+- name: Reload no firewalld
   systemd:
     name: firewalld
     state: reloaded
     enabled: yes
   tags: zabbix_front
 #-----------------------------------------------------------------------------------------------#
-- name: Reinciar FRONTEND - {{ zbx_front }}.
+- name: Reinciar FRONTEND
   systemd:
     name: "{{ item }}"
     state: restarted

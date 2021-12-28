@@ -1,2 +1,12 @@
 ---
 # tasks file for install_zabbix_agent_windows
+
+- name: "Install the correct repository"
+  include_tasks: install.agent.windows.yml
+    
+- name: Atualizando Sistema Operacional 
+  include_tasks: update.windows.yml
+
+
+- name: Adcionando host Automatico via Ansible 
+  include_tasks: api.add.windows.yml

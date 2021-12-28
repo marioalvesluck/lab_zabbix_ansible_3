@@ -8,3 +8,5 @@ packages_zabbix_server:
   - zabbix-sql-scripts
   - git
   - dos2unix
+  - zabbix-get
+  - zabbix-sender

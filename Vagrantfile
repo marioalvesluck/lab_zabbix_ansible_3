@@ -2,8 +2,8 @@
 # vi: set ft=ruby  :
 
 machines = {
-  "debian"   => {"memory" => "512", "cpu" => "2", "ip" => "140","image" => "debian/bullseye64"},
-  "ubuntu" => {"memory" => "512",  "cpu" => "2", "ip" => "150", "image" => "ubuntu/focal64"},
+  "debian"   => {"memory" => "256", "cpu" => "2", "ip" => "140","image" => "debian/bullseye64"},
+  "ubuntu" => {"memory" => "256",  "cpu" => "2", "ip" => "150", "image" => "debian/bullseye64"},
 }
 
 Vagrant.configure("2") do |config|

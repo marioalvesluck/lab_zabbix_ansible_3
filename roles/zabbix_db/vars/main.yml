@@ -1,21 +1,21 @@
 ---
 # vars file for db_zabbix
 # Schema Criação banco de Dados MYSQL8.0
-url_schema: zcat /usr/share/doc/zabbix-sql-scripts/mysql/create.sql.gz | mysql -h 192.168.3.120 -u zabbix_server -pzabbix zabbix
-url_partition: "mysql -h 192.168.3.120 -u zabbix_server -pzabbix zabbix < /opt/zbx_db_part.sql"
+# url_schema: zcat /usr/share/doc/zabbix-sql-scripts/mysql/create.sql.gz | mysql -h 192.168.3.120 -u zabbix_server -pzabbix zabbix
+# url_partition: "mysql -h 192.168.3.120 -u zabbix_server -pzabbix zabbix < /opt/zbx_db_part.sql"
 
-# VARIAVEL CRIAÇÃDO DO USUARIO ZABBIX LOCALHOST
-db_user_zabbix: 'zabbix'
-db_user_zabbix_pass: 'zabbix'
+# # VARIAVEL CRIAÇÃDO DO USUARIO ZABBIX LOCALHOST
+# db_user_zabbix: 'zabbix'
+# db_user_zabbix_pass: 'zabbix'
     
 
-# SENHA DO USER LOCAL ROOT
-root_pass: 'zabbix'
+# # SENHA DO USER LOCAL ROOT
+# root_pass: 'zabbix'
 
-# VARIAVEL DE TimeZone.
-timezone: America/Sao_Paulo
+# # VARIAVEL DE TimeZone.
+# timezone: America/Sao_Paulo
 
-database_remove:
-  - test
-  - sys
-  - perfomance_schema 
+# database_remove:
+#   - test
+#   - sys
+#   - perfomance_schema 
