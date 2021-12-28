@@ -4,40 +4,40 @@
     - zabbix 
     
   roles:
-    # - role: Common_Linux
-    # - role: zabbix_db
-    #   when: ansible_host == zbx_db
-    # - role: zabbix_server
-    #   when: ansible_host == zbx_srv
-    # - role: zabbix_front
-    #   when: ansible_host == zbx_front
-    # - role: grafana_server
-    #   when: ansible_host == zbx_front
+    - role: Common_Linux
+    - role: zabbix_db
+      when: ansible_host == zbx_db
+    - role: zabbix_server
+      when: ansible_host == zbx_srv
+    - role: zabbix_front
+      when: ansible_host == zbx_front
+    - role: grafana_server
+      when: ansible_host == zbx_front
 
 #----------------------- PROXY SP --------------------------------------#
-# - name: Instalação do Zabbix Proxy
-#   hosts: 
-#     - zbx_proxy_sp
-#   vars:
-#    - proxy_name: 'PROXY-SP'
-#    - zbx_proxy: 192.168.3.130
-#    - host_grupo: Matriz-A
-#    - psk_identity: proxysp
-#    - proxy_db: sp.db
-#    - local: sp
-#   roles:
-#     - role: zabbix_proxy
+- name: Instalação do Zabbix Proxy
+  hosts: 
+    - zbx_proxy_sp
+  vars:
+   - proxy_name: 'PROXY-SP'
+   - zbx_proxy: 192.168.3.130
+   - host_grupo: Matriz-A
+   - psk_identity: proxysp
+   - proxy_db: sp.db
+   - local: sp
+  roles:
+    - role: zabbix_proxy
 #---------------------------------------------------------------------#
-# - name: Playbook de instalação do Agentes de hosts no Zabbix .
-#   hosts:
-#     - zbx_front
-#     - zbx_db
-#   vars:
-#     - proxy_name: 'PROXY-SP'
-#     - zbx_proxy: 192.168.3.130
-#     - host_grupo: Matriz-A
-#   roles:
-#     - role: zabbix_agent_linux
+- name: Playbook de instalação do Agentes de hosts no Zabbix .
+  hosts:
+    - zbx_front
+    - zbx_db
+  vars:
+    - proxy_name: 'PROXY-SP'
+    - zbx_proxy: 192.168.3.130
+    - host_grupo: Matriz-A
+  roles:
+    - role: zabbix_agent_linux
 #----------------------------------------------------------------------#
 - name: Playbook de instalação do Agentes de hosts no Zabbix .
   hosts:
@@ -71,7 +71,7 @@
 # #-----------------------------------------------------------------------#
 # - name: Playbook de instalação do Agentes de hosts no Zabbix .
 #   hosts:
-#     #- debian
+#       - debian
 #       - zbx_db
 #   vars:
 #      - proxy_name: 'PROXY-RJ'
