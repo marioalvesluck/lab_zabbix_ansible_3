@@ -1,0 +1,57 @@
+# Base create host groups example
+- name: Criando Grupo de host no Frontend do Zabbix - {{ ansible_all_ipv4_addresses[0]}}.
+  local_action:
+    module: community.zabbix.zabbix_group
+    server_url: http://{{ zbx_front }}/zabbix/
+    login_user: '{{ username }}'
+    login_password: '{{ password }}'
+    state: present
+    host_groups: '{{ host_grupo }}'
+#-----------------------------------------------------------------------------------------------#
+- name: Criar o Proxy Modo Active.
+  local_action:
+    module: community.zabbix.zabbix_proxy
+    server_url: http://{{ zbx_front }}/zabbix/
+    login_user: '{{ username }}'
+    login_password: '{{ password }}'
+    proxy_name: '{{ proxy_name }}'
+    status: active
+    state: present
+    proxy_address: '{{ zbx_proxy }}'
+    tls_accept: PSK
+    tls_psk_identity: '{{ psk_identity }}'
+    tls_psk: "{{ psk }}"
+
+#-----------------------------------------------------------------------------------#
+- name: Criando Proxy no Frontend do zabbix .
+  local_action:
+    module: community.zabbix.zabbix_host
+    server_url: http://{{ zbx_front }}/zabbix/
+    login_user: '{{ username }}'
+    login_password: '{{ password }}'
+    host_name: "{{ansible_fqdn}}"
+    visible_name: "{{ansible_fqdn}}"
+    host_groups:
+      - '{{ host_grupo }}'
+    link_templates:
+      - Linux by Zabbix agent active
+      - Zabbix proxy health
+      - ICMP Ping
+    status: enabled
+    state: present
+    inventory_mode: automatic
+    interfaces:
+      - type: '1'
+        main: 1
+        useip: 1
+        ip: "{{ ansible_all_ipv4_addresses[0]}}"
+        dns: ""
+        port: "10050"
+    proxy: '{{ proxy_name }}'
+    macros:
+      - macro: '{$MYSQL.DSN}'
+        value: tcp://{{ zbx_db }}:3306
+      - macro: '{$MYSQL.PASSWORD}'
+        value: "{{ db_user_monit_db }}"
+      - macro: '{$MYSQL.USER}'
+        value: "{{ db_user_pass_db }}"

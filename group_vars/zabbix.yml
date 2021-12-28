@@ -1,0 +1,100 @@
+# Variaveis de Ambiente para grupo zabbix ansible
+ansible_python_interpreter: auto
+ansible_ssh_port: 22
+ansible_become : True
+ansible_become_user: root
+ansible_ssh_user: root
+ansible_ssh_pass: 123
+
+# Consulta a versão que busca Instalar em : https://repo.zabbix.com/zabbix/
+zbx_version: 5.4
+zbx_agent_version: 5.5
+version_grafana: 8.3.3
+
+# Criar usuario no sistema operacional
+username_so: mario
+userpass_so: 4linux@!
+super_group_so: root
+
+# Variaveis de login API Zabbix , Segurança Criar um Usuario no Frontend do Zabbix para Acesso somente API.
+username: 'Admin'
+password: 'zabbix'
+
+# Declarar as variavies do arquivo de hosts / Alterar IP conforme sua necessidade .
+zbx_front: 192.168.3.100
+zbx_srv: 192.168.3.110
+zbx_db: 192.168.3.120
+zbx_proxy: 192.168.3.130
+
+#--------------------------- Adção de templates -----------------------------------------------------#
+# Macro Padronizada adição de Templates no Agentes 
+zabbix_link_templates:
+  - Linux by Zabbix agent active
+  - ICMP Ping
+
+#---------------------- Banco de Dados ---------------------------------------------------------------#
+# Variaveis de Criar banco zabbix e particionar banco.
+# OBS: TROCA ENDEREÇO IP DO SERVIDOR PARA IP DO BANCO QUE IRA SER PARTICIONADO CONFORME SUA ESTRUTURA.
+url_schema: zcat /usr/share/doc/zabbix-sql-scripts/mysql/create.sql.gz | mysql -h 192.168.3.120 -u zabbix_server -pzabbix zabbix
+url_partition: "mysql -h 192.168.3.120 -u zabbix_server -pzabbix zabbix < /opt/zbx_db_part.sql"
+
+# VARIAVEL CRIAÇÃDO DO USUARIO ZABBIX LOCALHOST
+db_user_zabbix: 'zabbix'
+db_user_zabbix_pass: 'zabbix'
+
+# SENHA DO USER LOCAL ROOT
+root_pass: 'zabbix'
+
+# VARIAVEL DE TimeZone.
+timezone: America/Sao_Paulo
+
+database_remove:
+  - test
+  - sys
+  - perfomance_schema 
+
+# VARIAVEL CRIAÇÃO DO BANCO DE DADOS
+db_name: 'zabbix'
+
+# VARIAVEL CRIAÇÃO DO USUARIO ZABBIX SERVER
+db_user_server: 'zabbix_server'
+db_user_pass_server: 'zabbix'
+
+# VARIAVEIS DE CRIAÇÃO DE USUARIO zabbix_web
+db_user_web: 'zabbix_web'
+db_user_pass_web: 'zabbix'
+
+# VARIAVEIS DE CRIAÇÃO DE USUARIO ZABBIXMONITDB
+db_user_monit_db: 'zabbixmonitdb'
+db_user_pass_db: 'zabbixmonitdb'
+
+#------------------------------------------------------------------------------------------------------#
+# Variaveis de monitoring db zabbix
+# Ajustar conforme sua versão de banco de dados Acessando e verificando versão com comando select version ();
+# https://downloads.mysql.com/archives/c-odbc/
+
+version_connector_odbc: 8.0.26
+FRONT_DSN: zabbix
+
+#Observação Neste caso do Monitoramento no host banco dados a partir do proxy, podera seguir conforme
+# Sua Necessidade e alterando assim, podendo clonar host e adcionar template MYSQL by Zabbix agent2
+# Variveis do host User password criado em deploy.zabbix.yml , verificar usuario abaixo adcionado.
+# nosso Caso de Exemplo- ZABBIXMONITDB - Informações o usuario remote acima.
+
+# Acionar variaveis aos hosts.
+
+  # {$MYSQL.DSN} - tcp://192.168.3.120:3306
+  # {$MYSQL.PASSWORD} -  zabbixmonitdb
+  # {$MYSQL.USER} - zabbixmonitdb
+
+
+# Configuração Zabbix agent Windows
+# https://cdn.zabbix.com/zabbix/binaries/stable/5.4/5.4.8/zabbix_agent2-5.4.8-windows-amd64-openssl.msi
+
+zabbix_win_download_url: https://cdn.zabbix.com/zabbix/binaries/stable/
+zabbix_version: 5.4
+zabbix_version_long: 5.4.8
+zabbix_win_package: zabbix_agent2-5.4.8-windows-amd64-openssl.msi
+zabbix_win_download_link: "{{ zabbix_win_download_url }}/{{ zabbix_version}}/{{ zabbix_version_long }}/{{ zabbix_win_package }}"
+zabbix_win_install_dir: 'C:\Zabbix'
+

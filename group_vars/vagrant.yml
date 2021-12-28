@@ -1,0 +1,25 @@
+# Variaveis de Ambiente para grupo zabbix ansible
+ansible_python_interpreter: /usr/bin/python3
+ansible_ssh_port: 22
+ansible_become : True
+ansible_become_user: root
+ansible_user: vagrant
+
+# Consulta a versão que busca Instalar em : https://repo.zabbix.com/zabbix/
+zbx_agent_version: 5.5
+# Variaveis de login API Zabbix , Segurança Criar um Usuario no Frontend do Zabbix para Acesso somente API.
+username: 'Admin'
+password: 'zabbix'
+
+#DECLARAR AS VARIAVEL DO ARQUIVO HOSTS/ ALTERAR IP CONFORME NECESSIDADE EM HOSTS .
+zbx_front: 192.168.3.100
+zbx_srv: 192.168.3.110
+zbx_db: 192.168.3.120
+zbx_proxy: 192.168.3.130
+
+# Macros de configuração do Proxy
+zabbix_link_templates:
+  - Linux by Zabbix agent active
+  - ICMP Ping
+
+#-------------------------------------------------------------------------------------------------------#

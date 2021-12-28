@@ -1,0 +1,50 @@
+---
+
+# tasks file for install_zabbix_agent_linux
+
+- name: Adcionando Repositorio Zabbix - {{ ansible_distribution }}/{{ ansible_all_ipv4_addresses[0]}}.
+  apt:
+    deb: https://repo.zabbix.com/zabbix/{{ zbx_agent_version }}/ubuntu/pool/main/z/zabbix-release/zabbix-release_{{ zbx_agent_version }}-1%2Bubuntu20.04_all.deb
+    state: present
+  tags: zabbix_agent2
+  when: ansible_distribution == "Ubuntu"
+# --------------------------------------------------------------------------------------------#
+- name: Atualizando Sistema Operacional - {{ ansible_all_ipv4_addresses[0]}}.
+  apt:
+    update_cache: yes
+  tags: zabbix_agent2
+  when: ansible_distribution == "Ubuntu"
+#-----------------------------------------------------------------------------------------------#
+- name: Instalando pacote zabbix-agent2 - {{ ansible_all_ipv4_addresses[0]}}..
+  apt:
+    name: zabbix-agent2
+    state: present
+  tags: zabbix_agent2
+  when: ansible_distribution == "Ubuntu"
+# # --------------------------------------------------------------------------------------------#
+- name: Configurando o Arquivo zabbix_agent2.conf - {{ ansible_all_ipv4_addresses[0]}}.
+  lineinfile:
+    dest: /etc/zabbix/zabbix_agent2.conf
+    state: present
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    backrefs: yes
+  loop:
+    - { regexp: "^Server=127.0.0.1", line: "Server={{ zbx_proxy }}" }
+    - { regexp: "^ServerActive=127.0.0.1", line: "ServerActive={{ zbx_proxy }} " }
+    - { regexp: "^Hostname=Zabbix server", line: "Hostname={{ ansible_fqdn }}" }
+    - { regexp: "# Timeout=3", line: "Timeout=30" }
+    - { regexp: "# DenyKey=system.run[*]", line: "AllowKey=system.run[*]" }
+  tags: zabbix_agent2
+  when: ansible_distribution == "Ubuntu"
+# ----------------------------------------------------------------------------------------------#
+- name: Iniciar/ Habilitar zabbix-agent2 - {{ ansible_all_ipv4_addresses[0]}}.
+  systemd:
+    name: zabbix-agent2
+    state: restarted
+    enabled: yes
+  tags: zabbix_agent2
+  when: ansible_distribution == "Ubuntu"
+#-------------------------------------------------------------------------------------------------#
+
+...

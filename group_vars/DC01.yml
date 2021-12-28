@@ -1,0 +1,28 @@
+# User de autenticação windows
+ansible_python_interpreter: /usr/bin/python3
+ansible_user: Administrador
+ansible_password: Care@fidi
+ansible_port: 5986
+ansible_connection: winrm
+ansible_winrm_server_cert_validation: ignore
+
+# Variaveis de login API Zabbix , Segurança Criar um Usuario no Frontend do Zabbix para Acesso somente API.
+username: 'Admin'
+password: 'zabbix'
+
+#--------------------------- Adção de templates -----------------------------------------------------#
+# Macro Padronizada adição de Templates no Agentes 
+zabbix_link_templates_windows:
+  - Windows by Zabbix agent active
+  - ICMP Ping
+
+# Configuração Zabbix agent Windows
+# https://cdn.zabbix.com/zabbix/binaries/stable/5.4/5.4.9/zabbix_agent2-5.4.9-windows-amd64-openssl-static.zip
+
+zabbix_win_download_url: https://cdn.zabbix.com/zabbix/binaries/stable
+zabbix_version: 5.4
+zabbix_version_long: 5.4.9
+zabbix_win_package: zabbix_agent2-{{ zabbix_version_long }}-windows-amd64-openssl-static.zip
+zabbix_win_download_link: "{{ zabbix_win_download_url }}/{{ zabbix_version}}/{{ zabbix_version_long }}/{{ zabbix_win_package }}"
+zabbix_win_install_dir: 'C:\zabbix'
+zabbix_dest_download_msi: C:\Users\Administrador\Downloads\zabbix_agent.msi
