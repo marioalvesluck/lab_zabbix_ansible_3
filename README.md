@@ -1,6 +1,4 @@
-Role Name
-=========
-FINALIZANDO PROJETO EM DESENVOLVIMENTO.
+Projeto tem como objetivo Auxiliar comunidade Zabbix .
 
 Padronização do Ambiente e Instalação do Zabbix 3 Camadas com particionamento banco de dados + Proxy + Agents + Adção de hosts Automaticamente e ++++++.
 
@@ -36,20 +34,24 @@ Dependencies:
 
 Obs: Alterar conforme sua necessidade o arquivo ansible.cfg para sua arquitetura.
 
-Neste Projeto foram ultilizados 4 Servidores:
+Neste Projeto foram ultilizados 6 Servidores:
 
   - Frontend zabbix / Grafana Server
   - Zabbix-server
   - Zabbix-Proxy
   - Banco de Dados
 
-Projeto Realizado é uma forma de auxiliar comunidade Zabbix Com deploy Rapido do ambiente para Homologação.
+Servidores Windows - Ultilizado para Testes de Instalaçao do agente zabbix e adcionar ao frontend do zabbix.
+
+  - DC01
+  - DC02
 
 O que Projeto de Automação Obterá apos a Implementação.
 -------------------------------------------------------
 
 Roles do Projeto: 
 -----------------  
+
   - Zabbix Server 
   - Zabbix Frontend
   - MYSQL , banco de dados Particionando .
@@ -62,24 +64,13 @@ Roles do Projeto:
   - Instalação de Agentes Windows em Desenvolvimento.
   - Adcionado Configurações Monitoramento Apache 
   - Adcionado ao Projeto odbc Connector configurações do proxy e adcionado configurações basicas do odbc.ini
-    Ajustar conforme sua necessidade e verificar versão do MYSQL , acessando banco e executando select version ();
+  - Ajustar conforme sua necessidade e verificar versão do MYSQL , acessando banco e executando select version ();
   
 Variables
 --------------
-Ajustar de Acordo seu Ambiente.
+Arquivo hosts - Ajustar os IPs Conforme sua infraestrutura .
 
-Arquivo hosts :
-
-Ajustar os IPs Conforme sua infraestrutura .
-
-Variaveis em group_vars:
-
-ansible_python_interpreter: auto 
-ansible_ssh_port: 22
-ansible_become : True
-ansible_become_user: root
-ansible_user: root
-ansible_pass: batatinha@2021
+Observação Variaveis em group_vars, Alterar conforme sua necessidade.
 
 Exemplo de Ultilização 
 ----------------
@@ -88,7 +79,7 @@ ansible-playbook deploy.zabbix.yml
 
   roles:
    
-    <!-- - role: Common_Linux
+    - role: Common_Linux
     - role: db_zabbix
       when: ansible_host == zbx_db
     - role: zabbix_server
@@ -101,10 +92,6 @@ ansible-playbook deploy.zabbix.yml
       when: ansible_host == zbx_db
     - role: grafana-server
       when: ansible_host == zbx_front
-    - role: zabbix-proxy
-      when: ansible_host == zbx_proxy
-    - role: Common_Windows 
-      when: ansible_host == DC01 -->
 
 License
 -------

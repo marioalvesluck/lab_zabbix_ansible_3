@@ -1,0 +1,10 @@
+---
+
+- name: Instale todas as atualizações de segurança, críticas e cumulativas .
+  win_updates:
+    category_names:
+      - SecurityUpdates
+      - CriticalUpdates
+      - UpdateRollups
+    reboot: yes
+...

@@ -1,7 +1,5 @@
 # Arquivos de hosts de configuração com variaveis 
 
-# Lista de hosts para Implementação do zabbix 3 camadas
-
 [zbx_front]
 192.168.3.100
 

@@ -1,0 +1,31 @@
+- name: Instalação do Zabbix Agent Redhat
+  include_tasks: redhat.yml
+  when: ansible_facts['distribution_major_version'] == "8"
+
+- name: Instalação do zabbix agent debian
+  include_tasks: debian.yml
+  when: ansible_distribution == "Debian"
+
+- name: Instalação agente ubuntu
+  include_tasks: ubuntu.yml 
+  when: ansible_distribution == "Ubuntu"
+
+- name: Adcionando host Automatico via Ansible 
+  include_tasks: api.agent.create.yml
+  when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu" or ansible_facts['distribution_major_version'] == "8"
+
+- name: Instalando Agente zabbix 2 no Windows
+  include_tasks: install.agent.windows.yml
+  when: zabbix_agent_os_family == "Windows"
+
+- name: Adcionando host Automatico via Ansible 
+  include_tasks: api.add.windows.yml
+  when: zabbix_agent_os_family == "Windows"
+
+# - name: Remover Agente via Ansible. 
+#   include_tasks: uninstall_zabbix_agent.yml
+#    when: zabbix_agent_os_family == "Windows"
+
+# - name: Atualizando Sistema Operacional 
+#   include_tasks: update.windows.yml
+#   when: zabbix_agent_os_family == "Windows"

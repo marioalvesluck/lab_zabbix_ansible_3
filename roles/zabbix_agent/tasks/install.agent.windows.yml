@@ -1,0 +1,63 @@
+---
+
+- name: "Windows | Set path to zabbix.exe"
+  set_fact:
+    zabbix_win_exe_path: '{{ zabbix_win_install_dir }}\bin\zabbix_agent2.exe'
+
+- name:  Criando estrutura Diretorio
+  win_file:
+    path: "{{ item }}"
+    state: directory
+  loop:
+    - "{{ zabbix_win_install_dir }}"
+    - "{{ zabbix_win_userparameter }}"
+    - "{{ zabbix_win_log }}"
+
+
+- name: Download Zabbix Agent Zip file
+  win_get_url:
+    url: "{{zabbix_win_download_link }}"
+    dest: '{{ zabbix_win_install_dir }}'
+    force: False
+    follow_redirects: all
+
+- name: "Windows | Unzip file"
+  win_unzip:
+    src: '{{ zabbix_win_install_dir }}\{{ zabbix_win_package }}'
+    dest: "{{ zabbix_win_install_dir }}"
+    creates: '{{ zabbix_win_exe_path }}'
+
+- name: "Windows | Instalando Serviço no Windows"
+  win_command: '{{ zabbix_win_exe_path }} --config {{ zabbix_win_install_dir }}\conf\zabbix_agent2.conf --install'
+  register: zabbix_windows_install
+  ignore_errors: yes
+
+
+- name: Copiando template Agent para Servidor.
+  win_template:
+    src: zabbix_agent2.conf
+    dest: '{{ zabbix_win_install_dir }}\conf\zabbix_agent2.conf'
+
+- name: Started o service
+  win_service:
+    name: Zabbix Agent 2
+    start_mode: auto
+    state: started
+  ignore_errors: yes
+
+- name: "Windows | Add Porta Zabbix Firewall rule "
+  win_firewall_rule:
+    name: Zabbix Agent
+    localport: 10050
+    action: allow
+    direction: in
+    protocol: tcp
+    state: present
+    enabled: yes
+  ignore_errors: yes
+
+- name : Remover Arquivo zipado Pasta.
+  win_shell: del '{{ zabbix_win_install_dir }}\{{ zabbix_win_package }}' 
+  ignore_errors: yes
+
+...
