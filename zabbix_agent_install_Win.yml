@@ -9,4 +9,4 @@
     - host_grupo: Matriz-A
     
   roles:
-    - role: zabbix_agent_windows
+    - role: zabbix_agent

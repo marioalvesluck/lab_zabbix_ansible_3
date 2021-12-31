@@ -35,7 +35,7 @@
     - zbx_proxy: 192.168.3.130
     - host_grupo: Empresa-X
   roles:
-    - role: zabbix_agent_linux
+    - role: zabbix_agent
 #----------------------------------------------------------------------#
 - name: Instalação do Zabbix Proxy RJ.
   hosts: 
@@ -59,7 +59,7 @@
     - zbx_proxy: 192.168.3.130
     - host_grupo: Empresa-X
   roles:
-    - role: zabbix_agent_windows
+    - role: zabbix_agent
 #-----------------------------------------------------------------------#
 - name: Playbook de instalação do Agente Windows .
   hosts:
@@ -70,5 +70,5 @@
     - zbx_proxy: 192.168.3.140
     - host_grupo: Empresa-Y
   roles:
-    - role: zabbix_agent_windows
+    - role: zabbix_agent
 #-----------------------------------------------------------------------#

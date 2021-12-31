@@ -8,7 +8,7 @@
     - zbx_proxy: 192.168.3.130
     - host_grupo: Empresa-X
   roles:
-    - role: zabbix_agent_linux
+    - role: zabbix_agent
 #-----------------------------------------------------------------------#
 - name: Playbook de instalação do Agentes de hosts no Zabbix .
   hosts:
@@ -19,4 +19,4 @@
      - host_grupo: Empresa-Y
 
   roles:
-     - role: zabbix_agent_linux
+     - role: zabbix_agent
