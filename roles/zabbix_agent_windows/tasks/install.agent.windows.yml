@@ -10,6 +10,8 @@
     state: directory
   loop:
     - "{{ zabbix_win_install_dir }}"
+    - "{{ zabbix_win_userparameter }}"
+    - "{{ zabbix_win_log }}"
 
 
 - name: Download Zabbix Agent Zip file
@@ -25,26 +27,18 @@
     dest: "{{ zabbix_win_install_dir }}"
     creates: '{{ zabbix_win_exe_path }}'
 
-- name: "Windows | Register Service"
+- name: "Windows | Instalando Serviço no Windows"
   win_command: '{{ zabbix_win_exe_path }} --config {{ zabbix_win_install_dir }}\conf\zabbix_agent2.conf --install'
   register: zabbix_windows_install
   ignore_errors: yes
 
-- name: Configurações o Arquivo zabbix_agentd.conf
-  win_lineinfile:
-    dest: '{{ zabbix_win_install_dir }}\conf\zabbix_agent2.conf'
-    state: present
-    regexp: "{{ item.regexp }}"
-    line: "{{ item.line }}"
-    backrefs: yes
-  loop:
-    - { regexp: "^Server=127.0.0.1", line: "Server={{ zbx_proxy }}" }
-    - { regexp: "^ServerActive=127.0.0.1", line: "ServerActive={{ zbx_proxy }} " }
-    - { regexp: "^Hostname=Windows host", line: "Hostname={{ ansible_hostname }}" }
-    - { regexp: "# Timeout=3", line: "Timeout=30" }
-    - { regexp: "# DenyKey=system.run[*]", line: "AllowKey=system.run[*]" }
 
-- name: Restart o service
+- name: Copiando template Agent para Servidor.
+  win_template:
+    src: zabbix_agent2.conf
+    dest: '{{ zabbix_win_install_dir }}\conf\zabbix_agent2.conf'
+
+- name: Started o service
   win_service:
     name: Zabbix Agent 2
     start_mode: auto
@@ -60,6 +54,10 @@
     protocol: tcp
     state: present
     enabled: yes
+  ignore_errors: yes
+
+- name : Remover Arquivo zipado Pasta.
+  win_shell: del '{{ zabbix_win_install_dir }}\{{ zabbix_win_package }}' 
   ignore_errors: yes
 
 ...

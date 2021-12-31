@@ -38,17 +38,6 @@
   tags: zabbix_server
   when: ansible_facts['distribution_major_version'] == "8"
 #----------------------------------------------------------------------------------------------#
-- name: Reiniciar HTTPD
-  systemd:
-    name: "{{ item }}"
-    state: restarted
-    enabled: yes
-  loop:
-    - php-fpm
-    - httpd 
-  tags: zabbix_front
-  when: ansible_facts['distribution_major_version'] == "8"
-#------------------------------------------------------------------------------------------------#
 - name: Criando Datasource do zabbix no Grafana
   grafana_datasource:
     name: "zabbix"
@@ -59,12 +48,10 @@
     ds_type: "alexanderzobnin-zabbix-datasource"
     ds_url: "http://{{ zbx_front }}/zabbix/api_jsonrpc.php"
     database: "zabbix"
-    user: "Admin"
-    password: "zabbix"
   tags: grafana-server
   when: ansible_facts['distribution_major_version'] == "8"
 #------------------------------------------------------------------------------------------------#
-- name: Adcionado Porta firewalld Grafana-server
+- name: Liberando Porta firewall.
   firewalld:
     port: "{{ item }}"
     permanent: yes

@@ -1,15 +1,29 @@
+#----------------------- PROXY SP --------------------------------------#
 - name: Instalação do Zabbix Proxy
   hosts: 
     - zbx_proxy_sp
-  
   vars:
-
    - proxy_name: 'PROXY-SP'
    - zbx_proxy: 192.168.3.130
    - host_grupo: Matriz-A
    - psk_identity: proxysp
    - proxy_db: sp.db
    - local: sp
-
   roles:
-    - role: zabbix_proxy 
+    - role: zabbix_proxy
+
+#-------------------------------------------------------------------------#
+- name: Instalação do Zabbix Proxy
+  hosts: 
+    - zbx_proxy_rj
+    
+  vars:
+   - proxy_name: 'PROXY-RJ'
+   - zbx_proxy: 192.168.3.200
+   - host_grupo: Matriz-B
+   - psk_identity: proxyrj
+   - proxy_db: rj.db
+   - local: rj
+  
+  roles:
+    - role: zabbix_proxy

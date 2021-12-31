@@ -7,10 +7,4 @@
       - CriticalUpdates
       - UpdateRollups
     reboot: yes
-
-- name: Certifique-se de esperar o tempo suficiente para que as atualizações sejam aplicadas durante a reinicialização.
-  win_updates:
-      reboot: yes
-      reboot_timeout: 300
-
 ...

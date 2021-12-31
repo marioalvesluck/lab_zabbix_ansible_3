@@ -1,0 +1,7 @@
+- name: Playbook de Instalação e Implementação Grafana CentOS + Vagrant
+  hosts:
+    - zbx_front
+  
+ 
+  roles:
+    - role: grafana_server
