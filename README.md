@@ -34,6 +34,8 @@ Dependencies:
   - ansible-galaxy collection install community.zabbix
   - zabbix-api >= 0.5.4 
 
+Obs: Alterar conforme sua necessidade o arquivo ansible.cfg para sua arquitetura.
+
 Neste Projeto foram ultilizados 4 Servidores:
 
   - Frontend zabbix / Grafana Server
