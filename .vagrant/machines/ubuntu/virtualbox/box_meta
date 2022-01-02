@@ -1,1 +1,1 @@
-{"name":"debian/bullseye64","version":"11.20211018.1","provider":"virtualbox","directory":"boxes/debian-VAGRANTSLASH-bullseye64/11.20211018.1/virtualbox"}
+{"name":"ubuntu/focal64","version":"20211026.0.0","provider":"virtualbox","directory":"boxes/ubuntu-VAGRANTSLASH-focal64/20211026.0.0/virtualbox"}

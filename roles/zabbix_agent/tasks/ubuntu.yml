@@ -7,21 +7,18 @@
     deb: https://repo.zabbix.com/zabbix/{{ zbx_agent_version }}/ubuntu/pool/main/z/zabbix-release/zabbix-release_{{ zbx_agent_version }}-1%2Bubuntu20.04_all.deb
     state: present
   tags: zabbix_agent2
-  when: ansible_distribution == "Ubuntu"
 # --------------------------------------------------------------------------------------------#
 - name: Atualizando Sistema Operacional - {{ ansible_all_ipv4_addresses[0]}}.
   apt:
     update_cache: yes
   tags: zabbix_agent2
-  when: ansible_distribution == "Ubuntu"
 #-----------------------------------------------------------------------------------------------#
 - name: Instalando pacote zabbix-agent2 - {{ ansible_all_ipv4_addresses[0]}}..
   apt:
     name: zabbix-agent2
     state: present
   tags: zabbix_agent2
-  when: ansible_distribution == "Ubuntu"
-# # --------------------------------------------------------------------------------------------#
+# --------------------------------------------------------------------------------------------#
 - name: Configurando o Arquivo zabbix_agent2.conf - {{ ansible_all_ipv4_addresses[0]}}.
   lineinfile:
     dest: /etc/zabbix/zabbix_agent2.conf
@@ -36,7 +33,6 @@
     - { regexp: "# Timeout=3", line: "Timeout=30" }
     - { regexp: "# DenyKey=system.run[*]", line: "AllowKey=system.run[*]" }
   tags: zabbix_agent2
-  when: ansible_distribution == "Ubuntu"
 # ----------------------------------------------------------------------------------------------#
 - name: Iniciar/ Habilitar zabbix-agent2 - {{ ansible_all_ipv4_addresses[0]}}.
   systemd:
@@ -44,7 +40,6 @@
     state: restarted
     enabled: yes
   tags: zabbix_agent2
-  when: ansible_distribution == "Ubuntu"
 #-------------------------------------------------------------------------------------------------#
 
 ...

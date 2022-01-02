@@ -7,23 +7,19 @@
     deb: https://repo.zabbix.com/zabbix/{{ zbx_agent_version }}/debian/pool/main/z/zabbix-release/zabbix-release_{{ zbx_agent_version }}-1%2Bdebian11_all.deb
     state: present
   tags: zabbix_agent2
-  when: ansible_distribution == "Debian"
 # --------------------------------------------------------------------------------------------#
 
 - name: Atualizando Sistema Operacional - {{ ansible_all_ipv4_addresses[0]}}.
   apt:
     update_cache: yes
   tags: zabbix_agent2
-  when: ansible_distribution == "Debian"
-
 #----------------------------------------------------------------------------------------------#
 - name: Instalando pacote zabbix-agent2 - {{ ansible_all_ipv4_addresses[0]}}.
   apt:
     name: zabbix-agent2
     state: present
   tags: zabbix_agent2
-  when: ansible_distribution == "Debian"
-# # --------------------------------------------------------------------------------------------#
+# --------------------------------------------------------------------------------------------#
 - name: Configurações o Arquivo zabbix_agent2.conf - {{ ansible_all_ipv4_addresses[0]}}.
   lineinfile:
     dest: /etc/zabbix/zabbix_agent2.conf
@@ -38,8 +34,6 @@
     - { regexp: "# Timeout=3", line: "Timeout=30" }
     - { regexp: "# DenyKey=system.run[*]", line: "AllowKey=system.run[*]" }
   tags: zabbix_agent2
-  when: ansible_distribution == "Debian"
-
 # ----------------------------------------------------------------------------------------------#
 - name: Iniciar/ Habilitar zabbix-agent2 - {{ ansible_all_ipv4_addresses[0]}}.
   systemd:
@@ -47,6 +41,4 @@
     state: started
     enabled: yes
   tags: zabbix_agent2
-  when: ansible_distribution == "Debian"
-
 ...

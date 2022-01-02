@@ -3,7 +3,7 @@
 
 machines = {
   "debian"   => {"memory" => "256", "cpu" => "2", "ip" => "140","image" => "debian/bullseye64"},
-  "ubuntu" => {"memory" => "256",  "cpu" => "2", "ip" => "150", "image" => "debian/bullseye64"},
+  "ubuntu" => {"memory" => "256",  "cpu" => "2", "ip" => "150", "image" => "ubuntu/focal64"},
 }
 
 Vagrant.configure("2") do |config|
@@ -12,7 +12,7 @@ Vagrant.configure("2") do |config|
     config.vm.define "#{name}" do |machine|
       machine.vm.box = "#{conf["image"]}"
       machine.vm.hostname = "#{name}.vagrant"
-      machine.vm.network "public_network",ip: "192.168.3.#{conf["ip"]}"
+      machine.vm.network "public_network",ip: "192.168.3.#{conf["ip"]}", bridge: "wlp1s0"
       machine.vm.provider "virtualbox" do |vb|
         vb.name = "#{name}"
         vb.memory = conf["memory"]

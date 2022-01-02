@@ -4,7 +4,6 @@
 - name: Adcionando Repositorio Grafana Server
   shell: "wget https://dl.grafana.com/oss/release/grafana-{{ version_grafana }}-1.x86_64.rpm"
   tags: grafana-server
-  when: ansible_facts['distribution_major_version'] == "8"
 # --------------------------------------------------------------------------------------------#
 - name: Atualizando Sistema / cache Sistema Operacional
   dnf: 
@@ -12,13 +11,11 @@
     state: latest
     update_cache: yes
   tags: config_inicial
-  when: ansible_facts['distribution_major_version'] == "8"
 #----------------------------------------------------------------------------------------------#
 - name: Instalando pacotes grafana-server
   shell: "yum install grafana-{{ version_grafana }}-1.x86_64.rpm -y"
   tags: grafana-server
-  when: ansible_facts['distribution_major_version'] == "8"
-#----------------------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------------------------#
 - name: Instalando Plugins no Grafana
   grafana_plugin:
     name: "{{ item }}"
@@ -28,15 +25,13 @@
     - alexanderzobnin-zabbix-app
     - grafana-piechart-panel
   tags: grafana-server
-  when: ansible_facts['distribution_major_version'] == "8"
 #----------------------------------------------------------------------------------------------#
 - name: Iniciar/ Habilitar Grafana-server
   systemd:
     name: grafana-server
-    state: started
+    state: restarted
     enabled: yes
   tags: zabbix_server
-  when: ansible_facts['distribution_major_version'] == "8"
 #----------------------------------------------------------------------------------------------#
 - name: Criando Datasource do zabbix no Grafana
   grafana_datasource:
@@ -49,8 +44,7 @@
     ds_url: "http://{{ zbx_front }}/zabbix/api_jsonrpc.php"
     database: "zabbix"
   tags: grafana-server
-  when: ansible_facts['distribution_major_version'] == "8"
-#------------------------------------------------------------------------------------------------#
+#----------------------------------------------------------------------------------------------#
 - name: Liberando Porta firewall.
   firewalld:
     port: "{{ item }}"
@@ -59,7 +53,6 @@
   loop:
     - 3000/tcp
   tags: grafana-server
-  when: ansible_facts['distribution_major_version'] == "8"
 # ----------------------------------------------------------------------------------------------#
 - name: Reload no firewalld
   systemd:
@@ -67,5 +60,4 @@
     state: reloaded
     enabled: yes
   tags: grafana-server
-  when: ansible_facts['distribution_major_version'] == "8"
 ...
