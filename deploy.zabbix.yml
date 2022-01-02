@@ -3,7 +3,6 @@
   hosts:
     - zabbix 
   roles:
-    - role: Common_Linux
     - role: zabbix_db
       when: ansible_host == zbx_db
     - role: zabbix_server

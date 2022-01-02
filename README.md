@@ -62,20 +62,21 @@ O que Projeto de Automação Obterá apos a Implementação.
 Roles do Projeto: 
 -----------------  
 
-  - Zabbix Server 
-  - Zabbix Frontend
-  - MYSQL , banco de dados Particionando .
-  - Grafana Server - Plugin Zabbix
-  - Zabbix Proxy 
-  - Adção de hosts Automaticos
-  - Instalação dos Agentes Linux
-  - Adcionar hosts Linux  / Templates
-  - Adcionar hosts Windows / Templates
-  - Instalação de Agentes Windows em Desenvolvimento.
-  - Adcionado Configurações Monitoramento Apache 
-  - Adcionado ao Projeto odbc Connector configurações do proxy e adcionado configurações basicas do odbc.ini
-  - Ajustar conforme sua necessidade e verificar versão do MYSQL , acessando banco e executando select version ();
+  - zabbix_server
+  - zabbix_proxy
+  - zabbix_front
+  - zabbix_db
+  - grafana_server
+  - zabbix_agent + linux ou Windows
+  - zabbix_agent_windows
+  - api_add_linux
+  - api_add_windows
   
+Padronização do Ambiente 
+
+  - Common_Linux
+  - Common_Windows
+
 Variables
 --------------
 Arquivo hosts - Ajustar os IPs Conforme sua infraestrutura .
@@ -89,7 +90,6 @@ ansible-playbook deploy.zabbix.yml
 
   roles:
    
-    - role: Common_Linux
     - role: db_zabbix
       when: ansible_host == zbx_db
     - role: zabbix_server
