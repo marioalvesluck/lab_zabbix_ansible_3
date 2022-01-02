@@ -1,6 +1,16 @@
-Projeto tem como objetivo Auxiliar comunidade Zabbix .
+Criando Ambiente Escalavel com Zabbix, Projeto tem como objetivo Auxiliar comunidade Zabbix .
 
-Padronização do Ambiente e Instalação do Zabbix 3 Camadas com particionamento banco de dados + Proxy + Agents + Adção de hosts Automaticamente e ++++++.
+Neste Deploy teremos Seguintes Serviços.
+  - Zabbix Server
+  - Zabbix Front
+  - Zabbix DB (MYSQL 8)
+  - Particionamento Banco MYSQL
+  - Zabbix Proxy
+  - Instalação dos Agentes Linux e Windows
+  - Adcionar Templates Automaticamente 
+  - Adcionar hosts Automaticamente 
+
+E Muito Mais ......................
 
 Sistema Operacional Ultilizado no Projeto - Rocky Linux 8 com Banco de Dados MYSQL.
 
@@ -11,7 +21,7 @@ Requirements
 
 Necessario para deploy das tasks, Maquinas Previamente Instaladas e com Ansible configurado e comunicando com hosts. 
 
-Foi adcionado um vagrantfile para os testes, Ajuste conforme sua necessidade.
+Foi adcionado um vagrantfile Para Exemplo, Ajuste Para ambiente conforme sua necessidade.
 -----------------------------------------------------------------------------
 
 Para mais informações Segue Link Abaixo do website do Ansible e Vagrant .
