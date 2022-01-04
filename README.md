@@ -1,4 +1,5 @@
 Criando Ambiente Escalavel com Zabbix, Projeto tem como objetivo Auxiliar comunidade Zabbix .
+![A-Proj_topologia](https://user-images.githubusercontent.com/45793520/148065909-941edf93-0283-490b-8dc5-864f4f193e0b.JPG)
 Neste Deploy teremos Seguintes Serviços.
   - Zabbix Server
   - Zabbix Front
