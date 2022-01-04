@@ -1,4 +1,4 @@
-- name: Playbook de Instalação e Implementação Grafana CentOS + Vagrant
+- name: Playbook de Instalação e Implementação Grafana CentOS.
   hosts:
     - zbx_front
  

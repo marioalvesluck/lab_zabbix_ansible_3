@@ -66,7 +66,8 @@
   when: ansible_facts['distribution_major_version'] == "8"
 #-----------------------------------------------------------------------------------#
 - name: Importando schema da database do zabbix servidor - {{ zbx_db }}.
-  shell: '{{ url_schema }}'
+  #shell: zcat /usr/share/doc/zabbix-sql-scripts/mysql/'{{ import_schema }}' | mysql -h "{{ zbx_db }}" -u "{{ db_user_server }}"  "{{ db_name }}"
+  shell: '{{ url_schema }}' 
   ignore_errors: yes
   when: ansible_facts['distribution_major_version'] == "8"
 
@@ -82,22 +83,22 @@
   when: ansible_facts['distribution_major_version'] == "8"
 
 - name: Realizar o particionamento no banco de dados
-  shell: MYSQL_PWD="{{ db_user_pass_server }}" mysql -h "{{ zbx_db }}" -u zabbix_server zabbix < /opt/part.sql
+  shell: MYSQL_PWD="{{ db_user_pass_server }}" mysql -h "{{ zbx_db }}" -u "{{ db_user_server }}" "{{ db_name }}" < /opt/part.sql
   ignore_errors: yes
   when: ansible_facts['distribution_major_version'] == "8"
 
 - name: Realizar a configuração inicial de manutenção do banco
-  shell: MYSQL_PWD="{{ db_user_pass_server }}" mysql -h "{{ zbx_db }}" -u zabbix_server  "{{ db_name }}" -e "CALL partition_maintenance_all('zabbix');"
+  shell: MYSQL_PWD="{{ db_user_pass_server }}" mysql -h "{{ zbx_db }}" -u "{{ db_user_server }}"  "{{ db_name }}" -e "CALL partition_maintenance_all('zabbix');"
   ignore_errors: yes
   when: ansible_facts['distribution_major_version'] == "8"
 
 - name: Realizar a configuração inicial de manutenção do banco
-  shell: MYSQL_PWD="{{ db_user_pass_server }}" mysql -h "{{ zbx_db }}" -u zabbix_server  "{{ db_name }}" -e "show create table history\G"
+  shell: MYSQL_PWD="{{ db_user_pass_server }}" mysql -h "{{ zbx_db }}" -u "{{ db_user_server }}"  "{{ db_name }}" -e "show create table history\G"
   ignore_errors: yes
   when: ansible_facts['distribution_major_version'] == "8"
   
 - name: Realizar a configuração inicial de manutenção do banco
-  shell: MYSQL_PWD="{{ db_user_pass_server }}" mysql -h "{{ zbx_db }}" -u zabbix_server  "{{ db_name }}" -e "show create table trends\G"
+  shell: MYSQL_PWD="{{ db_user_pass_server }}" mysql -h "{{ zbx_db }}" -u "{{ db_user_server }}"  "{{ db_name }}" -e "show create table trends\G"
   ignore_errors: yes
   when: ansible_facts['distribution_major_version'] == "8"
 
@@ -108,7 +109,7 @@
     minute: "30"
     hour: "3"
     user: root
-    job: MYSQL_PWD="{{ db_user_pass_server }}" mysql -h "{{ zbx_db }}" -u zabbix_server  "{{ db_name }}" -e "CALL partition_maintenance_all('zabbix');" > /tmp/CronDBpartitiong.log 2>&1"
+    job: MYSQL_PWD="{{ db_user_pass_server }}" mysql -h "{{ zbx_db }}" -u "{{ db_user_server }}"  "{{ db_name }}" -e "CALL partition_maintenance_all('zabbix');" > /tmp/CronDBpartitiong.log 2>&1"
     cron_file: ansible_partition_db
   tags: zabbix_server
   when: ansible_facts['distribution_major_version'] == "8"

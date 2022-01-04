@@ -11,6 +11,17 @@ zbx_version: 5.5
 zbx_agent_version: 5.5
 version_grafana: 8.3.3
 
+# SCRIPTS PARA MONTAR TABLEAS DO BANCO DE DADOS FORAM ALTERADOS DE CREATE.SQL.GZ PARA SERVER.SQL.GZ
+#---------------------- Banco de Dados ---------------------------------------------------------------#
+# OBS: HABILITAR OU DESABILITAR CONFORME A VERSÃO DO ZABBIX SERVER PARA PARTICIONAMENTO.
+# Habilitar abaixo para instalação do Zabbix Versao 6.
+url_schema: zcat /usr/share/doc/zabbix-sql-scripts/mysql/server.sql.gz | mysql -h "{{ zbx_db }}" -u "{{ db_user_server }}"  "{{ db_name }}"
+
+# habilitar para Versão 5.4 Abaixo.
+#url_schema: zcat /usr/share/doc/zabbix-sql-scripts/mysql/create.sql.gz | mysql -h "{{ zbx_db }}" -u "{{ db_user_server }}"  "{{ db_name }}"
+
+#-----------------------------------------------------------------------------------------------------#
+
 # Criar usuario no sistema operacional
 username_so: mario
 userpass_so: 4linux@!
@@ -32,11 +43,6 @@ zabbix_link_templates:
   - Linux by Zabbix agent active
   - ICMP Ping
 
-#---------------------- Banco de Dados ---------------------------------------------------------------#
-# Variaveis de Criar banco zabbix e particionar banco.
-# OBS: TROCA ENDEREÇO IP DO SERVIDOR PARA IP DO BANCO QUE IRA SER PARTICIONADO CONFORME SUA ESTRUTURA.
-url_schema: zcat /usr/share/doc/zabbix-sql-scripts/mysql/create.sql.gz | mysql -h 192.168.3.120 -u zabbix_server -pzabbix zabbix
-url_partition: "mysql -h 192.168.3.120 -u zabbix_server -pzabbix zabbix < /opt/zbx_db_part.sql"
 
 # VARIAVEL CRIAÇÃDO DO USUARIO ZABBIX LOCALHOST
 db_user_zabbix: 'zabbix'

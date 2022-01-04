@@ -1,4 +1,4 @@
 ---
 # vars file for install_zabbix_server
 
-services_zabbix: ['zabbix-server','zabbix-agent2','firewalld']
+
