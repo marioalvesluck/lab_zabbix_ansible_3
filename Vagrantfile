@@ -13,7 +13,7 @@ Vagrant.configure("2") do |config|
   machines.each do |name, conf|
     config.vm.define "#{name}" do |machine|
       machine.vm.box = "#{conf["image"]}"
-      machine.vm.hostname = "#{name}.vagrant"
+      machine.vm.hostname = "#{name}.example.zabbix"
       machine.vm.network "public_network",ip: "192.168.3.#{conf["ip"]}", bridge: "wlp1s0"
       machine.vm.provider "virtualbox" do |vb|
         vb.name = "#{name}"
@@ -21,7 +21,7 @@ Vagrant.configure("2") do |config|
         vb.cpus = conf["cpu"]
         vb.customize ["modifyvm", :id, "--groups", "/zabbix"]
       end
-      if "#{conf["image"]}" == "rockylinux/8"
+      if "#{conf["image"]}" == "centos/8"
         machine.vm.provision "shell", path: "./scripts/centos.sh" 
       end
     end
