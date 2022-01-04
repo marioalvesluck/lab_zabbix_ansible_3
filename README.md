@@ -45,11 +45,12 @@ Dependencies:
 
 Obs: Alterar conforme sua necessidade o arquivo ansible.cfg para sua arquitetura.
 
-Neste Projeto foram ultilizados 6 Servidores:
+Neste Projeto foram ultilizados 7 Servidores:
 
   - Frontend zabbix / Grafana Server
   - Zabbix-server
-  - Zabbix-Proxy
+  - Zabbix-Proxy - SP
+  - Zabbix-Proxy - RJ
   - Banco de Dados
 
 Servidores Windows - Ultilizado para Testes de Instalaçao do agente zabbix e adcionar ao frontend do zabbix.
