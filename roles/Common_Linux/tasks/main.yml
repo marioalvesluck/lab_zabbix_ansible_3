@@ -1,3 +1,4 @@
 - name: Atualização dos servidores Linux
   include_tasks: config_inicial.yml
+  when: ansible_facts['distribution_major_version'] == "8"
 

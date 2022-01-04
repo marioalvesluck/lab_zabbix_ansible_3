@@ -1,5 +1,7 @@
 - name: Playbook de instalação do Zabbix Proxy SqLite3
   include_tasks: proxy.yml
+  when: ansible_facts['distribution_major_version'] == "8"
 
 - name: Playbook de Criação do proxy no frontend do zabbix
   include_tasks: api.proxy.create.yml
+  when: ansible_facts['distribution_major_version'] == "8"

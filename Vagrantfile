@@ -2,8 +2,10 @@
 # vi: set ft=ruby  :
 
 machines = {
-  "debian"   => {"memory" => "256", "cpu" => "2", "ip" => "140","image" => "debian/bullseye64"},
-  "ubuntu" => {"memory" => "256",  "cpu" => "2", "ip" => "150", "image" => "ubuntu/focal64"},
+  "node01"   => {"memory" => "1024", "cpu" => "2", "ip" => "140","image" => "centos/8"},
+  "node02"   => {"memory" => "1024", "cpu" => "2", "ip" => "140","image" => "centos/8"},
+  "node03"   => {"memory" => "2048", "cpu" => "2", "ip" => "140","image" => "centos/8"},
+  "node04" => {"memory" => "1024",  "cpu" => "2", "ip" => "150", "image" => "centos/8"},
 }
 
 Vagrant.configure("2") do |config|
@@ -19,11 +21,8 @@ Vagrant.configure("2") do |config|
         vb.cpus = conf["cpu"]
         vb.customize ["modifyvm", :id, "--groups", "/zabbix"]
       end
-      if "#{conf["image"]}" == "debian/bullseye64"
-        machine.vm.provision "shell", path: "./scripts/debian.sh" 
-      end
-      if "#{conf["image"]}" == "ubuntu/focal64"
-        machine.vm.provision "shell", path: "./scripts/debian.sh"
+      if "#{conf["image"]}" == "rockylinux/8"
+        machine.vm.provision "shell", path: "./scripts/centos.sh" 
       end
     end
   end

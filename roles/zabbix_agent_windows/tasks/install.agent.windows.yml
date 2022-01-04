@@ -16,7 +16,7 @@
 
 - name: Download Zabbix Agent Zip file
   win_get_url:
-    url: "{{zabbix_win_download_link }}"
+    url: '{{zabbix_win_download_link }}'
     dest: '{{ zabbix_win_install_dir }}'
     force: False
     follow_redirects: all

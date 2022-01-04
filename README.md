@@ -32,7 +32,8 @@ https://www.vagrantup.com/
 
 Procedures Particionamento do Banco de Dados Zabbix.
 
-https://blog.zabbix.com/partitioning-a-zabbix-mysql-database-with-perl-or-stored-procedures/13531/
+Agradecimentos ao Script de Particionamento Everaldo.
+https://everaldoscabral.blogspot.com/2020/01/sobre-o-zabbix-particionamento-do-banco.html
 
 
 Dependencies:

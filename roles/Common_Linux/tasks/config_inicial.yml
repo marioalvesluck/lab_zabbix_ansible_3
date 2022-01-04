@@ -136,14 +136,12 @@
     name: ['postfix']
     state: absent
   tags: config_inicial
-  when: ansible_facts['distribution_major_version'] == "8"
 #---------------------------------------------------------------------------------------------------------#
 - name: Intalando lista de Pacotes
   dnf: 
      name: "{{ common_pacotes_redhat }}"
      state: latest
   tags: config_inicial
-  when: ansible_facts['distribution_major_version'] == "8"
 #----------------------------------------------------------------------------------------------------------#
 - name: Habilitar e iniciar serviço do chronyd
   systemd:
@@ -151,7 +149,6 @@
      state: started
      enabled: yes
   tags: config_inicial
-  when: ansible_facts['distribution_major_version'] == "8"
 #-----------------------------------------------------------------------------------------------------------#
 - name: Reiniciar serviço chronyd 
   systemd:
@@ -159,7 +156,6 @@
      state: restarted
      daemon_reload: yes
   tags: config_inicial
-  when: ansible_facts['distribution_major_version'] == "8"
 #-----------------------------------------------------------------------------------------------------------#
 - name: Copiando Arquivo .vimrc default
   copy: 
@@ -169,7 +165,6 @@
     - { src: '.vimrc', dest: '/root/.vimrc'}
     - { src: '.vimrc', dest: '/home/{{ username_so }}/.vimrc'}
   tags: config_inicial
-  when: ansible_facts['distribution_major_version'] == "8"
 #--------------------------------------------------------------------------------------------------#
 - name: Setando configurações de segurança no arquuivo sshd_config
   lineinfile:
@@ -183,7 +178,6 @@
     - { regexp: '#StrictModes yes', line: 'StrictModes yes' }
     - { regexp: 'X11Forwarding yes', line: 'X11Forwarding no' }
   tags: config_inicial
-  when: ansible_facts['distribution_major_version'] == "8"
 #-------------------------------------------------------------------------------------------------#
 - name: Ativar o firewalld no Sistema
   systemd:
@@ -191,7 +185,6 @@
     state: started
     enabled: yes
   tags: config_inicial
-  when: ansible_facts['distribution_major_version'] == "8"
 #------------------------------------------------------------------------------------------------------------#
 - name: Reload no firewalld
   systemd:
@@ -199,10 +192,8 @@
     state: reloaded
     enabled: yes
   tags: config_inicial
-  when: ansible_facts['distribution_major_version'] == "8"
 #------------------------------------------------------------------------------------------------------------#    
 - name: Realizar Reboot Apos 1 minutos
   reboot:
     reboot_timeout: 300
   tags: config_inicial
-  when: ansible_facts['distribution_major_version'] == "8"

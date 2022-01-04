@@ -6,13 +6,10 @@
     state: present
   ignore_errors: yes
   tags: zabbix_proxy
-  when: ansible_facts['distribution_major_version'] == "8"
 # --------------------------------------------------------------------------------------------#
-#
 - name: Instalando pacotes zabbix-proxy
   dnf: name='{{ packages_zabbix_proxy }}' state=latest
   tags: zabbix_proxy
-  when: ansible_facts['distribution_major_version'] == "8"
 #--------------------------------------------------------------------------------------------#
 - name: Criar diretorio banco sqlite3
   file:
@@ -23,21 +20,17 @@
     state: directory
     recurse: yes
   tags: zabbix_proxy
-  when: ansible_facts['distribution_major_version'] == "8"
 # --------------------------------------------------------------------------------------------#
 - name: Gerando Chave psk
   shell: sudo sh -c "openssl rand -hex 32 > /etc/zabbix/{{ local }}.psk"
   ignore_errors: true
   tags: zabbix_proxy
-  when: ansible_facts['distribution_major_version'] == "8"
-
 #------------------------------------------------------------------------------------------------#
 - name : Armazenando psk VARIAVEL
   shell: "cat /etc/zabbix/{{ local }}.psk"
   register: pks
   ignore_errors: yes
   tags: zabbix_proxy
-  when: ansible_facts['distribution_major_version'] == "8"
 #------------------------------------------------------------------------------------------------#
 - name: Armazenando saida pks.stdout
   set_fact: 
@@ -68,17 +61,14 @@
     - { regexp: '# TLSPSKIdentity=', line: 'TLSPSKIdentity={{ psk_identity }}' }
     - { regexp: '# TLSPSKFile=', line: 'TLSPSKFile=/etc/zabbix/{{ local }}.psk' }
   tags: zabbix_proxy
-  when: ansible_facts['distribution_major_version'] == "8"
 #-----------------------------------------------------------------------------------------------#
 - name: Restart do  Zabbix Proxy
   systemd: name=zabbix-proxy state=started enabled=yes
   tags: zabbix_proxy 
-  when: ansible_facts['distribution_major_version'] == "8"
 #----------------------------------------------------------------------------------------------#
 - name: Instalando Pacotes Agente2
   dnf: name='{{ packages_zabbix_agent }}' state=latest
   tags: zabbix_proxy
-  when: ansible_facts['distribution_major_version'] == "8"
 #------------------------------------------------------------------------------------#
 - name: Configurando o Arquivo zabbix_agent2.conf
   lineinfile:
@@ -94,12 +84,10 @@
     - { regexp: "# Timeout=3", line: "Timeout=30" }
     - { regexp: "# DenyKey=system.run[*]", line: "AllowKey=system.run[*]" }
   tags: zabbix_proxy
-  when: ansible_facts['distribution_major_version'] == "8"
 #------------------------------------------------------------------------------------------------#
 - name: Restart zabbix-agent2
   systemd: name=zabbix-agent2 state=restarted enabled=yes
   tags: zabbix_proxy
-  when: ansible_facts['distribution_major_version'] == "8"
 #-------------------------------------------------------------------------------------#
 
 - name: Adcionado Porta firewalld
@@ -112,23 +100,19 @@
     - 10050/tcp
     - 3306/tcp
   tags: zabbix_proxy
-  when: ansible_facts['distribution_major_version'] == "8"
 #----------------------------------------------------------------------------------------------#
 - name: Restart do  Zabbix Proxy
   systemd: name=zabbix-proxy state=restarted enabled=yes
   tags: zabbix_proxy 
-  when: ansible_facts['distribution_major_version'] == "8"
 # ----------------------------------------------------------------------------------------------#
 - name: Reload no firewalld
   systemd: name=firewalld state=reloaded daemon_reload=yes enabled=yes
   tags: zabbix_proxy
-  when: ansible_facts['distribution_major_version'] == "8"
 #------------------------------------------------------------------------------------------------#
 - name: Realizando Download dos Drivers odbc versão correspondende do banco
   shell: rpm -ivh https://downloads.mysql.com/archives/get/p/10/file/mysql-connector-odbc-{{ version_connector_odbc }}-1.el8.x86_64.rpm
   ignore_errors: yes
   tags: zabbix_proxy
-  when: ansible_facts['distribution_major_version'] == "8"
 #------------------------------------------------------------------------------------------------#
 - name: Configurando o Arquivo odbc.ini
   blockinfile:
@@ -143,4 +127,3 @@
        Port        = 3306
        Database    = zabbix
   tags: zabbix_proxy
-  when: ansible_facts['distribution_major_version'] == "8"

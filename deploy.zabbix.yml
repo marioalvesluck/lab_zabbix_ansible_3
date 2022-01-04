@@ -1,8 +1,9 @@
 #------------------- Instalação zabbix Server ------------------------#
-- name: Deploy de Instalação Zabbix Server tree layers.
+- name: Deploy Zabbix Server tree layers.
   hosts:
     - zabbix 
   roles:
+    - role: Common_Linux
     - role: zabbix_db
       when: ansible_host == zbx_db
     - role: zabbix_server
@@ -11,6 +12,7 @@
       when: ansible_host == zbx_front
     - role: grafana_server
       when: ansible_host == zbx_front
+
 #----------------------- PROXY SP --------------------------------------#
 - name: Instalação do Zabbix Proxy SP
   hosts: 
