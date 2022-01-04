@@ -1,6 +1,4 @@
 Criando Ambiente Escalavel com Zabbix, Projeto tem como objetivo Auxiliar comunidade Zabbix .
-Topologia do Projeto Ultilizada:
-
 Neste Deploy teremos Seguintes Serviços.
   - Zabbix Server
   - Zabbix Front
@@ -15,11 +13,10 @@ E Muito Mais ......................
 Sistema Operacional Ultilizado no Projeto - Rocky Linux 8 com Banco de Dados MYSQL.
 
 https://rockylinux.org/
-![A-Proj_topologia](https://user-images.githubusercontent.com/45793520/148065909-941edf93-0283-490b-8dc5-864f4f193e0b.JPG)
+
 
 Requirements
 ------------
-OBS: ALTERAR VARIAVEIS DENTRO DE GROUP_VARS/ CONFORME SUA NECESSIDADE LEIA ARQUIVOS ALI CONTIDO.
 Necessario para deploy das tasks, Maquinas Previamente Instaladas e com Ansible configurado e comunicando com hosts. 
 
 Foi adcionado um vagrantfile Para Exemplo, Ajuste Para ambiente conforme sua necessidade.
