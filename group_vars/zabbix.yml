@@ -11,7 +11,7 @@ zbx_version: 5.5
 zbx_agent_version: 5.5
 version_grafana: 8.3.3
 
-# SCRIPTS PARA MONTAR TABLEAS DO BANCO DE DADOS FORAM ALTERADOS DE CREATE.SQL.GZ PARA SERVER.SQL.GZ
+# SCRIPTS PARA MONTAR TABELAS DO BANCO DE DADOS FORAM ALTERADOS DE CREATE.SQL.GZ PARA SERVER.SQL.GZ
 #---------------------- Banco de Dados ---------------------------------------------------------------#
 # OBS: HABILITAR OU DESABILITAR CONFORME A VERSÃO DO ZABBIX SERVER PARA PARTICIONAMENTO.
 # Habilitar abaixo para instalação do Zabbix Versao 6.
@@ -92,15 +92,3 @@ FRONT_DSN: zabbix
   # {$MYSQL.DSN} - tcp://192.168.3.120:3306
   # {$MYSQL.PASSWORD} -  zabbixmonitdb
   # {$MYSQL.USER} - zabbixmonitdb
-
-
-# Configuração Zabbix agent Windows
-# https://cdn.zabbix.com/zabbix/binaries/stable/5.4/5.4.8/zabbix_agent2-5.4.8-windows-amd64-openssl.msi
-
-zabbix_win_download_url: https://cdn.zabbix.com/zabbix/binaries/stable/
-zabbix_version: 5.4
-zabbix_version_long: 5.4.8
-zabbix_win_package: zabbix_agent2-5.4.8-windows-amd64-openssl.msi
-zabbix_win_download_link: "{{ zabbix_win_download_url }}/{{ zabbix_version}}/{{ zabbix_version_long }}/{{ zabbix_win_package }}"
-zabbix_win_install_dir: 'C:\Zabbix'
-
