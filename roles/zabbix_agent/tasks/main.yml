@@ -11,20 +11,16 @@
   when: ansible_distribution == "Ubuntu"
 
 - name: Adcionando host Automatico via Ansible 
-  include_tasks: api.agent.create.yml
+  include_tasks: add.linux.yml
   when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu" or ansible_facts['distribution_major_version'] == "8"
 
 - name: Instalando Agente zabbix 2 no Windows
-  include_tasks: install.agent.windows.yml
+  include_tasks: windows.yml
   when: ansible_os_family == "Windows"
 
 - name: Adcionando host Automatico via Ansible 
-  include_tasks: api.add.windows.yml
+  include_tasks: add.windows.yml
   when: ansible_os_family == "Windows"
-
-# - name: Remover Agente via Ansible. 
-#   include_tasks: uninstall_zabbix_agent.yml
-#   when: ansible_os_family == "Windows"
 
 # - name: Atualizando Sistema Operacional 
 #   include_tasks: update.windows.yml

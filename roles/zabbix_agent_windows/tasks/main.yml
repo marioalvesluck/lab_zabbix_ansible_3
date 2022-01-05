@@ -1,14 +1,14 @@
 ---
 # tasks file for install_zabbix_agent_windows
 
-- name: Instalando Agente zabbix 2 no Windows
-  include_tasks: install.agent.windows.yml
+# - name: Instalando Agente zabbix 2 no Windows
+#   include_tasks: install.agent.windows.yml
 
-- name: Adcionando host Automatico via Ansible 
-  include_tasks: api.add.windows.yml
+# - name: Adcionando host Automatico via Ansible 
+#   include_tasks: api.add.windows.yml
 
-# - name: Remover Agente via Ansible. 
-#   include_tasks: uninstall_zabbix_agent.yml
+- name: Remover Agente via Ansible. 
+  include_tasks: uninstall_zabbix_agent.yml
 
 # - name: Atualizando Sistema Operacional 
 #   include_tasks: update.windows.yml

@@ -45,6 +45,8 @@
     - { regexp: '# StartReportWriters=0', line: 'StartReportWriters=1' }
     - { regexp: '# DBTLSConnect=', line: 'DBTLSConnect=required' }
     - { regexp: '# WebServiceURL=', line: 'WebServiceURL=http://{{zbx_front}}:10053/report' }
+    - { regexp: '# HANodeName=', line: 'HANodeName={{ zbx_front }}' }
+    - { regexp: '# NodeAddress=localhost:10051', line: 'NodeAddress={{ zbx_front }}:10051' }
   when: ansible_facts['distribution_major_version'] == "8"
   tags: zabbix_server
 #-----------------------------------------------------------------------------------#

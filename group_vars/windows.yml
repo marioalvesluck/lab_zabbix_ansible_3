@@ -16,8 +16,9 @@ zabbix_link_templates_windows:
   - ICMP Ping
 
 # Configuração Zabbix agent Windows
-# https://cdn.zabbix.com/zabbix/binaries/stable/5.4/5.4.9/zabbix_agent2-5.4.9-windows-amd64-openssl-static.zip
+
 # https://cdn.zabbix.com/zabbix/binaries/stable/5.4/5.4.9/zabbix_agent-5.4.9-windows-amd64.zip
+
 zabbix_win_download_url: https://cdn.zabbix.com/zabbix/binaries/stable
 zabbix_version: 5.4
 zabbix_version_long: 5.4.9
@@ -28,3 +29,6 @@ zabbix_win_userparameters: 'C:\zabbix\userparameters'
 zabbix_win_scripts: 'C:\zabbix\scripts'
 zabbix_win_log: 'C:\zabbix\log'
 timeout: 30
+zabbix_agent_win_svc_recovery: True
+zabbix_agent_package_state: present
+zabbix_agent_src_reinstall: True

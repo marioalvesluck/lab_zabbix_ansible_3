@@ -1,14 +1,14 @@
 #-----------------------------------------------------------------------#
-- name: Deploy Instalação Agente windows .
-  hosts:
-    - DC01
-  vars:
-    - zbx_front: 192.168.3.100
-    - proxy_name: 'PROXY-SP'
-    - zbx_proxy: 192.168.3.130
-    - host_grupo: Empresa-X
-  roles:
-    - role: zabbix_agent
+# - name: Deploy Instalação Agente windows .
+#   hosts:
+#     - DC01
+#   vars:
+#     - zbx_front: 192.168.3.100
+#     - proxy_name: 'PROXY-SP'
+#     - zbx_proxy: 192.168.3.130
+#     - host_grupo: Empresa-X
+#   roles:
+#     - role: zabbix_agent
 #-----------------------------------------------------------------------#
 - name: Playbook de instalação do Agente Windows .
   hosts:

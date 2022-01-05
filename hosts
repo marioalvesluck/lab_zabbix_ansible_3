@@ -6,6 +6,9 @@
 [zbx_srv]
 192.168.3.110
 
+[zbx_node02]
+192.168.3.111
+
 [zbx_db]
 192.168.3.120
 
@@ -18,6 +21,7 @@
 [zabbix:children]
 zbx_front
 zbx_srv
+zbx_node02
 zbx_db
 zbx_proxy_sp
 zbx_proxy_rj
