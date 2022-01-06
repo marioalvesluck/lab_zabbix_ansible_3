@@ -1,0 +1,21 @@
+---
+# defaults file for allone_zabbix
+
+packages_mysql:
+  - mysql-server
+  - mysql
+  - python3-PyMySQL
+  - git
+  - dos2unix
+
+packages_zabbix_server:
+  - zabbix-server-mysql
+  - zabbix-agent2
+  - zabbix-sql-scripts
+  - zabbix-selinux-policy
+  - zabbix-get
+  - zabbix-sender
+  - zabbix-apache-conf
+  - zabbix-web-mysql
+  - httpd
+  - zabbix-web-service

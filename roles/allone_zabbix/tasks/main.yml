@@ -1,0 +1,2 @@
+- name: Playbook de Instalação do zabbix Server all one Zabbix
+  include_tasks: allonezabbix.yml

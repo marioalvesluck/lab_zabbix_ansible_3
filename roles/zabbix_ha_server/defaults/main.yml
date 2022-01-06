@@ -1,0 +1,10 @@
+---
+# defaults file for zabbix_ha_server
+
+packages_zabbix_server:
+  - mysql
+  - zabbix-server-mysql
+  - git
+  - dos2unix
+  - zabbix-get
+  - zabbix-sender

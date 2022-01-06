@@ -1,0 +1,19 @@
+---
+# vars file for allone_zabbix
+
+timezone: America/Sao_Paulo
+
+# CONFIGURAÇÃO DO FRONTEND DO ZABBIX
+zbx_port: 10051
+zbx_name: Deploy_Zabbix_Ansible
+zbx_web: 'zabbix'
+
+# VARIAVEIS DO APACHE
+execution_time: 600
+max_input: 600
+memory_limit: 256M
+max_size: 32M
+max_filesize: 16M
+
+# VARIAVEL REQUIRE APACHE 
+set_ip: 192.168.3.0/24

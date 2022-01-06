@@ -1,0 +1,151 @@
+---
+
+- name: Definindo caminho para Zabbix Agent2
+  set_fact:
+    zabbix_win_exe_path: '{{ zabbix_win_install_dir }}\bin\zabbix_agent2.exe'
+
+- name: Verificando se Zabbix Agent2 esta Instalado
+  win_stat:
+    path: '{{ zabbix_win_exe_path }}'
+  register: agent_file_info
+- debug:
+    msg: '{{ agent_file_info }}'
+
+- name: Versão do Zabbix Agent2 instalado.
+  win_file_version:
+    path: "{{ zabbix_win_exe_path }}"
+  register: zabbix_win_exe_info
+  when:
+    - agent_file_info.stat.exists
+- debug:
+    msg: '{{ zabbix_win_exe_info }}'
+
+- name: Checando Update (Set default)
+  set_fact:
+    update_zabbix_agent: False
+  when:
+    - agent_file_info.stat.exists
+
+- name: Checando Update
+  set_fact:
+    update_zabbix_agent: True
+  when:
+    - agent_file_info.stat.exists
+#- ("{% if zabbix_win_exe_info.win_file_version.product_version <= '4.0.0' %} True {% else %} False {% endif %}")
+
+- name: Parando o Service Zabbix (Update)
+  win_service:
+    name: Zabbix Agent 2
+    start_mode: auto
+    state: stopped
+  when:
+    - update_zabbix_agent | default(false)
+    - agent_file_info.stat.exists
+
+- name: Parando o Service Zabbix Agent 2
+  win_service:
+    name: Zabbix Agent 2
+    state: stopped
+  when:
+    - update_zabbix_agent | default(false)
+    - agent_file_info.stat.exists
+  ignore_errors: yes
+
+- name: Remove Serviço zabbix agent2
+  win_command: '{{ zabbix_win_exe_path }} --config {{ zabbix_win_install_dir }}\conf\zabbix_agent2.conf --uninstall'
+  when:
+    - update_zabbix_agent | default(false)
+    - agent_file_info.stat.exists
+  ignore_errors: yes
+
+- name:  Removendo estrutura do diretorio
+  win_file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - "{{ zabbix_win_install_dir }}"
+    - "{{ zabbix_win_userparameters }}"
+    - "{{ zabbix_win_scripts }}"
+    - "{{ zabbix_win_log }}"
+  when:
+    - update_zabbix_agent | default(false)
+    - agent_file_info.stat.exists
+
+
+- name:  Criando estrutura Diretorio
+  win_file:
+    path: "{{ item }}"
+    state: directory
+  loop:
+    - "{{ zabbix_win_install_dir }}"
+    - "{{ zabbix_win_userparameters }}"
+    - "{{ zabbix_win_scripts}}"
+    - "{{ zabbix_win_log }}"
+
+- name: Download Arquivo Zabbix Agent 2
+  win_get_url:
+    url: '{{zabbix_win_download_link }}'
+    dest: '{{ zabbix_win_install_dir }}'
+    force: False
+    follow_redirects: all
+  register: zabbix_agent_win_download_zip
+  until: zabbix_agent_win_download_zip is succeeded
+  retries: 2
+  delay: 5
+- debug:
+    msg: '{{ zabbix_agent_win_download_zip }}'
+
+- name: Descompactando Arquivo Zabbix Agent 2
+  win_unzip:
+    src: '{{ zabbix_win_install_dir }}\{{ zabbix_win_package }}'
+    dest: "{{ zabbix_win_install_dir }}"
+    creates: '{{ zabbix_win_exe_path }}'
+
+- name: Instalando Serviço no Windows
+  win_command: '{{ zabbix_win_exe_path }} --config {{ zabbix_win_install_dir }}\conf\zabbix_agent2.conf --install'
+  register: zabbix_windows_install
+  ignore_errors: yes
+- debug:
+    msg: '{{ zabbix_windows_install }}'
+
+- name: Copiando template Agent para Servidor.
+  win_template:
+    src: zabbix_agent2.conf
+    dest: '{{ zabbix_win_install_dir }}\conf\zabbix_agent2.conf'
+
+- name: Obtendo as configurações de recuperação do Zabbix Service
+  win_shell: sc.exe qfailure "Zabbix Agent 2" 1100
+  register: svc_recovery
+  changed_when: false
+  check_mode: false
+  when: zabbix_agent_win_svc_recovery
+
+- name: Configurando Recovery Zabbix Agent 2
+  win_shell: sc.exe failure "Zabbix Agent 2" actions= restart/5000/restart/10000/restart/20000 reset= 86400
+  when:
+    - "'RESTART -- Delay' not in svc_recovery.stdout"
+    - zabbix_agent_win_svc_recovery
+
+- name: Started o service
+  win_service:
+    name: Zabbix Agent 2
+    start_mode: auto
+    state: started
+  ignore_errors: yes
+
+- name: Adcionando Porta Zabbix Agent 2 Firewall
+  win_firewall_rule:
+    name: Zabbix Agent 2
+    localport: 10050
+    action: allow
+    direction: in
+    protocol: tcp
+    state: present
+    enabled: yes
+  ignore_errors: yes
+
+- name : Remover Arquivo zipado Pasta.
+  win_shell: del '{{ zabbix_win_install_dir }}\{{ zabbix_win_package }}' 
+  ignore_errors: yes
+
+...

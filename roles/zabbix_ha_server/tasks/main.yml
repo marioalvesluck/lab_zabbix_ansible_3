@@ -1,0 +1,3 @@
+- name: Playbook de Instalação do ha_srv
+  include_tasks: ha_srv.yml
+  when: ansible_facts['distribution_major_version'] == "8" or ansible_distribution_file_variety == "RedHat"

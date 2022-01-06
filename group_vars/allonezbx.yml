@@ -10,32 +10,14 @@ ansible_ssh_pass: 123
 zbx_version: 5.5
 zbx_agent_version: 5.5
 version_grafana: 8.3.3
-
-# SCRIPTS PARA MONTAR TABELAS DO BANCO DE DADOS FORAM ALTERADOS DE CREATE.SQL.GZ PARA SERVER.SQL.GZ
-#---------------------- Banco de Dados ---------------------------------------------------------------#
-# OBS: HABILITAR OU DESABILITAR CONFORME A VERSÃO DO ZABBIX SERVER PARA PARTICIONAMENTO.
-# Habilitar abaixo para instalação do Zabbix Versao 6.
-url_schema: zcat /usr/share/doc/zabbix-sql-scripts/mysql/server.sql.gz | mysql -h "{{ zbx_db }}" -u "{{ db_user_server }}"  "{{ db_name }}"
-
-# habilitar para Versão 5.4 Abaixo.
-#url_schema: zcat /usr/share/doc/zabbix-sql-scripts/mysql/create.sql.gz | mysql -h "{{ zbx_db }}" -u "{{ db_user_server }}"  "{{ db_name }}"
-
 #-----------------------------------------------------------------------------------------------------#
 
-# Criar usuario no sistema operacional
-username_so: mario
-userpass_so: 4linux@!
-super_group_so: root
-
-# Variaveis de login API Zabbix , Segurança Criar um Usuario no Frontend do Zabbix para Acesso somente API.
+# Variaveis de login API Zabbix 
 username: 'Admin'
 password: 'zabbix'
 
-# Declarar as variavies do arquivo de hosts / Alterar IP conforme sua necessidade .
-zbx_front: 192.168.3.100
-zbx_srv: 192.168.3.110
-zbx_db: 192.168.3.120
-zbx_proxy: 192.168.3.130
+# Declarar as variavies do arquivo de hosts
+zbx_proxy: 192.168.3.111
 allonezbx: 192.168.3.111
 
 #--------------------------- Adção de templates -----------------------------------------------------#
@@ -62,14 +44,6 @@ database_remove:
 
 # VARIAVEL CRIAÇÃO DO BANCO DE DADOS
 db_name: 'zabbix'
-
-# VARIAVEL CRIAÇÃO DO USUARIO ZABBIX SERVER
-db_user_server: 'zabbix_server'
-db_user_pass_server: 'zabbix'
-
-# VARIAVEIS DE CRIAÇÃO DE USUARIO zabbix_web
-db_user_web: 'zabbix_web'
-db_user_pass_web: 'zabbix'
 
 # VARIAVEIS DE CRIAÇÃO DE USUARIO ZABBIXMONITDB
 db_user_monit_db: 'zabbixmonitdb'

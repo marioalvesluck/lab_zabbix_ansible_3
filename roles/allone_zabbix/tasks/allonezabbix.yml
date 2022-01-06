@@ -1,0 +1,276 @@
+---
+# tasks file for allone_zabbix
+# -------------------------------------------------------------------------------------------#
+- name: Adcionando Repositorio Zabbix Server
+  dnf:
+    name: https://repo.zabbix.com/zabbix/{{ zbx_version }}/rhel/8/x86_64/zabbix-release-{{ zbx_version }}-1.el8.noarch.rpm
+    state: present
+  tags: zabbix_server
+# --------------------------------------------------------------------------------------------#
+- name: Instalando pacotes zabbix-server
+  dnf:
+    name: '{{ packages_zabbix_server}}'
+    state: latest
+  tags: zabbix_server
+# -------------------------------------------------------------------------------------------#
+- name: Adcionando Repositorio Grafana Server
+  shell: "wget https://dl.grafana.com/oss/release/grafana-{{ version_grafana }}-1.x86_64.rpm"
+  tags: grafana-server
+# --------------------------------------------------------------------------------------------#
+- name: Instalando pacotes grafana-server
+  shell: "yum install grafana-{{ version_grafana }}-1.x86_64.rpm -y"
+  tags: grafana-server
+#-----------------------------------------------------#
+- name: Instalando Banco de Dados 
+  dnf:
+    name: "{{ packages_mysql }}"
+    state: latest
+  tags: zabbix_mydb
+#----------------------------------------------------#
+- name: Remover Pacotes Desnecessarios
+  dnf:
+    name: mariadb-libs
+    state: removed
+  tags: zabbix_mydb
+# ----------------------------------------------------#
+- name: Habilitando na Inicialização Service MYSQL
+  systemd:
+    name: mysqld
+    state: started
+    enabled: yes
+  tags: zabbix_mydb
+#---------------------------------------------------------------------#
+- name: Criar senha de Root no banco de Dados
+  mysql_user:
+    name: root
+    password: "{{ root_pass }}"
+    host: localhost
+  no_log: true
+  tags: zabbix_mydb
+#-------------------------------------------------------------------------# 
+- name: Copiando Arquivo .my.cnf default
+  copy: 
+    src: "{{ item.src }}" 
+    dest: "{{ item.dest }}"
+    mode: 0644
+  loop:
+    - { src: '.my.cnf', dest: '/root/.my.cnf'}
+  tags: zabbix_mydb
+
+- name: Criando banco de dados com nome 'zabbix'
+  mysql_db:
+    name: "{{ db_name }}"
+    login_host: localhost
+    login_user: 'root'
+    login_password: '{{ root_pass }}'
+    encoding: utf8mb4
+    collation: utf8mb4_bin
+    state: present
+  tags: zabbix_mydb
+
+
+- name: Removendo contas de usuários 'anônimos' para localhost
+  mysql_user:
+    name: ''
+    host_all: yes
+    state: absent
+    login_user: root
+    login_password: "{{ root_pass }}"
+  no_log: true
+  tags: zabbix_mydb
+#--------------------------------------------------------#
+- name: Removendo o MySQL 'test database'
+  mysql_db:
+    name: '{{ database_remove }}'
+    state: absent
+    login_user: root
+    login_password: "{{ root_pass }}"
+  tags: zabbix_mydb
+#------------------------------#
+- name: Altera o plugin de autenticação do usuário 'root' do MYSQL para mysql_native_password
+  shell: mysql -u root -p"{{ root_pass }}" -e 'UPDATE mysql.user SET plugin="mysql_native_password" WHERE user="root" AND host="localhost"'
+  tags: zabbix_mydb
+#------------------------------------------------------------#
+- name: Privilégios de liberação para usuário 'root'
+  shell: mysql -u root -p"{{ root_pass }}" -e 'FLUSH PRIVILEGES'
+  tags: zabbix_mydb
+#-----------------------------------------------------------------#  
+- name: Criando usuário 'zabbix' para o MYSQL
+  mysql_user:
+    name: "{{ db_user_zabbix }}"
+    password: "{{ db_user_zabbix_pass }}"
+    priv: '*.*:ALL,GRANT'
+    login_user: root
+    login_password: "{{ root_pass }}"
+    state: present
+    host: '%'
+  no_log: true
+  tags: zabbix_mydb
+#-----------------------------------------------------------#
+- name: Criando usuário 'zabbixmonitdb' para Monitorar o Banco
+  mysql_user:
+    name: "{{ db_user_monit_db }}"
+    password: "{{ db_user_pass_db }}"
+    priv: '*.*:ALL,GRANT'
+    login_user: root
+    login_password: "{{ root_pass }}"
+    state: present
+    host: '%'
+  no_log: true
+  tags: zabbix_mydb
+#--------------------------------------------------------------------------------#
+- name: Importando schema da database do zabbix servidor
+  shell: zcat /usr/share/doc/zabbix-sql-scripts/mysql/server.sql.gz | mysql -u zabbix -pzabbix zabbix
+  ignore_errors: yes
+  tags: zabbix_mydb
+# --------------------------------------------------------------------------------------------#
+- name: Iniciar/ Habilitar zabbix-server
+  systemd:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  loop:
+    - zabbix-server
+    - zabbix-agent2
+  tags: zabbix_server
+# ----------------------------------------------------------------------------------------------#
+- name: Iniciar/ Habilitar e Iniciar App do Apache2
+  systemd:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  loop:
+     - httpd 
+     - php-fpm
+  tags: zabbix_front
+
+#-------------------------------------------------------------------------------#
+- name: Setando configurações de segurança no arquivo zabbix_server.conf
+  lineinfile:
+    dest: /etc/zabbix/zabbix_server.conf
+    state: present
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    backrefs: yes
+  loop:
+    - { regexp: '# DBHost=localhost', line: 'DBHost={{ allonezbx }}' }
+    - { regexp: 'DBName=zabbix', line: 'DBName={{ db_name }}' }
+    - { regexp: 'DBUser=zabbix', line: 'DBUser={{ db_user_zabbix }}' }
+    - { regexp: '# DBPassword=', line: 'DBPassword={{ db_user_zabbix_pass }}' }
+    - { regexp: '# StartPollers=5', line: 'StartPollers=10' }
+    - { regexp: '# StartPingers=1', line: 'StartPingers=10' }
+    - { regexp: '# CacheSize=8M', line: 'CacheSize=1024M' }
+    - { regexp: 'Timeout=4', line: 'Timeout=30' }
+    - { regexp: '# ValueCacheSize=8M', line: 'ValueCacheSize=1024M' }
+    - { regexp: '# VMwareCacheSize=8M', line: 'VMwareCacheSize=1024M' }
+    - { regexp: '# StartReportWriters=0', line: 'StartReportWriters=1' }
+    - { regexp: '# DBTLSConnect=', line: 'DBTLSConnect=required' }
+    - { regexp: '# WebServiceURL=', line: 'WebServiceURL=http://{{ allonezbx }}:10053/report' }
+    - { regexp: '# HANodeName=', line: 'HANodeName=node01' }
+    - { regexp: '# NodeAddress=localhost:10051', line: 'NodeAddress={{ allonezbx }}:10051' }
+  tags: zabbix_server
+#----------------------------------------------------------------------------------------------#
+- name: ADD time zone no /etc/php-fpm.d/zabbix.conf
+  shell: "echo php_value[date.timezone] = {{ timezone }} >> /etc/php-fpm.d/zabbix.conf"
+  ignore_errors: True
+  tags: zabbix_front
+- name: Setando configurações do Arquivo PhP do Apache
+  lineinfile:
+    dest:  /etc/php.ini
+    state: present
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    backrefs: yes
+  loop:
+    - { regexp: ';date.timezone =', line: 'date.timezone = {{ timezone }}' }
+    - { regexp: 'max_execution_time = 30', line: 'max_execution_time = {{ execution_time }}' }
+    - { regexp: 'max_input_time = 60', line: 'max_input_time = {{ max_input }}' }
+    - { regexp: 'memory_limit = 128M', line: 'memory_limit = {{ memory_limit  }}' }
+    - { regexp: 'post_max_size = 8M', line: 'post_max_size = {{ max_size }}' }
+    - { regexp: 'upload_max_filesize = 2M', line: 'upload_max_filesize = {{ max_filesize }}' }
+  tags: zabbix_front
+#-----------------------------------------------------------------------------------------------#
+- name: Setando configurações do Arquivo Apache / Coletas HTTP
+  blockinfile:
+    path: /etc/httpd/conf/httpd.conf
+    block: |
+      <Location "/server-status">
+        SetHandler server-status
+        Require local
+        Require ip {{ set_ip }}
+      </Location>
+  tags: zabbix_front
+#--------------------------------------------------------------------------------------------------#
+- name: Copiando Arquivo zabbix.conf.php default
+  template:
+    src:  templates/zabbix.conf.php.j2
+    dest: /etc/zabbix/web/zabbix.conf.php
+  tags: zabbix_front
+#--------------------------------------------------------------------------------------------------#
+- name: Baixando Pacotes googlechrome
+  shell: wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+  tags: zabbix_front
+#-------------------------------------------------------------------------------------------------#
+- name: Instalando googlechrome
+  shell: "sudo dnf localinstall google-chrome-stable_current_x86_64.rpm -y"
+  tags: zabbix_front
+#------------------------------------------------------------------------------------------------#
+- name: Instalando Plugins no Grafana
+  grafana_plugin:
+    name: "{{ item }}"
+    version: latest
+    state: present
+  loop:
+    - alexanderzobnin-zabbix-app
+    - grafana-piechart-panel
+  tags: grafana-server
+#----------------------------------------------------------------------------------------------#
+- name: Iniciar/ Habilitar Grafana-server
+  systemd:
+    name: grafana-server
+    state: restarted
+    enabled: yes
+  tags: zabbix_server
+#----------------------------------------------------------------------------------------------#
+- name: Criando Datasource do zabbix no Grafana
+  grafana_datasource:
+    name: "zabbix"
+    grafana_url: "http://{{ allonezbx }}:3000"
+    grafana_user: "admin"
+    grafana_password: "admin"
+    org_id: "1"
+    ds_type: "alexanderzobnin-zabbix-datasource"
+    ds_url: "http://{{ allonezbx }}/zabbix/api_jsonrpc.php"
+    database: "zabbix"
+  tags: grafana-server
+# #-----------------------------------------------------------------------------------------------#
+- name: Adcionado Porta firewalld 
+  firewalld:
+    port: "{{ item }}"
+    permanent: yes
+    state: enabled
+  loop:
+    - 10051/tcp
+    - 10050/tcp
+    - 3306/tcp 
+    - 80/tcp
+    - 443/tcp
+    - 3000/tcp
+
+- name: Reload no firewalld
+  systemd:
+    name: firewalld
+    state: reloaded
+    enabled: yes
+
+- name: Reinciar serviços
+  systemd:
+    name: "{{ item }}"
+    state: restarted
+    enabled: yes
+  loop:
+    - php-fpm
+    - httpd 
+    - zabbix-server
+    - zabbix-agent2
+  tags: zabbix_front

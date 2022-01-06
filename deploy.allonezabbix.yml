@@ -1,0 +1,6 @@
+#------------------- Instalação ha Server ------------------------#
+- name: Deploy Zabbix allone .
+  hosts:
+    - allonezbx
+  roles:
+    - role: allone_zabbix

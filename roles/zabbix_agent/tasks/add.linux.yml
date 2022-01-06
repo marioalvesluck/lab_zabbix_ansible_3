@@ -1,0 +1,25 @@
+- name: Adcionando hosts no zabbix Frontend do Zabbix.
+  local_action:
+    module: community.zabbix.zabbix_host
+    server_url: http://{{ zbx_front }}/zabbix/
+    login_user: '{{ username }}'
+    login_password: '{{ password }}'
+    host_name: "{{ansible_fqdn}}"
+    visible_name: "{{ansible_fqdn}}"
+    host_groups:
+      - '{{ host_grupo }}'
+    link_templates: "{{ zabbix_link_templates }}"
+    status: enabled
+    state: present
+    inventory_mode: automatic
+    interfaces:
+      - type: '1'
+        main: 1
+        useip: 1
+        ip: "{{ ansible_all_ipv4_addresses[0]}}"
+        dns: ""
+        port: "10050"
+    proxy: '{{ proxy_name }}'
+#     register: api_add_front
+# - debug:
+#     msg: '{{ api_add_front }}' 
