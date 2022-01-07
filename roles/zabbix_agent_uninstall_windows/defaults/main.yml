@@ -1,0 +1,7 @@
+---
+# defaults file for install_zabbix_agent_windows
+
+zabbix_win_install_dir: 'C:\zabbix'
+zabbix_win_userparameters: 'C:\zabbix\userparameters'
+zabbix_win_scripts: 'C:\zabbix\scripts'
+zabbix_win_log: 'C:\zabbix\log'
