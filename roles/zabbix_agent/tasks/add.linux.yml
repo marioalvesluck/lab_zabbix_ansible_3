@@ -1,6 +1,7 @@
 - name: Adcionando hosts no zabbix Frontend do Zabbix.
   local_action:
     module: community.zabbix.zabbix_host
+    # Alterar variavel correspondente no arquivo iventario
     server_url: http://{{ zbx_front }}/zabbix/
     login_user: '{{ username }}'
     login_password: '{{ password }}'

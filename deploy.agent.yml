@@ -7,6 +7,7 @@
     - proxy_name: 'PROXY-SP'
     - zbx_proxy: 192.168.3.130
     - host_grupo: Empresa-X
+    
   roles:
     - role: zabbix_agent
 #-----------------------------------------------------------------------#

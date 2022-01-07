@@ -17,7 +17,7 @@ username: 'Admin'
 password: 'zabbix'
 
 # Declarar as variavies do arquivo de hosts
-zbx_proxy: 192.168.3.111
+zbx_proxy: 192.168.3.130
 allonezbx: 192.168.3.111
 
 #--------------------------- Adção de templates -----------------------------------------------------#

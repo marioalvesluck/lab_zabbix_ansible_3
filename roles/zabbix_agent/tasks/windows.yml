@@ -113,19 +113,6 @@
     src: zabbix_agent2.conf
     dest: '{{ zabbix_win_install_dir }}\conf\zabbix_agent2.conf'
 
-- name: Obtendo as configurações de recuperação do Zabbix Service
-  win_shell: sc.exe qfailure "Zabbix Agent 2" 1100
-  register: svc_recovery
-  changed_when: false
-  check_mode: false
-  when: zabbix_agent_win_svc_recovery
-
-- name: Configurando Recovery Zabbix Agent 2
-  win_shell: sc.exe failure "Zabbix Agent 2" actions= restart/5000/restart/10000/restart/20000 reset= 86400
-  when:
-    - "'RESTART -- Delay' not in svc_recovery.stdout"
-    - zabbix_agent_win_svc_recovery
-
 - name: Started o service
   win_service:
     name: Zabbix Agent 2

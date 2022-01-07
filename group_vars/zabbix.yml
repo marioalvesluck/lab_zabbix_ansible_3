@@ -32,11 +32,12 @@ username: 'Admin'
 password: 'zabbix'
 
 # Declarar as variavies do arquivo de hosts / Alterar IP conforme sua necessidade .
-zbx_front: 192.168.3.100
+
+#zbx_front: 192.168.3.100
 zbx_srv: 192.168.3.110
 zbx_db: 192.168.3.120
 zbx_proxy: 192.168.3.130
-allonezbx: 192.168.3.111
+zbx_front: 192.168.3.111
 
 #--------------------------- Adção de templates -----------------------------------------------------#
 # Macro Padronizada adição de Templates no Agentes 

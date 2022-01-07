@@ -45,7 +45,7 @@
     backrefs: yes
   loop:
     - { regexp: '# ProxyMode=0', line: 'ProxyMode=0' }
-    - { regexp: '^Server=127.0.0.1', line: 'Server={{ zbx_srv }}' }
+    - { regexp: '^Server=127.0.0.1', line: 'Server={{ allonezbx }}' }
     - { regexp: '^Hostname=Zabbix proxy', line: 'Hostname={{ proxy_name }}' }
     - { regexp: '# EnableRemoteCommands=0', line: 'EnableRemoteCommands=1' }
     - { regexp: '^DBName=zabbix_proxy', line: 'DBName=/var/lib/sqlite/{{ proxy_db }}' }

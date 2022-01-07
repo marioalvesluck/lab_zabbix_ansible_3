@@ -13,17 +13,17 @@
     - role: zabbix_proxy
 
 #-------------------------------------------------------------------------#
-- name: Instalação do Zabbix Proxy
-  hosts: 
-    - zbx_proxy_rj
+# - name: Instalação do Zabbix Proxy
+#   hosts: 
+#     - zbx_proxy_rj
     
-  vars:
-   - proxy_name: 'PROXY-RJ'
-   - zbx_proxy: 192.168.3.200
-   - host_grupo: Matriz-B
-   - psk_identity: proxyrj
-   - proxy_db: rj.db
-   - local: rj
+#   vars:
+#    - proxy_name: 'PROXY-RJ'
+#    - zbx_proxy: 192.168.3.200
+#    - host_grupo: Matriz-B
+#    - psk_identity: proxyrj
+#    - proxy_db: rj.db
+#    - local: rj
   
-  roles:
-    - role: zabbix_proxy
+#   roles:
+#     - role: zabbix_proxy
