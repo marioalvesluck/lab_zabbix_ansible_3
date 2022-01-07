@@ -2,25 +2,25 @@
 
 # tasks file for install_zabbix_agent_linux
 
-- name: Adcionando Repositorio Zabbix - {{ ansible_distribution }}/{{ ansible_all_ipv4_addresses[0]}}.
+- name: Adcionando Repositorio Zabbix - {{ ansible_distribution }}
   apt:
     deb: https://repo.zabbix.com/zabbix/{{ zbx_agent_version }}/debian/pool/main/z/zabbix-release/zabbix-release_{{ zbx_agent_version }}-1%2Bdebian11_all.deb
     state: present
   tags: zabbix_agent2
 # --------------------------------------------------------------------------------------------#
 
-- name: Atualizando Sistema Operacional - {{ ansible_all_ipv4_addresses[0]}}.
+- name: Atualizando Sistema Operacional 
   apt:
     update_cache: yes
   tags: zabbix_agent2
 #----------------------------------------------------------------------------------------------#
-- name: Instalando pacote zabbix-agent2 - {{ ansible_all_ipv4_addresses[0]}}.
+- name: Instalando pacote zabbix-agent2 
   apt:
     name: zabbix-agent2
     state: present
   tags: zabbix_agent2
 # --------------------------------------------------------------------------------------------#
-- name: Configurações o Arquivo zabbix_agent2.conf - {{ ansible_all_ipv4_addresses[0]}}.
+- name: Configurações o Arquivo zabbix_agent2.conf
   lineinfile:
     dest: /etc/zabbix/zabbix_agent2.conf
     state: present
@@ -35,7 +35,7 @@
     - { regexp: "# DenyKey=system.run[*]", line: "AllowKey=system.run[*]" }
   tags: zabbix_agent2
 # ----------------------------------------------------------------------------------------------#
-- name: Iniciar/ Habilitar zabbix-agent2 - {{ ansible_all_ipv4_addresses[0]}}.
+- name: Iniciar/ Habilitar zabbix-agent2 
   systemd:
     name: zabbix-agent2
     state: started

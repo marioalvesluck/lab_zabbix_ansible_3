@@ -1,5 +1,18 @@
 ---
 # tasks file for api_zabbix create hosts windows
+# Criando Grupo no frontend do Zabbix
+- name: Criando Grupo de host no Frontend do Zabbix
+  local_action:
+    module: community.zabbix.zabbix_group
+    server_url: http://{{ allonezbx }}/zabbix/
+    login_user: '{{ username }}'
+    login_password: '{{ password }}'
+    state: present
+    host_groups: '{{ host_grupo }}'
+  register: api_add_group
+- debug:
+    msg: '{{ api_add_group }}' 
+
 - name: Adcionando hosts Windows no zabbix Frontend do Zabbix.
   local_action:
     module: community.zabbix.zabbix_host
@@ -19,7 +32,8 @@
       - type: '1'
         main: 1
         useip: 1
-        ip: "{{ ansible_ip_addresses[0] }}"
+        ip: "{{ hostvars[inventory_hostname].ansible_host }}"
+        #ip: "{{ ansible_ip_addresses[0] }}"
         dns: ""
         port: "10050"
     proxy: '{{ proxy_name }}'

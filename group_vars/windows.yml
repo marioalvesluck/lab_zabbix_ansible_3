@@ -10,6 +10,8 @@ ansible_winrm_server_cert_validation: ignore
 username: 'Admin'
 password: 'zabbix'
 
+# IP frontend Zabbix
+
 allonezbx: 192.168.3.111
 zbx_front: 192.168.3.111
 
@@ -23,8 +25,8 @@ zabbix_link_templates_windows:
 # https://cdn.zabbix.com/zabbix/binaries/stable/5.4/5.4.9/zabbix_agent-5.4.9-windows-amd64.zip
 
 zabbix_win_download_url: https://cdn.zabbix.com/zabbix/binaries/stable
-zabbix_version: 5.0
-zabbix_version_long: 5.0.18
+zabbix_version: 5.4
+zabbix_version_long: 5.4.9
 zabbix_win_package: zabbix_agent2-{{ zabbix_version_long }}-windows-amd64-openssl-static.zip
 zabbix_win_download_link: "{{ zabbix_win_download_url }}/{{ zabbix_version}}/{{ zabbix_version_long }}/{{ zabbix_win_package }}"
 zabbix_win_install_dir: 'C:\zabbix'

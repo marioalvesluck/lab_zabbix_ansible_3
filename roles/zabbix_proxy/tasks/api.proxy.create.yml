@@ -1,5 +1,5 @@
 # Base create host groups example
-- name: Criando Grupo de host no Frontend do Zabbix - {{ ansible_all_ipv4_addresses[0]}}.
+- name: Criando Grupo de host no Frontend do Zabbix
   local_action:
     module: community.zabbix.zabbix_group
     server_url: http://{{ zbx_front }}/zabbix/

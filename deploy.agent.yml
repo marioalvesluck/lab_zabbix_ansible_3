@@ -1,8 +1,7 @@
 #--------------------------------------------------------------#
 - name: Playbook de instalação do Agentes de hosts no Zabbix .
   hosts:
-    - ubuntu
-
+    - vagrant
   vars:
     - proxy_name: 'PROXY-SP'
     - zbx_proxy: 192.168.3.130
@@ -11,13 +10,13 @@
   roles:
     - role: zabbix_agent
 #-----------------------------------------------------------------------#
-#- name: Playbook de instalação do Agentes de hosts no Zabbix .
-#  hosts:
-#      - zbx_db
-#  vars:
-#     - proxy_name: 'PROXY-RJ'
-#     - zbx_proxy: 192.168.3.140
-#     - host_grupo: Empresa-Y
-#
-#  roles:
-#     - role: zabbix_agent
+- name: Playbook de instalação do Agentes de hosts no Zabbix .
+  hosts:
+      - DC02
+  vars:
+     - proxy_name: 'PROXY-SP'
+     - zbx_proxy: 192.168.3.130
+     - host_grupo: Empresa-Y
+       
+  roles:
+     - role: zabbix_agent

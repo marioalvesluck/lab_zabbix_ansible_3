@@ -2,10 +2,8 @@
 # vi: set ft=ruby  :
 
 machines = {
-  "node01"   => {"memory" => "1024", "cpu" => "2", "ip" => "140","image" => "centos/8"},
-  "node02"   => {"memory" => "1024", "cpu" => "2", "ip" => "140","image" => "centos/8"},
-  "node03"   => {"memory" => "2048", "cpu" => "2", "ip" => "140","image" => "centos/8"},
-  "node04" => {"memory" => "1024",  "cpu" => "2", "ip" => "150", "image" => "centos/8"},
+  "debian"   => {"memory" => "1024", "cpu" => "2", "ip" => "240","image" => "debian/bullseye64"},
+  "ubuntu"   => {"memory" => "1024", "cpu" => "2", "ip" => "241","image" => "ubuntu/focal64"}
 }
 
 Vagrant.configure("2") do |config|
@@ -13,7 +11,7 @@ Vagrant.configure("2") do |config|
   machines.each do |name, conf|
     config.vm.define "#{name}" do |machine|
       machine.vm.box = "#{conf["image"]}"
-      machine.vm.hostname = "#{name}.example.zabbix"
+      machine.vm.hostname = "#{name}.zabbix"
       machine.vm.network "public_network",ip: "192.168.3.#{conf["ip"]}", bridge: "wlp1s0"
       machine.vm.provider "virtualbox" do |vb|
         vb.name = "#{name}"
@@ -21,9 +19,13 @@ Vagrant.configure("2") do |config|
         vb.cpus = conf["cpu"]
         vb.customize ["modifyvm", :id, "--groups", "/zabbix"]
       end
-      if "#{conf["image"]}" == "centos/8"
-        machine.vm.provision "shell", path: "./scripts/centos.sh" 
+      if "#{conf["image"]}" == "debian/bullseye64"
+        machine.vm.provision "shell", path: "./scripts/debian.sh" 
       end
+      if "#{conf["image"]}" == "ubuntu/focal64"
+        machine.vm.provision "shell", path: "./scripts/debian.sh" 
+      end
+
     end
   end
 end

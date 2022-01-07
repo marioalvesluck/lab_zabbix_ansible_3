@@ -1,46 +1,46 @@
 # Arquivos de hosts de configuração com variaveis 
 
 [zbx_front]
-192.168.3.100
+front ansible_host=192.168.3.100
 
 [zbx_srv]
-192.168.3.110
+srv ansible_host=192.168.3.110
 
 [allonezbx]
-192.168.3.111
-
-[zbx_node02]
-192.168.3.111
+onezbx ansible_host=192.168.3.111
 
 [zbx_db]
-192.168.3.120
+mysql ansible_host=192.168.3.120
 
 [zbx_proxy_sp]
-192.168.3.130
+prx_sp ansible_host=192.168.3.130
 
 [zbx_proxy_rj]
-192.168.3.140
+prx_rj ansible_host=192.168.3.140
+
 
 [zabbix:children]
 zbx_front
 zbx_srv
-zbx_node02
 zbx_db
 zbx_proxy_sp
 zbx_proxy_rj
 
+[debian]
+linux01 ansible_host=192.168.3.240
 
 [ubuntu]
-192.168.3.150
+linux02 ansible_host=192.168.3.241
 
 [vagrant]
-192.168.3.140
-192.168.3.150
+debian
+ubuntu 
 
 [DC01]
-192.168.3.200
+SRVDC01 ansible_host=192.168.3.200
+
 [DC02]
-192.168.3.201
+SRVDC02 ansible_host=192.168.3.201
 
 [windows:children]
 DC01

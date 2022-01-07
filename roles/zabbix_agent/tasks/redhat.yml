@@ -2,19 +2,19 @@
 
 # tasks file for install_zabbix_agent_linux
 
-- name: Adcionando Repositorio Zabbix - {{ ansible_distribution }}/{{ ansible_all_ipv4_addresses[0]}}.
+- name: Adcionando Repositorio Zabbix - {{ ansible_distribution }}
   dnf:
     name: https://repo.zabbix.com/zabbix/{{ zbx_agent_version }}/rhel/8/x86_64/zabbix-release-{{ zbx_agent_version }}-1.el8.noarch.rpm
     state: present
   tags: zabbix_agent2
 # --------------------------------------------------------------------------------------------#
-- name: Instalando pacote zabbix-agent2 - {{ ansible_all_ipv4_addresses[0]}}.
+- name: Instalando pacote zabbix-agent2 
   dnf:
     name: zabbix-agent2
     state: present
   tags: zabbix_agent2
 # --------------------------------------------------------------------------------------------#
-- name: Configurando o Arquivo zabbix_agent2.conf - {{ ansible_all_ipv4_addresses[0]}}.
+- name: Configurando o Arquivo zabbix_agent2.conf 
   lineinfile:
     dest: /etc/zabbix/zabbix_agent2.conf
     state: present
@@ -29,7 +29,7 @@
     - { regexp: "# DenyKey=system.run[*]", line: "AllowKey=system.run[*]" }
   tags: zabbix_agent2
 #----------------------------------------------------------------------------------------------#
-- name: Adcionado Porta firewalld  Zabbix_Agent2 - {{ ansible_all_ipv4_addresses[0]}}.
+- name: Adcionado Porta firewalld  Zabbix_Agent2 
   firewalld:
     port: "{{ item }}"
     permanent: yes
@@ -39,14 +39,14 @@
     - 10051/tcp
   tags: zabbix_agent2
 # ----------------------------------------------------------------------------------------------#
-- name: Iniciar/ Habilitar zabbix-agent2 - {{ ansible_all_ipv4_addresses[0]}}.
+- name: Iniciar/ Habilitar zabbix-agent2 
   systemd:
     name: zabbix-agent2
     state: started
     enabled: yes
   tags: zabbix_agent2
 #-------------------------------------------------------------------------------#
-- name: Reload no firewalld - {{ ansible_all_ipv4_addresses[0]}}.
+- name: Reload no firewalld 
   systemd:
     name: firewalld
     state: reloaded
