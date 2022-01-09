@@ -1,2 +1,5 @@
 ---
 # defaults file for install_zabbix_agent_linux
+
+zabbix_agent_service: zabbix-agent2.service
+zabbix_win_agent_service: Zabbix Agent 2

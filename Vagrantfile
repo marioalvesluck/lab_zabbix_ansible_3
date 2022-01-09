@@ -2,8 +2,8 @@
 # vi: set ft=ruby  :
 
 machines = {
-  "debian"   => {"memory" => "1024", "cpu" => "2", "ip" => "240","image" => "debian/bullseye64"},
-  "ubuntu"   => {"memory" => "1024", "cpu" => "2", "ip" => "241","image" => "ubuntu/focal64"}
+  "office-srvlxdns"   => {"memory" => "512", "cpu" => "2", "ip" => "240","image" => "debian/bullseye64"},
+  "office-router"   => {"memory" => "512", "cpu" => "2", "ip" => "241","image" => "ubuntu/focal64"}
 }
 
 Vagrant.configure("2") do |config|

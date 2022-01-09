@@ -24,14 +24,9 @@
   loop:
     - alexanderzobnin-zabbix-app
     - grafana-piechart-panel
+    - novatec-sdg-panel
+  notify: restart grafana
   tags: grafana-server
-#----------------------------------------------------------------------------------------------#
-- name: Iniciar/ Habilitar Grafana-server
-  systemd:
-    name: grafana-server
-    state: restarted
-    enabled: yes
-  tags: zabbix_server
 #----------------------------------------------------------------------------------------------#
 - name: Criando Datasource do zabbix no Grafana
   grafana_datasource:

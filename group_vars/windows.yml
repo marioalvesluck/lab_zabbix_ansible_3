@@ -30,6 +30,7 @@ zabbix_version_long: 5.4.9
 zabbix_win_package: zabbix_agent2-{{ zabbix_version_long }}-windows-amd64-openssl-static.zip
 zabbix_win_download_link: "{{ zabbix_win_download_url }}/{{ zabbix_version}}/{{ zabbix_version_long }}/{{ zabbix_win_package }}"
 zabbix_win_install_dir: 'C:\zabbix'
+zabbix_win_install_dir_backup: 'C:\zabbix.backup'
 zabbix_win_userparameters: 'C:\zabbix\userparameters'
 zabbix_win_scripts: 'C:\zabbix\scripts'
 zabbix_win_log: 'C:\zabbix\log'

@@ -1,11 +1,5 @@
 
 #---------------------------------------------------------------------------#
-
-- name: "Windows | Set path to zabbix.exe"
-  set_fact:
-    zabbix_win_exe_path: '{{ zabbix_win_install_dir }}\bin\zabbix_agent2.exe'
-
-
 - name: Parando Serviço 
   win_service:
     name: Zabbix Agent 2

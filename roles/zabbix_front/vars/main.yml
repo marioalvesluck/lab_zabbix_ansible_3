@@ -9,6 +9,11 @@ zbx_name: Deploy_Zabbix_Ansible
 zbx_web: 'zabbix'
 
 # LISTA DE PACOTES INSTALAR FRONTEND
+
+common_packages_front:
+        - php-fpm
+        - httpd 
+
 packages_zabbix_frontend:
         - mysql 
         - zabbix-apache-conf

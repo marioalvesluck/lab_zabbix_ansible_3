@@ -1,3 +1,18 @@
 ---
 # handlers file for install_zabbix_agent_linux
 
+- name: restart linux zabbix-agent2
+  service:
+    name: "{{ zabbix_agent_service }}"
+    state: restarted
+    enabled: yes
+  become: yes
+  when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu" or ansible_facts['distribution_major_version'] == "8"
+
+- name: restart win zabbix agent
+  win_service:
+    name: "{{ zabbix_win_agent_service }}"
+    state: restarted
+    enabled: yes
+  when:
+    - ansible_os_family == "Windows"

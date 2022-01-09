@@ -1,3 +1,10 @@
 ---
 # handlers file for grafana-server
 
+#----------------------------------------------------------------------------------------------#
+- name: restart grafana
+  systemd:
+    name: grafana-server
+    state: restarted
+    enabled: yes
+  tags: zabbix_server

@@ -31,7 +31,6 @@
     update_zabbix_agent: True
   when:
     - agent_file_info.stat.exists
-#- ("{% if zabbix_win_exe_info.win_file_version.product_version <= '4.0.0' %} True {% else %} False {% endif %}")
 
 - name: Parando o Service Zabbix (Update)
   win_service:
@@ -41,6 +40,28 @@
   when:
     - update_zabbix_agent | default(false)
     - agent_file_info.stat.exists
+
+
+- name:  Criando Diretorio backup
+  win_file:
+    path: '{{ zabbix_win_install_dir_backup}}'
+    state: directory
+  when:
+    - agent_file_info.stat.exists
+  ignore_errors: yes
+
+- name: Realizando backup da Pasta Zabbix
+  win_copy:
+    src: "{{zabbix_win_install_dir}}"
+    dest: "{{ zabbix_win_install_dir_backup }}"
+    remote_src: yes
+    backup: yes
+  when:
+    - agent_file_info.stat.exists
+  ignore_errors: yes
+  register: backup
+- debug:
+    msg: '{{ backup }}'
 
 - name: Parando o Service Zabbix Agent 2
   win_service:

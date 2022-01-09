@@ -32,6 +32,6 @@
         dns: ""
         port: "10050"
     proxy: '{{ proxy_name }}'
-#     register: api_add_front
-# - debug:
-#     msg: '{{ api_add_front }}' 
+  register: api_add_front
+- debug:
+    msg: '{{ api_add_front }}' 
