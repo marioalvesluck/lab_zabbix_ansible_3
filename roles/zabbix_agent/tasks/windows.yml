@@ -31,7 +31,6 @@
     update_zabbix_agent: True
   when:
     - agent_file_info.stat.exists
-    - "{% if zabbix_win_exe_info.win_file_version.product_version ('4.0.0', '>=') %}{% else %} {{ zabbix_win_exe_info.win_file_version.product_version}} {% endif %}"
 
 - name: Parando o Service Zabbix (Update)
   win_service:
