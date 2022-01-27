@@ -1,3 +1,4 @@
 - name: Playbook de Instalação do zabbix_server
   include_tasks: server.yml
+  when: ansible_facts['distribution_major_version'] == "8"
 
