@@ -1,7 +1,7 @@
 # User de autenticação windows
 ansible_python_interpreter: /usr/bin/python3
-ansible_user: Administrador
-ansible_password: batata
+ansible_user: "user"
+ansible_password: "batata"
 ansible_port: 5986
 ansible_connection: winrm
 ansible_winrm_server_cert_validation: ignore
