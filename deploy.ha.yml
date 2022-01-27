@@ -2,9 +2,5 @@
 - name: Deploy HA Zabbix .
   hosts:
     - zbx_node02
-  vars:
-    - proxy_name: 'PROXY-SP'
-    - zbx_proxy: 192.168.3.130
-    - host_grupo: Empresa-X
   roles:
-    - role: zabbix_agent
+    - role: zabbix_ha_server
