@@ -26,15 +26,23 @@ zbx_db
 zbx_proxy_sp
 zbx_proxy_rj
 
-[debian]
+[officerouter]
 linux01 ansible_host=192.168.3.240
 
-[ubuntu]
+[officeswitch]
 linux02 ansible_host=192.168.3.241
 
-[vagrant]
-linux01
-linux02
+[officesr01]
+linux03 ansible_host=192.168.3.242
+
+[officesr02]
+linux04 ansible_host=192.168.3.243
+
+[vagrant:children]
+officerouter
+officeswitch
+officesr01
+officesr02
 
 [DC01]
 SRVDC01 ansible_host=192.168.3.200

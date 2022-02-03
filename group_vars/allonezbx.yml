@@ -7,9 +7,10 @@ ansible_ssh_user: root
 ansible_ssh_pass: 123
 
 # Consulta a versão que busca Instalar em : https://repo.zabbix.com/zabbix/
-zbx_version: 5.5
+zbx_version: 5.2
 zbx_agent_version: 5.5
-version_grafana: 8.3.3
+# Consulta a versao que buscar instalar em : https://grafana.com/grafana/download?edition=oss
+version_grafana: 7.5.13
 #-----------------------------------------------------------------------------------------------------#
 
 # Variaveis de login API Zabbix 

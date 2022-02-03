@@ -5,7 +5,7 @@
   vars:
    - proxy_name: 'PROXY-SP'
    - zbx_proxy: 192.168.3.130
-   - host_grupo: Matriz-A
+   - host_grupo: NEW-YORK
    - psk_identity: proxysp
    - proxy_db: sp.db
    - local: sp

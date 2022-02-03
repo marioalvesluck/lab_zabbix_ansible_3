@@ -2,8 +2,11 @@
 # vi: set ft=ruby  :
 
 machines = {
-  "office-srvlxdns"   => {"memory" => "512", "cpu" => "2", "ip" => "240","image" => "debian/bullseye64"},
-  "office-router"   => {"memory" => "512", "cpu" => "2", "ip" => "241","image" => "ubuntu/focal64"}
+  "office-new-york-router"   => {"memory" => "512", "cpu" => "2", "ip" => "240","image" => "debian/bullseye64"},
+  "office-new-york-Switch"   => {"memory" => "512", "cpu" => "2", "ip" => "241","image" => "ubuntu/focal64"},
+  "office-new-york-sr01"   => {"memory" => "512", "cpu" => "2", "ip" => "242","image" => "debian/bullseye64"},
+  "office-new-york-sr02"   => {"memory" => "512", "cpu" => "2", "ip" => "243","image" => "debian/bullseye64"},
+
 }
 
 Vagrant.configure("2") do |config|
