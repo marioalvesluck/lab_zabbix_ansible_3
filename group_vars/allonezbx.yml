@@ -13,6 +13,13 @@ zbx_agent_version: 5.5
 version_grafana: 7.5.13
 #-----------------------------------------------------------------------------------------------------#
 
+# versoes abaixo da 6.
+#url_schema : zcat /usr/share/doc/zabbix-sql-scripts/mysql/server.sql.gz | mysql -u zabbix -pzabbix zabbix
+
+# versao 5.4 >  
+url_schema : zcat /usr/share/doc/zabbix-server-mysql/create.sql.gz | mysql -u zabbix -pzabbix zabbix
+
+
 # Variaveis de login API Zabbix 
 username: 'Admin'
 password: 'zabbix'

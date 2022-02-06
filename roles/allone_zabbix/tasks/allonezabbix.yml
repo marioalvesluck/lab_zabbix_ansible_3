@@ -120,9 +120,7 @@
   tags: zabbix_mydb
 #--------------------------------------------------------------------------------#
 - name: Importando schema da database do zabbix servidor
-  #shell: zcat /usr/share/doc/zabbix-sql-scripts/mysql/server.sql.gz | mysql -u zabbix -pzabbix zabbix
-  # versoes abaixo da 6.
-  shell: zcat /usr/share/doc/zabbix-server-mysql/create.sql.gz | mysql -u zabbix -pzabbix zabbix
+  shell: '{{url_schema }}'
   ignore_errors: yes
   tags: zabbix_mydb
 # --------------------------------------------------------------------------------------------#
