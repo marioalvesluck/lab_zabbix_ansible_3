@@ -12,7 +12,7 @@ zbx_agent_version: 5.5
 # Consulta a versao que buscar instalar em : https://grafana.com/grafana/download?edition=oss
 version_grafana: 7.5.13
 #-----------------------------------------------------------------------------------------------------#
-
+# Mudanças na versão desmarcar ou selecionar versão da criação das tabelas na versão informada
 # versoes abaixo da 6.
 #url_schema : zcat /usr/share/doc/zabbix-sql-scripts/mysql/server.sql.gz | mysql -u zabbix -pzabbix zabbix
 
