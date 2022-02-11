@@ -38,6 +38,8 @@
     ds_type: "alexanderzobnin-zabbix-datasource"
     ds_url: "http://{{ zbx_front }}/zabbix/api_jsonrpc.php"
     database: "zabbix"
+    zabbix_user: Admin
+    zabbix_password: zabbix
   tags: grafana-server
 #----------------------------------------------------------------------------------------------#
 - name: Liberando Porta firewall.
